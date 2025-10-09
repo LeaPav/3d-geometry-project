@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <limits>
+#include <cmath>
+
 namespace math{
     template<typename T>
     class Vec2 {
@@ -37,32 +39,44 @@ namespace math{
         // static methods
 
         static float Angle(const Vec2& from, const Vec2& to) {
+            float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y);
+            float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y);
 
+            float dot = from.x * to.x + from.y * to.y;
+
+            if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f;
+
+            float cosTheta = dot / (magnitudeFrom * magnitudeTo);
+            cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
+
+            return std::acos(cosTheta) * 180.0f / 3.14159265f;
         }
 
         static T Distance(const Vec2& a, const Vec2& b) {
             T dx = a.x - b.x;
             T dy = a.y - b.y;
-            return std::sqrt(dx * dx, dy * dy);
+            return std::sqrt(dx * dx + dy * dy);
         }
 
         static T Dot(const Vec2& a, const Vec2& b) {
             return a.x * b.x + a.y * b.y; // produit scalaire
         
         }
-        static Vec2 Lerp(const Vec2& a, const Vec2& b, float t) {
 
+        static Vec2 Lerp(const Vec2& a, const Vec2& b, float t) { // t : facteur d'interpolation, entre 0-1
+            t = std::fmax(0.0f, std::fmin(1.0f, t));
+            return Vec2(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
         }
 
         static Vec2 Max(const Vec2& a, const Vec2& b) {
-            return ((a.x > b.x) ? a.x : b.x), (a.y > b.y) ? a.y : b.y);
+            return Vec2((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y);
         }
 
-        static Vec2 Min(const Vec2 a, const Vec2& b) {
-            return ((a.x < b.x) ? a.x : b.x), (a.y < b.y) ? a.y : b.y);
+        static Vec2 Min(const Vec2& a, const Vec2& b) {
+            return Vec2((a.x < b.x) ? a.x : b.x, (a.y < b.y) ? a.y : b.y);
         }
 
-        static Vec2 Scale(const Vec2 a, const Vec2 b) {
+        static Vec2 Scale(const Vec2& a, const Vec2& b) {
             return Vec2(a.x * b.x, a.y * b.y);
         }
     };
