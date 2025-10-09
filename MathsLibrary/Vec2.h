@@ -19,7 +19,7 @@ namespace math{
         Vec2 operator*(T scalar) const { return Vec2(x * scalar, y * scalar); }
         Vec2 operator/(T scalar) const { return Vec2(x / scalar, y / scalar); }
         bool operator==(const Vec2& vec) const { return (x == vec.x) && (y == vec.y); }
-        bool operator!=(const Vec2& vec) const { return (x!= vec.x) && (y != vec.y); }
+        bool operator!=(const Vec2& vec) const { return (x!= vec.x) || (y != vec.y); }
              
 
         // static properties
@@ -36,8 +36,35 @@ namespace math{
 
         // static methods
 
+        static float Angle(const Vec2& from, const Vec2& to) {
 
+        }
 
+        static T Distance(const Vec2& a, const Vec2& b) {
+            T dx = a.x - b.x;
+            T dy = a.y - b.y;
+            return std::sqrt(dx * dx, dy * dy);
+        }
+
+        static T Dot(const Vec2& a, const Vec2& b) {
+            return a.x * b.x + a.y * b.y; // produit scalaire
+        
+        }
+        static Vec2 Lerp(const Vec2& a, const Vec2& b, float t) {
+
+        }
+
+        static Vec2 Max(const Vec2& a, const Vec2& b) {
+            return ((a.x > b.x) ? a.x : b.x), (a.y > b.y) ? a.y : b.y);
+        }
+
+        static Vec2 Min(const Vec2 a, const Vec2& b) {
+            return ((a.x < b.x) ? a.x : b.x), (a.y < b.y) ? a.y : b.y);
+        }
+
+        static Vec2 Scale(const Vec2 a, const Vec2 b) {
+            return Vec2(a.x * b.x, a.y * b.y);
+        }
     };
 
 
