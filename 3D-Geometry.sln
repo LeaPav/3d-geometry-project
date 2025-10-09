@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maths", "Maths\Maths.vcxproj", "{81AC52E1-25E1-43FE-80AF-7E8803D57475}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MathsLibrary", "MathsLibrary\MathsLibrary.vcxproj", "{B8D618A2-CD51-4AF4-B62D-2DD0D4D4AF90}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{1723FD3C-92BD-E27E-67A3-92BABFB90E1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81AC52E1-25E1-43FE-80AF-7E8803D57475}.Debug|x64.ActiveCfg = Debug|x64
+		{81AC52E1-25E1-43FE-80AF-7E8803D57475}.Debug|x64.Build.0 = Debug|x64
+		{81AC52E1-25E1-43FE-80AF-7E8803D57475}.Release|x64.ActiveCfg = Release|x64
+		{81AC52E1-25E1-43FE-80AF-7E8803D57475}.Release|x64.Build.0 = Release|x64
+		{B8D618A2-CD51-4AF4-B62D-2DD0D4D4AF90}.Debug|x64.ActiveCfg = Debug|x64
+		{B8D618A2-CD51-4AF4-B62D-2DD0D4D4AF90}.Debug|x64.Build.0 = Debug|x64
+		{B8D618A2-CD51-4AF4-B62D-2DD0D4D4AF90}.Release|x64.ActiveCfg = Release|x64
+		{B8D618A2-CD51-4AF4-B62D-2DD0D4D4AF90}.Release|x64.Build.0 = Release|x64
+		{1723FD3C-92BD-E27E-67A3-92BABFB90E1A}.Debug|x64.ActiveCfg = Debug|x64
+		{1723FD3C-92BD-E27E-67A3-92BABFB90E1A}.Debug|x64.Build.0 = Debug|x64
+		{1723FD3C-92BD-E27E-67A3-92BABFB90E1A}.Release|x64.ActiveCfg = Release|x64
+		{1723FD3C-92BD-E27E-67A3-92BABFB90E1A}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2039E95-6EB4-40C3-B6BA-485AD72D2F2C}
+	EndGlobalSection
+EndGlobal
