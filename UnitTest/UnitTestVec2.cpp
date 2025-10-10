@@ -4,7 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace MathsTests
+namespace UnitTestVec2
 {
 	TEST_CLASS(Vec2)
 	{

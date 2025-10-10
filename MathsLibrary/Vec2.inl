@@ -1,3 +1,4 @@
+#include "Vec3.h"
 
 namespace math {
     template<typename T>

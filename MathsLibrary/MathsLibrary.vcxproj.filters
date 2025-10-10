@@ -18,6 +18,9 @@
     <ClInclude Include="Vec2.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Vec3.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -26,6 +29,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Vec2.inl">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </None>
+    <None Include="Vec3.inl">
       <Filter>Fichiers d%27en-tête</Filter>
     </None>
   </ItemGroup>

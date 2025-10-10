@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 #include "Vec2.h"
+#include "Vec3.h"
 
 int main()
 {
@@ -21,6 +22,7 @@ int main()
         window.draw(shape);
         window.display();
     }
+
 }
 
 

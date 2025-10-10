@@ -1,0 +1,52 @@
+#pragma once
+#include <limits>
+
+namespace math {
+
+	template <typename T>
+	class Vec3 {
+	public:
+		T x;
+		T y;
+		T z;
+
+		Vec3();
+		Vec3(T x, T y, T z);
+
+
+		// operators
+
+		Vec3 operator+(const Vec3& rhs) const;
+		Vec3 operator-(const Vec3& rhs) const;
+		Vec3 operator*(T scalar) const;
+		Vec3 operator/(T scalar) const;
+		bool operator==(const Vec3& vec) const;
+		bool operator!=(const Vec3& vec) const;
+
+		T& operator[](int index);
+
+		// static properties
+
+		static Vec3 down();
+		static Vec3 back();
+		static Vec3 forward();
+		static Vec3 left();
+		static Vec3 one();
+		static Vec3 right();
+		static Vec3 up();
+		static Vec3 zero();
+
+		static Vec3 negativeInfinity();
+		static Vec3 positiveInfinity();
+
+
+
+	};
+
+	using Vec3f = Vec3<float>;
+	using Vec3i = Vec3<int>;
+	using Vec3d = Vec3<double>;
+	
+
+}
+#include "Vec3.inl"
