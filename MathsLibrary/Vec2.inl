@@ -1,4 +1,5 @@
 #include "Vec2.h"
+
 namespace math {
     template<typename T>
     inline Vec2<T>::Vec2() : x(0), y(0)  { }
@@ -104,6 +105,17 @@ namespace math {
         cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
 
         return std::acos(cosTheta) * 180.0f / 3.14159265f;
+    }
+
+    template<typename T>
+    inline float Vec2<T>::SignedAngle(const Vec2& from, const Vec2& to)
+    {
+        float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y);
+        float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y);
+
+        float dot = Dot(from, to);
+
+
     }
 
     template<typename T>

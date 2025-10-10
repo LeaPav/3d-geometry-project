@@ -58,6 +58,9 @@ namespace math{
             return std::acos(cosTheta) * 180.0f / 3.14159265f;
         }*/
 
+        static float SignedAngle(const Vec2& from, const Vec2& to);
+    
+
         static T Distance(const Vec2& a, const Vec2& b); /*{
             T dx = a.x - b.x;
             T dy = a.y - b.y;
