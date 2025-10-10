@@ -1,3 +1,4 @@
+#include "Vec3.h"
 
 namespace math {
 	template<typename T>
@@ -101,5 +102,76 @@ namespace math {
 	inline Vec3<T> Vec3<T>::positiveInfinity()
 	{
 		return Vec2(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
+	}
+
+	template<typename T>
+	inline float math::Vec3<T>::Angle(const Vec3& from, const Vec3& to)
+	{
+		float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y + from.z * from.z);
+		float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y + to.z * to.z);
+
+		float dot = Dot(from, to);
+
+		if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f;
+
+		float cosTheta = dot / magnitudeFrom * magnitudeTo;
+		cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
+
+		return std::acos(cosTheta);
+	}
+
+	template<typename T>
+	inline float Vec3<T>::SignedAngle(const Vec3& from, const Vec3& to)
+	{
+		float dot = Dot(from, to);
+		float product = from.x * to.x - from.y * to.y - from.z * to.z;
+
+		return std::atan2(product, dot);
+	}
+
+	template<typename T>
+	inline T Vec3<T>::Distance(const Vec3& a, const Vec3& b)
+	{
+		T dx = a.x - b.x;
+		T dy = a.y - b.y;
+		T dz = a.z - b.z;
+		return std::sqrt(dx * dx + dy * dy + dz * dz);
+	}
+
+	template<typename T>
+	inline T Vec3<T>::Dot(const Vec3& a, const Vec3& b)
+	{
+		return a.x * b.x + a.y * b.y + a.z * b.z; // produit scalaire
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Lerp(const Vec3& a, const Vec3& b, float t)
+	{
+		t = std::fmax(0.0f, std::fmin(1.0f, t));
+		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z = (b.z - a.z) * t);
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::LerpUnclamped(const Vec3& a, const Vec3& b, float t)
+	{
+		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z = (b.z - a.z) * t);
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Max(const Vec3& a, const Vec3& b)
+	{
+		return Vec3((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y, (a.z > b.z) ? a.z : b.z);
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Min(const Vec3& a, const Vec3& b)
+	{
+		return Vec3((a.x < b.x) ? a.x : b.x, (a.y < b.y) ? a.y : b.y, (a.z < b.z) ? a.z : b.z);
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Scale(const Vec3& a, const Vec3 b)
+	{
+		return Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
 	}
 }

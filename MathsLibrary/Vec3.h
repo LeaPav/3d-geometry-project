@@ -39,8 +39,25 @@ namespace math {
 		static Vec3 negativeInfinity();
 		static Vec3 positiveInfinity();
 
+		// static methods
 
+		static float Angle(const Vec3& from, const Vec3& to);
 
+		static float SignedAngle(const Vec3& from, const Vec3& to);
+
+		static T Distance(const Vec3& a, const Vec3& b);
+
+		static T Dot(const Vec3& a, const Vec3& b);
+
+		static Vec3 Lerp(const Vec3& a, const Vec3& b, float t);
+
+		static Vec3 LerpUnclamped(const Vec3& a, const Vec3& b, float t);
+
+		static Vec3 Max(const Vec3& a, const Vec3& b);
+
+		static Vec3 Min(const Vec3& a, const Vec3& b);
+
+		static Vec3 Scale(const Vec3& a, const Vec3 b);
 	};
 
 	using Vec3f = Vec3<float>;
