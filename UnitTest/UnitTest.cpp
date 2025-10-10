@@ -64,6 +64,12 @@ namespace MathsTests
 			math::Vec2f vec2(1.0f, 3.0f);
 			Assert::IsTrue(vec1 != vec2);
 		}
+		TEST_METHOD(Operator_this)
+		{
+			math::Vec2f vec1(2.0f, 1.0f);
+			Assert::AreEqual(vec1.x, vec1[0]);
+			Assert::AreEqual(vec1.y, vec1[1]);
+		}
 		TEST_METHOD(Static_Distance)
 		{
 			math::Vec2f vec1(0.f, 0.f);
@@ -89,6 +95,14 @@ namespace MathsTests
 			math::Vec2f result = math::Vec2f::Lerp(vec1, vec2, 0.5f);
 			Assert::AreEqual(5.f, result.x);
 			Assert::AreEqual(5.f, result.y);
+		}
+		TEST_METHOD(Static_LerpUnclamped)
+		{
+			math::Vec2f vec1(0.f, 0.f);
+			math::Vec2f vec2(10, 10.0f);
+			math::Vec2f result = math::Vec2f::LerpUnclamped(vec1, vec2, 1.5f);
+			Assert::AreEqual(15.f, result.x);
+			Assert::AreEqual(15.f, result.y);
 		}
 		TEST_METHOD(Static_Max)
 		{
