@@ -42,7 +42,7 @@ namespace math{
             float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y);
             float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y);
 
-            float dot = from.x * to.x + from.y * to.y;
+            float dot = Dot(from, to);
 
             if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f;
 
