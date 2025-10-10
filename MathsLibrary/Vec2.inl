@@ -1,4 +1,3 @@
-#include "Vec2.h"
 
 namespace math {
     template<typename T>
@@ -99,23 +98,22 @@ namespace math {
 
         float dot = Dot(from, to);
 
-        if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f;
+        if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f; // eviter la division par 0
 
         float cosTheta = dot / (magnitudeFrom * magnitudeTo);
         cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
 
-        return std::acos(cosTheta) * 180.0f / 3.14159265f;
+        return std::acos(cosTheta);
     }
 
     template<typename T>
     inline float Vec2<T>::SignedAngle(const Vec2& from, const Vec2& to)
     {
-        float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y);
-        float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y);
 
         float dot = Dot(from, to);
+        float product = from.x * to.y - from.y * to.x; // pour connaitre le sens de la rotation (product > 0 -> anti horaire, product < 0 -> horaire)
 
-
+        return std::atan2(product, dot);
     }
 
     template<typename T>

@@ -86,7 +86,13 @@ namespace MathsTests
 		{
 			math::Vec2f vec1(1.f, 0.f);
 			math::Vec2f vec2(0, 1.0f);
-			Assert::AreEqual(90.0f, math::Vec2f::Angle(vec1, vec2), 0.001f);
+			Assert::AreEqual(1.5708f, math::Vec2f::Angle(vec1, vec2), 0.001f);
+		}
+		TEST_METHOD(Static_SignedAngle)
+		{
+			math::Vec2f vec1(1.f, 0.f);
+			math::Vec2f vec2(0, -1.0f);
+			Assert::AreEqual(-1.57079632679f, math::Vec2f::SignedAngle(vec1, vec2), 0.001f);
 		}
 		TEST_METHOD(Static_Lerp)
 		{
