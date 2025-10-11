@@ -43,7 +43,7 @@ namespace math {
 
 		static float Angle(const Vec3& from, const Vec3& to);
 
-		static float SignedAngle(const Vec3& from, const Vec3& to);
+		static float SignedAngle(const Vec3& from, const Vec3& to, const Vec3& axis);
 
 		static T Distance(const Vec3& a, const Vec3& b);
 
@@ -58,6 +58,8 @@ namespace math {
 		static Vec3 Min(const Vec3& a, const Vec3& b);
 
 		static Vec3 Scale(const Vec3& a, const Vec3 b);
+
+		static Vec3 Cross(const Vec3& a, const Vec3& b);
 	};
 
 	using Vec3f = Vec3<float>;

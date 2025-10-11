@@ -10,6 +10,7 @@ namespace UnitTestVec3
 	{
 	public:
 
+		float pi = 3.14159265f;
 		TEST_METHOD(Constructor_Default)
 		{
 			math::Vec3f vec;
@@ -101,6 +102,76 @@ namespace UnitTestVec3
 			math::Vec3f vec2(7.f, 5.f, 3.f);
 
 			Assert::AreEqual(86.f, math::Vec3f::Dot(vec1, vec2));
+		}
+		TEST_METHOD(Static_Angle)
+		{
+
+			math::Vec3f vec1(1, 0, 0);
+			math::Vec3f vec2(0, 1, 0);
+			Assert::AreEqual(pi / 2, math::Vec3f::Angle(vec1, vec2), 0.001f);
+		}
+		TEST_METHOD(Static_SignedAngle)
+		{
+
+			math::Vec3f vec1(1, 0, 0);
+			math::Vec3f vec2(0, 1, 0);
+			math::Vec3f axis(0, 0, -1);
+			Assert::AreEqual(-pi / 2, math::Vec3f::SignedAngle(vec1, vec2, axis), 0.001f);
+		}
+		TEST_METHOD(Static_Lerp)
+		{
+			math::Vec3f vec1(0.f, 0.f, 0.f);
+			math::Vec3f vec2(5, 10.0f, 6.f);
+			math::Vec3f result = math::Vec3f::Lerp(vec1, vec2, 0.5f);
+			Assert::AreEqual(2.5f, result.x);
+			Assert::AreEqual(5.f, result.y);
+			Assert::AreEqual(3.f, result.z);
+
+		}
+		TEST_METHOD(Static_LerpUnclamped)
+		{
+			math::Vec3f vec1(0.f, 0.f, 0.f);
+			math::Vec3f vec2(5, 10.0f, 6.f);
+			math::Vec3f result = math::Vec3f::LerpUnclamped(vec1, vec2, 2);
+			Assert::AreEqual(10.f, result.x);
+			Assert::AreEqual(20.f, result.y);
+			Assert::AreEqual(12.f, result.z);
+		}
+		TEST_METHOD(Static_Max)
+		{
+			math::Vec3f vec1(3.f, 7.f, 15.2f);
+			math::Vec3f vec2(2.f, 5.0f, 4.5f);
+			math::Vec3f result = math::Vec3f::Max(vec1, vec2);
+			Assert::AreEqual(3.f, result.x);
+			Assert::AreEqual(7.f, result.y);
+			Assert::AreEqual(15.2f, result.z);
+		}
+		TEST_METHOD(Static_Min)
+		{
+			math::Vec3f vec1(3.f, 7.f, 15.2f);
+			math::Vec3f vec2(2.f, 5.0f, 4.5f);
+			math::Vec3f result = math::Vec3f::Min(vec1, vec2);
+			Assert::AreEqual(2.f, result.x);
+			Assert::AreEqual(5.f, result.y);
+			Assert::AreEqual(4.5f, result.z);
+		}
+		TEST_METHOD(Static_Scale)
+		{
+			math::Vec3f vec1(8.f, 6.f, 14.f);
+			math::Vec3f vec2(7.f, 6.0f, 2.f);
+			math::Vec3f result = math::Vec3f::Scale(vec1, vec2);
+			Assert::AreEqual(56.f, result.x);
+			Assert::AreEqual(36.f, result.y);
+			Assert::AreEqual(28.f, result.z);
+		}
+		TEST_METHOD(Static_Cross)
+		{
+			math::Vec3f vec1(2.f, 6.f, 8.f);
+			math::Vec3f vec2(3.f, 5.f, 1.f);
+			math::Vec3f result = math::Vec3f::Cross(vec1, vec2);
+			Assert::AreEqual(-34.f, result.x);
+			Assert::AreEqual(22.f, result.y);
+			Assert::AreEqual(-8.f, result.z);
 		}
 	};
 }

@@ -114,19 +114,21 @@ namespace math {
 
 		if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f;
 
-		float cosTheta = dot / magnitudeFrom * magnitudeTo;
+		float cosTheta = dot / (magnitudeFrom * magnitudeTo);
 		cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
 
 		return std::acos(cosTheta);
 	}
 
 	template<typename T>
-	inline float Vec3<T>::SignedAngle(const Vec3& from, const Vec3& to)
+	inline float Vec3<T>::SignedAngle(const Vec3& from, const Vec3& to, const Vec3& axis)
 	{
-		float dot = Dot(from, to);
-		float product = from.x * to.x - from.y * to.y - from.z * to.z;
+	
+		Vec3 crossProduct = Cross(from, to);
+		float sign = Dot(axis, crossProduct);
+		float angle = Angle(from, to);
 
-		return std::atan2(product, dot);
+		return angle * sign;
 	}
 
 	template<typename T>
@@ -148,13 +150,13 @@ namespace math {
 	inline Vec3<T> Vec3<T>::Lerp(const Vec3& a, const Vec3& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
-		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z = (b.z - a.z) * t);
+		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
 	}
 
 	template<typename T>
 	inline Vec3<T> Vec3<T>::LerpUnclamped(const Vec3& a, const Vec3& b, float t)
 	{
-		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z = (b.z - a.z) * t);
+		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
 	}
 
 	template<typename T>
@@ -173,5 +175,14 @@ namespace math {
 	inline Vec3<T> Vec3<T>::Scale(const Vec3& a, const Vec3 b)
 	{
 		return Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
+	}
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Cross(const Vec3& a, const Vec3& b)
+	{
+		return Vec3<T>(
+			a.y * b.z - a.z * b.y,
+			a.z * b.x - a.x * b.z,
+			a.x * b.y - a.y * b.x
+		);
 	}
 }
