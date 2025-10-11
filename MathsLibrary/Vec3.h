@@ -60,6 +60,8 @@ namespace math {
 		static Vec3 Scale(const Vec3& a, const Vec3 b);
 
 		static Vec3 Cross(const Vec3& a, const Vec3& b);
+
+		static Vec3 Slerp(const Vec3& a, const Vec3& b, float t);
 	};
 
 	using Vec3f = Vec3<float>;

@@ -23,6 +23,7 @@ namespace math{
         Vec2 operator/(T scalar) const;
         bool operator==(const Vec2& vec) const; 
         bool operator!=(const Vec2& vec) const;
+        operator sf::Vector2f() const;
 
         T& operator[](int index);
 

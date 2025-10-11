@@ -185,4 +185,9 @@ namespace math {
 			a.x * b.y - a.y * b.x
 		);
 	}
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Slerp(const Vec3& a, const Vec3& b, float t)
+	{
+		return;
+	}
 }

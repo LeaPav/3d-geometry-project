@@ -1,4 +1,5 @@
 #include "Vec3.h"
+#include "Vec2.h"
 
 namespace math {
     template<typename T>
@@ -41,6 +42,12 @@ namespace math {
     inline bool Vec2<T>::operator!=(const Vec2& vec) const
     {
         return (x != vec.x) || (y != vec.y);
+    }
+
+    template<typename T>
+    inline Vec2<T>::operator sf::Vector2f() const
+    {
+        return sf::Vector2f(static_cast<float>(x), static_cast<float>(y));
     }
 
     template<typename T>
