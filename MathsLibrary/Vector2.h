@@ -12,26 +12,22 @@ namespace math {
 
         //properties
 
-        T Magnitude() const { return  std::sqrt(x * x + y * y)  }
-
-        Vec2 Normalized() const { double magnitude = std::sqrt(x * x + y * y); return x / magnitude, y / magnitude  }
-        //Vec2 Normalized() const { double magnitude = Magnitude(); if (magnitude < 0) return 0 }
-        //Vec2 Normalized() const { if (Magnitude() < 0) return 0 }
-        
-        T SqrMagnitude() const { return  x * x + y * y  }
+        float Magnitude() const { return std::sqrt(x * x + y * y); }
+        Vec2 Normalized() const { float magnitude = Magnitude(); if (magnitude < 0.00001f) { return Vec2(0.0f, 0.0f); } return Vec2(x / magnitude, y / magnitude); }
+        float SqrMagnitude() const { return x * x + y * y; }
 
         //public methods
 
-        bool Equals(const Vec2& rhs) const { if (x == rhs.x) && (y == rhs.y); return  rhs.true  }
-        T Normalize(const Vec2& rhs) const { double normalize = std::sqrt(x * x + y * y); if (normalise == 1)  return normalise  }
-        T Set(const Vec2& rhs) const { return new rhs.x, new rhs.y  }
-        std::string ToString(const Vec2& rhs) const { std::string format; return format }
-
+        bool Equals(const Vec2& rhs) const { return (x == rhs.x) && (y == rhs.y); }
+        Vec2 Normalize(const Vec2& rhs) const { float magnitude = rhs.Magnitude(); if (magnitude < 0.00001f) { return Vec2(0.0f, 0.0f); } return Vec2(x / magnitude, y / magnitude); }
+        void Set(const Vec2& rhs) { x = rhs.x; y = rhs.y; }
+        std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ")"; }
+        
         //static methods
 
         static Vec2 ClampMagnitude(const Vec2& rhs, float maxLength) {
            
-            float magnitude = rhs.Magnitude()
+            float magnitude = rhs.Magnitude();
             if (magnitude <= maxLength) { return rhs }
             else{ return rhs.Normalized() * maxLength }
 
@@ -45,21 +41,23 @@ namespace math {
             Vec2 delta = target - current;
             float distance = Distance(current, target);
 
-            Vec2 direction = delta / distance
 
-            if (distance <= maxDistanceDelta || distance == 0.0f) { return target; } else {return current + direction * maxDistanceDelta}
+            if (distance <= maxDistanceDelta || distance == 0.0f) { return target; }
+            
+            Vec2 direction = delta / distance;
+            return current + direction * maxDistanceDelta; 
 
             //déplace une valeur or objet d'une position actuelle vers une position cible à une vitesse constante
         }
 
 
-        static Vec2 Perpendicular(const Vec2& rhs) { return Vec2 (-rhs.y, rhs.x) } // formule de perpendicularité
+        static Vec2 Perpendicular(const Vec2& rhs) { return Vec2(-rhs.y, rhs.x); } // formule de perpendicularité
 
         static float Reflect(const Vec2& inDirection, const Vec2& inNormal) {
             
-            Vec2 n = Normalized(inNormal);
+            Vec2 n = inNormal.Normalized();
             float scal = Dot(inDirection, n);
-            return inDirection - 2 * n * scal; // formule de réflexion
+            return inDirection - n * (2.0f * scal); // formule de réflexion
         }
 
         static T Dot(const Vec2& a, const Vec2& b) {
