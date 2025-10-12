@@ -1,4 +1,3 @@
-#include "Vec3.h"
 
 namespace math {
 	template<typename T>
@@ -47,7 +46,7 @@ namespace math {
 		if (index == 0) return x;
 		else if (index == 1) return y;
 		else if (index == 2) return z;
-		else throw std::out_of_range("Vec2 index out of range");
+		else throw std::out_of_range("Vec3 index out of range");
 	}
 
 
@@ -96,12 +95,12 @@ namespace math {
 	template<typename T>
 	constexpr Vec3<T> Vec3<T>::negativeInfinity()
 	{
-		return Vec2(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
+		return Vec3(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
 	}
 	template<typename T>
 	constexpr Vec3<T> Vec3<T>::positiveInfinity()
 	{
-		return Vec2(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
+		return Vec3(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
 	}
 
 	template<typename T>
@@ -125,7 +124,7 @@ namespace math {
 	{
 	
 		Vec3 crossProduct = Cross(from, to);
-		float sign = Dot(axis, crossProduct);
+		float sign = (Dot(axis, crossProduct) >= 0) ? 1.0f : -1.0f;
 		float angle = Angle(from, to);
 
 		return angle * sign;
@@ -172,7 +171,7 @@ namespace math {
 	}
 
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::Scale(const Vec3& a, const Vec3 b)
+	constexpr Vec3<T> Vec3<T>::Scale(const Vec3& a, const Vec3& b)
 	{
 		return Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
 	}
@@ -188,6 +187,45 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Vec3<T>::Slerp(const Vec3& a, const Vec3& b, float t)
 	{
-		return;
+		t = std::fmax(0.0f, std::fmin(1.0f, t));
+
+		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a, b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+		T theta = std::acos(dot);
+		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::SlerpUnclamped(const Vec3& a, const Vec3& b, float t)
+	{
+		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a,b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+		T theta = std::acos(dot);
+		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+	}
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Project(const Vec3& vec, const Vec3& onNormal)
+	{
+		T denom = Dot(onNormal, onNormal); // denominateur, dans la formule c'est la norme au carré de b
+		if (denom == 0) return Vec3<T>();
+
+		return onNormal * (Vec3<T>::Dot(vec, onNormal) / denom);
+	}
+	template<typename T>
+	inline Vec3<T> Vec3<T>::ProjectOnPlane(const Vec3& vec, const Vec3& planeNormal)
+	{
+		T denom = Dot(planeNormal, planeNormal);
+		if (denom == 0) return Vec3<T>();
+
+		return vec - planeNormal * (Vec3<T>::Dot(vec, planeNormal) / denom);
+	}
+	template<typename T>
+	inline Vec3<T> Vec3<T>::MoveTowards(const Vec3& current, const Vec3& target, float maxDistanceDelta)
+	{
+		Vec3<T> delta = target - current;
+		
+	}
+	template<typename T>
+	inline Vec3<T> Vec3<T>::RotateTowards(const Vec3& current, const Vec3& target, float maxRadiansDelta, float maxMagnitudeDelta)
+	{
+		
 	}
 }

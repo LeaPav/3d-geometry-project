@@ -1,4 +1,3 @@
-#include "Vec3.h"
 #include "Vec2.h"
 
 namespace math {

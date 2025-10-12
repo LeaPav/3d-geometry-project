@@ -3,6 +3,7 @@
 #include <limits>
 #include <cmath>
 #include <stdexcept>
+#include <SFML/Graphics.hpp>
 
 namespace math{
     template<typename T>
@@ -13,8 +14,8 @@ namespace math{
 
         constexpr Vec2() ;
         constexpr Vec2(T x, T y) ;
-
-
+        
+        
         // operators
 
         constexpr Vec2 operator+(const Vec2& rhs) const; 

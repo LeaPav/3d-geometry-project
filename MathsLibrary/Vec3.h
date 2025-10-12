@@ -1,5 +1,6 @@
 #pragma once
 #include <limits>
+#include <cmath>
 
 namespace math {
 
@@ -57,11 +58,21 @@ namespace math {
 
 		static constexpr Vec3 Min(const Vec3& a, const Vec3& b);
 
-		static constexpr Vec3 Scale(const Vec3& a, const Vec3 b);
+		static constexpr Vec3 Scale(const Vec3& a, const Vec3& b);
 
 		static Vec3 Cross(const Vec3& a, const Vec3& b);
 
 		static Vec3 Slerp(const Vec3& a, const Vec3& b, float t);
+
+		static Vec3 SlerpUnclamped(const Vec3& a, const Vec3& b, float t);
+
+		static Vec3 Project(const Vec3& vec, const Vec3& onNormal);
+
+		static Vec3 ProjectOnPlane(const Vec3& vec, const Vec3& planeNormal);
+
+		static Vec3 MoveTowards(const Vec3& current, const Vec3& target, float maxDistanceDelta);;
+
+		static Vec3 RotateTowards(const Vec3& current, const Vec3& target, float maxRadiansDelta, float maxMagnitudeDelta);
 	};
 
 	using Vec3f = Vec3<float>;

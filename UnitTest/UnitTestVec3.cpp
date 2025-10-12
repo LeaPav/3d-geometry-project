@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "Vec2.h"
+#include "Vec3.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
