@@ -68,6 +68,6 @@ public:
         return inDirection - n * (2.0f * scal) ; // formule de réflexion
     }
 
-    static Vec3 RotateTowards(Vec3 current, Vec3 target, float maxRadiansDelta, float maxMagnitudeDelta) {}
+    static Vec3 RotateTowards(const Vec3& current, const Vec3& target, float maxRadiansDelta, float maxMagnitudeDelta) {}
 
 };
