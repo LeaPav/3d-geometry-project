@@ -2,42 +2,42 @@
 
 namespace math {
 	template<typename T>
-	inline Vec3<T>::Vec3() : x(0), y(0), z(0) {}
+	constexpr Vec3<T>::Vec3() : x(0), y(0), z(0) {}
 
 	template<typename T>
-	inline math::Vec3<T>::Vec3(T x, T y, T z) : x(x), y(y), z(z) {}
+	constexpr math::Vec3<T>::Vec3(T x, T y, T z) : x(x), y(y), z(z) {}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::operator+(const Vec3& rhs) const
+	constexpr Vec3<T> Vec3<T>::operator+(const Vec3& rhs) const
 	{
 		return Vec3(x + rhs.x, y + rhs.y, z + rhs.z);
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::operator-(const Vec3& rhs) const
+	constexpr Vec3<T> Vec3<T>::operator-(const Vec3& rhs) const
 	{
 		return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::operator*(T scalar) const
+	constexpr Vec3<T> Vec3<T>::operator*(T scalar) const
 	{
 		return Vec3(x * scalar, y * scalar, z * scalar);
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::operator/(T scalar) const
+	constexpr Vec3<T> Vec3<T>::operator/(T scalar) const
 	{
 		return Vec3(x / scalar, y / scalar, z / scalar);
 	}
 
 	template<typename T>
-	inline bool Vec3<T>::operator==(const Vec3& vec) const
+	constexpr bool Vec3<T>::operator==(const Vec3& vec) const
 	{
 		return (x == vec.x) && (y == vec.y) && (z == vec.z);
 	}
 
 	template<typename T>
-	inline bool Vec3<T>::operator!=(const Vec3& vec) const
+	constexpr bool Vec3<T>::operator!=(const Vec3& vec) const
 	{
 		return  (x != vec.x) || (y != vec.y) || (z != vec.z);
 	}
@@ -52,54 +52,54 @@ namespace math {
 
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::back()
+	constexpr Vec3<T> Vec3<T>::back()
 	{
 		return Vec3(0, 0, -1);
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::down()
+	constexpr Vec3<T> Vec3<T>::down()
 	{
 		return Vec3(0, -1, 0);
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::forward()
+	constexpr Vec3<T> Vec3<T>::forward()
 	{
 		return Vec3(0,0,1);
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::left()
+	constexpr Vec3<T> Vec3<T>::left()
 	{
 		return Vec3(-1, 0, 0);
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::one()
+	constexpr Vec3<T> Vec3<T>::one()
 	{
 		return Vec3(1, 1, 1);
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::right()
+	constexpr Vec3<T> Vec3<T>::right()
 	{
 		return Vec3(1, 0, 0);
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::up()
+	constexpr Vec3<T> Vec3<T>::up()
 	{
 		return Vec3(0, 1, 0);
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::zero()
+	constexpr Vec3<T> Vec3<T>::zero()
 	{
 		return Vec3(0, 0, 0);
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::negativeInfinity()
+	constexpr Vec3<T> Vec3<T>::negativeInfinity()
 	{
 		return Vec2(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
 	}
 	template<typename T>
-	inline Vec3<T> Vec3<T>::positiveInfinity()
+	constexpr Vec3<T> Vec3<T>::positiveInfinity()
 	{
 		return Vec2(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
 	}
@@ -141,7 +141,7 @@ namespace math {
 	}
 
 	template<typename T>
-	inline T Vec3<T>::Dot(const Vec3& a, const Vec3& b)
+	constexpr T Vec3<T>::Dot(const Vec3& a, const Vec3& b)
 	{
 		return a.x * b.x + a.y * b.y + a.z * b.z; // produit scalaire
 	}
@@ -160,19 +160,19 @@ namespace math {
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::Max(const Vec3& a, const Vec3& b)
+	constexpr Vec3<T> Vec3<T>::Max(const Vec3& a, const Vec3& b)
 	{
 		return Vec3((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y, (a.z > b.z) ? a.z : b.z);
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::Min(const Vec3& a, const Vec3& b)
+	constexpr Vec3<T> Vec3<T>::Min(const Vec3& a, const Vec3& b)
 	{
 		return Vec3((a.x < b.x) ? a.x : b.x, (a.y < b.y) ? a.y : b.y, (a.z < b.z) ? a.z : b.z);
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::Scale(const Vec3& a, const Vec3 b)
+	constexpr Vec3<T> Vec3<T>::Scale(const Vec3& a, const Vec3 b)
 	{
 		return Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
 	}

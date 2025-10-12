@@ -10,34 +10,34 @@ namespace math {
 		T y;
 		T z;
 
-		Vec3();
-		Vec3(T x, T y, T z);
+		constexpr Vec3();
+		constexpr Vec3(T x, T y, T z);
 
 
 		// operators
 
-		Vec3 operator+(const Vec3& rhs) const;
-		Vec3 operator-(const Vec3& rhs) const;
-		Vec3 operator*(T scalar) const;
-		Vec3 operator/(T scalar) const;
-		bool operator==(const Vec3& vec) const;
-		bool operator!=(const Vec3& vec) const;
+		constexpr Vec3 operator+(const Vec3& rhs) const;
+		constexpr Vec3 operator-(const Vec3& rhs) const;
+		constexpr Vec3 operator*(T scalar) const;
+		constexpr Vec3 operator/(T scalar) const;
+		constexpr bool operator==(const Vec3& vec) const;
+		constexpr bool operator!=(const Vec3& vec) const;
 
 		T& operator[](int index);
 
 		// static properties
 
-		static Vec3 down();
-		static Vec3 back();
-		static Vec3 forward();
-		static Vec3 left();
-		static Vec3 one();
-		static Vec3 right();
-		static Vec3 up();
-		static Vec3 zero();
+		static constexpr Vec3 down();
+		static constexpr Vec3 back();
+		static constexpr Vec3 forward();
+		static constexpr Vec3 left();
+		static constexpr Vec3 one();
+		static constexpr Vec3 right();
+		static constexpr Vec3 up();
+		static constexpr Vec3 zero();
 
-		static Vec3 negativeInfinity();
-		static Vec3 positiveInfinity();
+		static constexpr Vec3 negativeInfinity();
+		static constexpr Vec3 positiveInfinity();
 
 		// static methods
 
@@ -47,17 +47,17 @@ namespace math {
 
 		static T Distance(const Vec3& a, const Vec3& b);
 
-		static T Dot(const Vec3& a, const Vec3& b);
+		static constexpr T Dot(const Vec3& a, const Vec3& b);
 
 		static Vec3 Lerp(const Vec3& a, const Vec3& b, float t);
 
 		static Vec3 LerpUnclamped(const Vec3& a, const Vec3& b, float t);
 
-		static Vec3 Max(const Vec3& a, const Vec3& b);
+		static constexpr Vec3 Max(const Vec3& a, const Vec3& b);
 
-		static Vec3 Min(const Vec3& a, const Vec3& b);
+		static constexpr Vec3 Min(const Vec3& a, const Vec3& b);
 
-		static Vec3 Scale(const Vec3& a, const Vec3 b);
+		static constexpr Vec3 Scale(const Vec3& a, const Vec3 b);
 
 		static Vec3 Cross(const Vec3& a, const Vec3& b);
 
