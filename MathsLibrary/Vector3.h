@@ -45,15 +45,14 @@ public:
         float distance = delta.Magnitude();
 
         if (distance <= maxDistanceDelta || distance == 0.0f) { return target; }
-        else {
-            Vec3 direction = delta / distance;
-            return current + direction * maxDistanceDelta;
-        }
+            
+        Vec3 direction = delta / distance;
+        return current + direction * maxDistanceDelta;
 
         //déplace une valeur or objet d'une position actuelle vers une position cible à une vitesse constante
     }
 
-    Vec3 Normalize(const Vec3& rhs) const { float magnitude = rhs.Magnitude(); if (magnitude < 0.00001f) { return Vec3(0.0f, 0.0f, 0.0f); })return { x / magnitude, y / magnitude, z / magnitude } }
+    Vec3 Normalize(const Vec3& rhs) const { float magnitude = rhs.Magnitude(); if (magnitude < 0.00001f) { return Vec3(0.0f, 0.0f, 0.0f); } return Vec3(x / magnitude, y / magnitude, z / magnitude); }
 
     static T OrthoNormalize(Vec3 normal, Vec3 tangent /*,Vec3 binormal*/ ) {}
 
