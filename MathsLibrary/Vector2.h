@@ -28,7 +28,7 @@ namespace math {
         static Vec2 ClampMagnitude(const Vec2& rhs, float maxLength) {
            
             float magnitude = rhs.Magnitude();
-            if (magnitude <= maxLength) { return rhs }
+            if (magnitude <= maxLength) { return rhs; }
             else{ return rhs.Normalized() * maxLength }
 
             //limiter la longeur d'un vecteur sans changer sa direction
@@ -47,17 +47,17 @@ namespace math {
             Vec2 direction = delta / distance;
             return current + direction * maxDistanceDelta; 
 
-            //déplace une valeur or objet d'une position actuelle vers une position cible à une vitesse constante
+            //dÃ©place une valeur or objet d'une position actuelle vers une position cible Ã  une vitesse constante
         }
 
 
-        static Vec2 Perpendicular(const Vec2& rhs) { return Vec2(-rhs.y, rhs.x); } // formule de perpendicularité
+        static Vec2 Perpendicular(const Vec2& rhs) { return Vec2(-rhs.y, rhs.x); } // formule de perpendicularitÃ©
 
         static float Reflect(const Vec2& inDirection, const Vec2& inNormal) {
             
             Vec2 n = inNormal.Normalized();
             float scal = Dot(inDirection, n);
-            return inDirection - n * (2.0f * scal); // formule de réflexion
+            return inDirection - n * (2.0f * scal); // formule de rÃ©flexion
         }
 
         static T Dot(const Vec2& a, const Vec2& b) {
