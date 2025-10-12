@@ -41,7 +41,6 @@ namespace math {
             Vec2 delta = target - current;
             float distance = Distance(current, target);
 
-
             if (distance <= maxDistanceDelta || distance == 0.0f) { return target; }
             
             Vec2 direction = delta / distance;
