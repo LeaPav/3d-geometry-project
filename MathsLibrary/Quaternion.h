@@ -9,25 +9,35 @@ public:
 
     // properties
 
-    T EulerAngles(const Vec3 rhs){}
-    T Normalized(const Vec4 rhs) const { double magnitude = std::sqrt(x * x + y * y + z * z + w * w); return { x / magnitude, y / magnitude, z / magnitude } }
+    T EulerAngles(const Vec3& rhs){}
+    Vec4 Normalized() const { float magnitude = std::sqrt(x * x + y * y + z * z + w * w); if (magnitude < 0.00001f) { return Vec4(0.0f, 0.0f, 0.0f, 0.0f); } return Vec4(x / magnitude, y / magnitude, z / magnitude), w / magnitude; }
 
 
     //public methods
 
-    bool Equals(const Vec4& rhs) const { if (x == rhs.x) && (y == rhs.y) && (z == rhs.z) && (w == rhs.w); return { rhs.true } }
-    T Set(/*const Vec4& rhs,*/ float newX, float newY, float newZ, float newW) const { return { new rhs.x, new rhs.y, new rhs.z, new rhs.w } }
+    bool Equals(const Vec4& rhs) const { return (x == rhs.x) && (y == rhs.y) && (z == rhs.z) && (w == rhs.w); }
+    void Set(const Vec4& rhs) { return  x = rhs.x, y = rhs.y, z = rhs.z, w = rhs.w; }
     
-    T SetFromToRotation(Vec3 fromDirection, Vec3 toDirection){}
-    T SetLookRotation(Vec3 view, Vec3 up){}
+    T SetFromToRotation(const Vec3& fromDirection, const Vec3& toDirection){}
+    T SetLookRotation(const Vec3& view, Vec3 up){}
     T ToAngleAxis(){}
-    std::string ToString(const Vec4& rhs) const { std::string format; return format }
+    std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")"; }
 
     // static methods
 
     T Euler(){}
     T LookRotation(){}
-    T Normalize(){}
+
+    Vec4 Normalize(const Vec4& rhs) const {
+        float magnitude = std::sqrt(x * x + y * y + z * z + w * w);
+        
+        if (magnitude < 0.00001f) {
+            return Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+        }
+
+        return Vec4(x/ magnitude, y/ magnitude, z/ magnitude, w/ magnitude);
+    }
+
     T RotateTowards(){}
     T Slerp(){}
     T SlerpUncampled(){}
