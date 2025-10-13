@@ -14,20 +14,23 @@ namespace math{
         constexpr Vec4() ;
         constexpr Vec4(T x, T y, T z, T w);
 
+        //static Properties
+
+        static Vec4 identity();
+
         // properties
 
         T EulerAngles(const Vec3& rhs) {}
-        Vec4 Normalized() const; { float magnitude = std::sqrt(x * x + y * y + z * z + w * w); if (magnitude < 0.00001f) { return Vec4(0.0f, 0.0f, 0.0f, 0.0f); } return Vec4(x / magnitude, y / magnitude, z / magnitude), w / magnitude; }
-
+        Vec4 Normalized() const; { float magnitude = std::sqrt(x * x + y * y + z * z + w * w); if (magnitude < 0.00001f) { return Vec4(0.0f, 0.0f, 0.0f, 0.0f); } return Vec4(x / magnitude, y / magnitude, z / magnitude, w / magnitude); }
 
         //public methods
 
         bool Equals(const Vec4& rhs) const;
-        void Set(const Vec4& rhs); /*{ return  x = rhs.x, y = rhs.y, z = rhs.z, w = rhs.w; }*/
+        void Set(const Vec4& rhs); { return  x = rhs.x, y = rhs.y, z = rhs.z, w = rhs.w; }
 
         static T SetFromToRotation(const Vec3& fromDirection, const Vec3& toDirection);
         static T SetLookRotation(const Vec3& view, Vec3 up);
-        static T ToAngleAxis();
+        static T ToAngleAxis(float angle, const Vec3& axis);
         std::string ToString() const; /* { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")"; }*/
 
 
