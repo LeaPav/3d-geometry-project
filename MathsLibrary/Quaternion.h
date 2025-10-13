@@ -20,7 +20,7 @@ namespace math{
 
         // properties
 
-        Vec4 EulerAngles(const Vec4& roll, const Vec4& pitch, const Vec4& yaw);
+        Vec4 EulerAngles();
         Vec4 Normalized() const; { float magnitude = std::sqrt(x * x + y * y + z * z + w * w); if (magnitude < 0.00001f) { return Vec4(0.0f, 0.0f, 0.0f, 0.0f); } return Vec4(x / magnitude, y / magnitude, z / magnitude, w / magnitude); }
 
         //public methods

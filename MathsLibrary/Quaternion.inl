@@ -10,18 +10,35 @@ namespace math {
 	constexpr Vec4<T>::Vec4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
 
 	template<typename T>
-	inline Vec4<T> Vec4<T>::EulerAngles(const Vec4& roll, const Vec4& pitch, const Vec4& yaw/*const Vec3& roll, const Vec3& pitch, const Vec3& yaw*/ )
+	inline Vec4<T> Vec4<T>::EulerAngles() //impossible de mettre Vec3<T>
 	{
+		//rotation autour de X
+		T sinr_cosp = 2 * (w * x + y * z);
+		T cosr_cosp = 1 - 2 * (x * x + y * y);
+		T roll = std::atan2(sinr_cosp, cosr_cosp);
 
+		//rotation autour de Y
+		T sinp = 2 * (w * y - z * x);
+		T pitch;
+		if (std::abs(sinp) >= 1) {
+			pitch = (sinp < 0 ? -1 : 1) * M_PI / 2;
+		}
+		else {
+			pitch = std::asin(sinp);
+		}
 
-		return Vec4();
+		//rotation autour de Z
+		T siny_cosp = 2 * (w * z + x * y);
+		T cosy_cosp = 1 - 2 * (y * y + z * z);
+		T yaw = std::atan2(siny_cosp, cosy_cosp);
+
+		T deg = 180.0 / M_PI;
+		T roll_deg = roll * deg;
+		T pitch_deg = pitch * deg;
+		T yaw_deg = yaw * deg;
+
+		return Vec3<T>(roll_deg, pitch_deg, yaw_deg);
 	}
-
-	//template<typename T>
-	//inline Vec4<T> Vec4<T>::EulerAngles()
-	//{
-	//	return Vec4();
-	//}
 
 
 	//static properties
