@@ -53,7 +53,7 @@ namespace math {
 		bool Equals(const Vec3& rhs) const { return (x == rhs.x) && (y == rhs.y) && (z == rhs.z); }
 
 		void Set(const Vec3& rhs) { x = rhs.x; y = rhs.y; z = rhs.z; }
-
+		;
 		std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std_to_string(z) + ")"; }
 
 		// static methods

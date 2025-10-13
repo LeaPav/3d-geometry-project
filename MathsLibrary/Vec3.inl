@@ -104,6 +104,8 @@ namespace math {
 		return Vec3(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
 	}
 
+	//static methods
+
 	template<typename T>
 	inline float math::Vec3<T>::Angle(const Vec3& from, const Vec3& to)
 	{
