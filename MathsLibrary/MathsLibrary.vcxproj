@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Mat3x3.inl" />
+    <None Include="Quaternion.inl" />
     <None Include="Vec2.inl" />
     <None Include="Vec3.inl" />
   </ItemGroup>
