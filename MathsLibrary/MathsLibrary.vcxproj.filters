@@ -16,6 +16,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2.h">
+	<Filter>Fichiers d%27en-tête</Filter>
+	</ClInclude>
+    <ClInclude Include="Vec2.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec3.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Mat3x3.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -23,5 +32,16 @@
     <ClCompile Include="Source.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Vec2.inl">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </None>
+    <None Include="Vec3.inl">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </None>
+    <None Include="Mat3x3.inl">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </None>
   </ItemGroup>
 </Project>
