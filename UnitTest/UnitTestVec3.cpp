@@ -208,6 +208,19 @@ namespace UnitTestVec3
 			Assert::AreEqual(-8.f, result.z);
 		}
 
+		TEST_METHOD(Static_RotateTowards)
+		{
+			math::Vec3f current(1, 0, 0);
+			math::Vec3f target(0, 1, 0);
+
+			float maxRadiansDelta = pi / 4;
+			float maxMagnitudeDelta = 10.f;
+
+			math::Vec3f result = math::Vec3f::RotateTowards(current, target, maxRadiansDelta, maxMagnitudeDelta);
+
+			float angleMoved = math::Vec3f::Angle(current, result);
+			Assert::IsTrue(angleMoved <= maxRadiansDelta + 0.001f);
+		}
 		TEST_METHOD(Static_Slerp_Ortho)
 		{
 			math::Vec3f vec1(1, 0, 0);

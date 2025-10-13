@@ -14,7 +14,6 @@ namespace math {
 		constexpr Vec3();
 		constexpr Vec3(T x, T y, T z);
 
-
 		// operators
 
 		constexpr Vec3 operator+(const Vec3& rhs) const;
@@ -50,9 +49,9 @@ namespace math {
 
 		bool Equals(const Vec3& rhs) const; 
 
-		//void Set(const Vec3& rhs); { x = rhs.x; y = rhs.y; z = rhs.z; }
+		void Set(T newX, T newY, T newZ ); 
 
-		//std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std_to_string(z) + ")"; }
+		std::string ToString() const; 
 
 		// static methods
 

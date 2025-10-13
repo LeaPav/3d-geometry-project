@@ -135,9 +135,10 @@ namespace math {
     }
 
     template<typename T>
-    inline void Vec2<T>::Set(const Vec2& rhs)
+    inline void Vec2<T>::Set(T newX, T newY)
     {
-        x = rhs.x; y = rhs.y;
+        x = newX;
+        y = newY;
     }
 
     template<typename T>

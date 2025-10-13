@@ -72,6 +72,8 @@ namespace UnitTestVec2
 		}
 		TEST_METHOD(Property_Magnitude)
 		{
+			math::Vec2f vec(4.f, 2.f);
+			Assert::AreEqual(5.f, vec.Magnitude(), 0.0001f);
 		
 		}
 		TEST_METHOD(Property_Normalized)
@@ -80,7 +82,8 @@ namespace UnitTestVec2
 		}
 		TEST_METHOD(Property_SqrMagnitude)
 		{
-			
+			math::Vec2f vec(2.f, 4.f);
+			Assert::AreEqual(18.f, vec.SqrMagnitude(), 0.0001f);
 		}
 		TEST_METHOD(Static_ClampMagnitude)
 		{

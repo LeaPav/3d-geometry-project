@@ -51,7 +51,7 @@ namespace math{
 
         bool Equals(const Vec2& rhs) const;
         Vec2 Normalize(const Vec2& rhs) const; 
-        void Set(const Vec2& rhs); 
+        void Set(T newX, T newY); 
         std::string ToString() const;
 
         // static methods

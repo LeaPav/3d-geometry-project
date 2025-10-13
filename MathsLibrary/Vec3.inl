@@ -128,13 +128,22 @@ namespace math {
 	template<typename T>
 	inline bool Vec3<T>::Equals(const Vec3& rhs) const
 	{
-		return (x == rhs.x) && (y == rhs.y) && (z == rhs.z);
+		return x == rhs.x && y == rhs.y && z == rhs.z;
 	}
 
-	/*void Set(const Vec3& rhs)
+	template<typename T>
+	inline void Vec3<T>::Set(T newX, T newY, T newZ)
 	{
-		 x = rhs.x; y = rhs.y; z = rhs.z; 
-	}*/
+		x = newX;
+		y = newY;
+		z = newZ;
+	}
+
+	template<typename T>
+	inline std::string Vec3<T>::ToString() const
+	{
+		 return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std_to_string(z) + ")"; 
+	}
 
 	template<typename T>
 	inline float math::Vec3<T>::Angle(const Vec3& from, const Vec3& to)
@@ -284,7 +293,18 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Vec3<T>::RotateTowards(const Vec3& current, const Vec3& target, float maxRadiansDelta, float maxMagnitudeDelta)
 	{
+		if (current == target) return target;
+		float angle = Angle(current, target);
 		
+		if (maxRadiansDelta < 0.0f) {
+			float t = std::fmin(1.0f, std::abs(maxRadiansDelta) / angle);
+			Vec3<T> opposite = Slerp(current, opposite, maxMagnitudeDelta);
+			return MoveTowards(current, opposite, maxMagnitudeDelta);
+		}
+		float tDir = (angle < 1e-5f) ? 0.0f : std::fmin(1.0f, maxRadiansDelta / angle);
+		Vec3<T> rotate = Slerp(current, target, tDir);
+		return MoveTowards(current, rotate, maxMagnitudeDelta);
+
 	}
 
 	template<typename T>
