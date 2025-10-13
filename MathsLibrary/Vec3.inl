@@ -1,3 +1,4 @@
+#include "Vec3.h"
 
 namespace math {
 	template<typename T>
@@ -248,25 +249,20 @@ namespace math {
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::Normalize(const Vec3& rhs)
+	inline Vec3<T> Vec3<T>::Normalize(const Vec3& rhs) const
 	{
-		float magnitude = rhs.Magnitude(); 
-		if (magnitude < 0.00001f) { 
-			return Vec3(0.0f, 0.0f, 0.0f); 
-		} 
-		return Vec3(x / magnitude, y / magnitude, z / magnitude); 
+		float magnitude = rhs.Magnitude();
+		if (magnitude < 0.00001f) {
+			return Vec3(0.0f, 0.0f, 0.0f);
+		}
+		return Vec3(x / magnitude, y / magnitude, z / magnitude);
 	}
 
-	//template<typename T>
-	//inline Vec3<T> Vec3<T>::OrthoNormalize(const Vec3& rhs)
-	//{
-	//	float magnitude = rhs.Magnitude();
-	//	if (magnitude <= maxLength) { return rhs; }
-	//	else { return rhs.Normalized() * maxLength; }
-
-	//	//	//limiter la longeur d'un vecteur sans changer sa direction
-	//}
-	//
+	template<typename T>
+	inline T Vec3<T>::OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal)
+	{
+		return T();
+	}
 
 	template<typename T>
 	inline float Vec3<T>::Reflect(const Vec3& inDirection, const Vec3& inNormal)

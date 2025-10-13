@@ -52,7 +52,7 @@ namespace math {
 
 		bool Equals(const Vec3& rhs) const { return (x == rhs.x) && (y == rhs.y) && (z == rhs.z); }
 
-		void Set(const Vec3& rhs) { x = rhs.x; y = rhs.y; z = rhs.z }
+		void Set(const Vec3& rhs) { x = rhs.x; y = rhs.y; z = rhs.z; }
 
 		std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std_to_string(z) + ")"; }
 
@@ -92,7 +92,7 @@ namespace math {
 
 		static Vec3 ClampMagnitude(const Vec3& rhs, float maxLength);
 
-		static Vec3 Normalize(const Vec3& rhs) const; 
+	    Vec3 Normalize(const Vec3& rhs) const; 
 
 		static T OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal);
 		// {
