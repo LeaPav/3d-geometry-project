@@ -1,17 +1,36 @@
 #include "Quaternion.h"
+#include "Vec3.h"
 
 namespace math {
-
-	//static properties
-
-
-	//properties
 
 	template <typename T>
 	constexpr Vec4<T>::Vec4() : x(0), y(0), z(0), w(0) {}
 
 	template <typename T>
 	constexpr Vec4<T>::Vec4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
+
+	template<typename T>
+	inline Vec4<T> Vec4<T>::EulerAngles(const Vec4& roll, const Vec4& pitch, const Vec4& yaw/*const Vec3& roll, const Vec3& pitch, const Vec3& yaw*/ )
+	{
+
+
+		return Vec4();
+	}
+
+	//template<typename T>
+	//inline Vec4<T> Vec4<T>::EulerAngles()
+	//{
+	//	return Vec4();
+	//}
+
+
+	//static properties
+
+
+	//properties
+
+
+
 
 	//public methods
 
