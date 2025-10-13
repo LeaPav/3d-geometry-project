@@ -30,37 +30,35 @@ namespace math{
 
         // static properties
 
-        static constexpr Vec2 zero();
-        static constexpr Vec2 one();
-        static constexpr Vec2 up();
-        static constexpr Vec2 down();
-        static constexpr Vec2 right();
-        static constexpr Vec2 left();
+        static constexpr Vec2 Zero();
+        static constexpr Vec2 One();
+        static constexpr Vec2 Up();
+        static constexpr Vec2 Down();
+        static constexpr Vec2 Right();
+        static constexpr Vec2 Left();
 
-        static constexpr  Vec2 positiveInfinity();
-        static constexpr Vec2 negativeInfinity();
+        static constexpr  Vec2 PositiveInfinity();
+        static constexpr Vec2 NegativeInfinity();
 
 
         //properties
 
-        float Magnitude() const { return std::sqrt(x * x + y * y); }
-        Vec2 Normalized() const { float magnitude = Magnitude(); if (magnitude < 0.00001f) { return Vec2(0.0f, 0.0f); } return Vec2(x / magnitude, y / magnitude); }
-        float SqrMagnitude() const { return x * x + y * y; }
+        float Magnitude() const;
+        Vec2 Normalized() const;
+        float SqrMagnitude() const;
 
         //public methods
 
-        bool Equals(const Vec2& rhs) const { return (x == rhs.x) && (y == rhs.y); }
-        Vec2 Normalize(const Vec2& rhs) const  { float magnitude = rhs.Magnitude(); if (magnitude < 0.00001f) { return Vec2(0.0f, 0.0f); } return Vec2(x / magnitude, y / magnitude); }
-        void Set(const Vec2& rhs) { x = rhs.x; y = rhs.y; }
-        std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ")"; }
+        bool Equals(const Vec2& rhs) const;
+        Vec2 Normalize(const Vec2& rhs) const; 
+        void Set(const Vec2& rhs); 
+        std::string ToString() const;
 
         // static methods
 
         static Vec2 ClampMagnitude(const Vec2& rhs, float maxLength);
 
-
         static Vec2 MoveTowards(const Vec2& current, const Vec2& target, float maxDistanceDelta);
-
 
         static Vec2 Perpendicular(const Vec2& rhs);
 
@@ -70,7 +68,6 @@ namespace math{
 
         static float SignedAngle(const Vec2& from, const Vec2& to);
     
-
         static T Distance(const Vec2& a, const Vec2& b); 
 
         static constexpr T Dot(const Vec2& a, const Vec2& b);

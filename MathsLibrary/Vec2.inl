@@ -58,45 +58,95 @@ namespace math {
     }
 
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::zero() {
+    constexpr Vec2<T> Vec2<T>::Zero() {
         return Vec2(0, 0);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::one()
+    constexpr Vec2<T> Vec2<T>::One()
     {
         return Vec2(1, 1);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::up()
+    constexpr Vec2<T> Vec2<T>::Up()
     {
         return Vec2(0, 1);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::down()
+    constexpr Vec2<T> Vec2<T>::Down()
     {
         return Vec2(0, -1);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::right()
+    constexpr Vec2<T> Vec2<T>::Right()
     { 
         return Vec2(1, 0);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::left()
+    constexpr Vec2<T> Vec2<T>::Left()
     {
         return Vec2(-1, 0);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::positiveInfinity()
+    constexpr Vec2<T> Vec2<T>::PositiveInfinity()
     {
         return Vec2(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::negativeInfinity()
+    constexpr Vec2<T> Vec2<T>::NegativeInfinity()
     {
         return Vec2(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
     }
+
+    template<typename T>
+    inline float Vec2<T>::Magnitude() const
+    {
+        return std::sqrt(x * x + y * y);
+    }
+
+    template<typename T>
+    inline Vec2<T> Vec2<T>::Normalized() const
+    {
+        float magnitude = Magnitude(); 
+        if (magnitude < 0.00001f) {
+            return Vec2(0.0f, 0.0f); } 
+        return Vec2(x / magnitude, y / magnitude);;
+    }
+
+    template<typename T>
+    inline float Vec2<T>::SqrMagnitude() const
+    {
+        return x * x + y * y;
+    }
     
+    template<typename T>
+    inline bool Vec2<T>::Equals(const Vec2& rhs) const
+    {
+        return (x == rhs.x) && (y == rhs.y);
+    }
+
+    template<typename T>
+    inline Vec2<T> Vec2<T>::Normalize(const Vec2& rhs) const
+    {
+        float magnitude = rhs.Magnitude(); 
+        if (magnitude < 0.00001f) { 
+            return Vec2(0.0f, 0.0f); 
+        } 
+        return Vec2(x / magnitude, y / magnitude);
+    }
+
+    template<typename T>
+    inline void Vec2<T>::Set(const Vec2& rhs)
+    {
+        x = rhs.x; y = rhs.y;
+    }
+
+    template<typename T>
+    inline std::string Vec2<T>::ToString() const
+    {
+        return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+    }
+
+
     template<typename T>
     inline Vec2<T> Vec2<T>::ClampMagnitude(const Vec2& rhs, float maxLength) 
     {

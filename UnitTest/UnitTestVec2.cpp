@@ -70,6 +70,42 @@ namespace UnitTestVec2
 			Assert::AreEqual(vec1.x, vec1[0]);
 			Assert::AreEqual(vec1.y, vec1[1]);
 		}
+		TEST_METHOD(Property_Magnitude)
+		{
+		
+		}
+		TEST_METHOD(Property_Normalized)
+		{
+			
+		}
+		TEST_METHOD(Property_SqrMagnitude)
+		{
+			
+		}
+		TEST_METHOD(Static_ClampMagnitude)
+		{
+			math::Vec2f vec1(0.f, 0.f);
+			math::Vec2f vec2(3.0f, 4.0f);
+			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+		}
+		TEST_METHOD(Static_MoveTowards)
+		{
+			math::Vec2f vec1(0.f, 0.f);
+			math::Vec2f vec2(3.0f, 4.0f);
+			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+		}
+		TEST_METHOD(Static_Perpendicular)
+		{
+			math::Vec2f vec1(0.f, 0.f);
+			math::Vec2f vec2(3.0f, 4.0f);
+			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+		}
+		TEST_METHOD(Static_Reflect)
+		{
+			math::Vec2f vec1(0.f, 0.f);
+			math::Vec2f vec2(3.0f, 4.0f);
+			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+		}
 		TEST_METHOD(Static_Distance)
 		{
 			math::Vec2f vec1(0.f, 0.f);

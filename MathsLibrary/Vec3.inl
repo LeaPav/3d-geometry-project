@@ -52,57 +52,89 @@ namespace math {
 
 
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::back()
+	constexpr Vec3<T> Vec3<T>::Back()
 	{
 		return Vec3(0, 0, -1);
 	}
 
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::down()
+	constexpr Vec3<T> Vec3<T>::Down()
 	{
 		return Vec3(0, -1, 0);
 	}
 
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::forward()
+	constexpr Vec3<T> Vec3<T>::Forward()
 	{
 		return Vec3(0,0,1);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::left()
+	constexpr Vec3<T> Vec3<T>::Left()
 	{
 		return Vec3(-1, 0, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::one()
+	constexpr Vec3<T> Vec3<T>::One()
 	{
 		return Vec3(1, 1, 1);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::right()
+	constexpr Vec3<T> Vec3<T>::Right()
 	{
 		return Vec3(1, 0, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::up()
+	constexpr Vec3<T> Vec3<T>::Up()
 	{
 		return Vec3(0, 1, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::zero()
+	constexpr Vec3<T> Vec3<T>::Zero()
 	{
 		return Vec3(0, 0, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::negativeInfinity()
+	constexpr Vec3<T> Vec3<T>::NegativeInfinity()
 	{
 		return Vec3(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::positiveInfinity()
+	constexpr Vec3<T> Vec3<T>::PositiveInfinity()
 	{
 		return Vec3(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
 	}
+
+	template<typename T>
+	inline float Vec3<T>::Magnitude() const
+	{
+		return std::sqrt(x * x + y * y + z * z);
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Normalized() const
+	{
+		float magnitude = Magnitude(); 
+		if (magnitude < 0.00001f) { 
+			return Vec3(0.0f, 0.0f, 0.0f); } 
+		return Vec3(x / magnitude, y / magnitude, z / magnitude);
+	}
+
+	template<typename T>
+	inline float Vec3<T>::SqrMagnitude() const
+	{
+		return x * x + y * y + z * z;
+	}
+
+	template<typename T>
+	inline bool Vec3<T>::Equals(const Vec3& rhs) const
+	{
+		return (x == rhs.x) && (y == rhs.y) && (z == rhs.z);
+	}
+
+	/*void Set(const Vec3& rhs)
+	{
+		 x = rhs.x; y = rhs.y; z = rhs.z; 
+	}*/
 
 	template<typename T>
 	inline float math::Vec3<T>::Angle(const Vec3& from, const Vec3& to)
@@ -205,7 +237,7 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Vec3<T>::Project(const Vec3& vec, const Vec3& onNormal)
 	{
-		T denom = Dot(onNormal, onNormal); // denominateur, dans la formule c'est la norme au carré de b
+		T denom = Dot(onNormal, onNormal); // denominateur, dans la formule c'est la norme au carre de b
 		if (denom == 0) return Vec3<T>();
 
 		return onNormal * (Vec3<T>::Dot(vec, onNormal) / denom);
