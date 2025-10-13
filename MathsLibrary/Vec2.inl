@@ -96,6 +96,43 @@ namespace math {
     {
         return Vec2(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
     }
+    
+    template<typename T>
+    inline Vec2<T> Vec2<T>::ClampMagnitude(const Vec2& rhs, float maxLength) 
+    {
+        float magnitude = rhs.Magnitude();
+        if (magnitude <= maxLength) { return rhs; }
+        else { return rhs.Normalized() * maxLength; }
+
+        //limiter la longeur d'un vecteur sans changer sa direction
+    }
+
+    template<typename T>
+    inline Vec2<T> Vec2<T>::MoveTowards(const Vec2& current, const Vec2& target, float maxDistanceDelta)
+    {
+        Vec2 delta = target - current;
+        float distance = Distance(current, target);
+
+        if (distance <= maxDistanceDelta || distance == 0.0f) { return target; }
+
+        Vec2 direction = delta / distance;
+        return current + direction * maxDistanceDelta;
+
+        //déplace une valeur or objet d'une position actuelle vers une position cible à une vitesse constante
+    }
+    template<typename T>
+    inline Vec2<T> Vec2<T>::Perpendicular(const Vec2& rhs)
+    {
+        return Vec2(-rhs.y, rhs.x); 
+    }
+
+    template<typename T>
+    inline float Vec2<T>::Reflect(const Vec2& inDirection, const Vec2& inNormal)
+    {
+        Vec2 n = inNormal.Normalized();
+        float scal = Dot(inDirection, n);
+        return inDirection - n * (2.0f * scal); // formule de réflexion
+    }
 
     template<typename T>
     inline float Vec2<T>::Angle(const Vec2& from, const Vec2& to)
