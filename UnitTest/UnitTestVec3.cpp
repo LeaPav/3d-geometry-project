@@ -89,6 +89,40 @@ namespace UnitTestVec3
 			Assert::AreEqual(vec.y, vec[1]);
 			Assert::AreEqual(vec.z, vec[2]);
 		}
+
+		TEST_METHOD(Instance_Magnitude)
+		{
+			math::Vec3f vec(5.f, 14.f, 2.f);
+
+			Assert::AreEqual(15.f, vec.Magnitude(), 0.0001f);
+	
+		}
+		TEST_METHOD(Instance_SqrMagnitude)
+		{
+			math::Vec3f vec(4.f, 3.f, 6.f);
+
+			Assert::AreEqual(61.f, vec.SqrMagnitude(), 0.0001f);
+
+		}
+		TEST_METHOD(Instance_Normalized_Mag1)
+		{
+			math::Vec3f vec(3.f, 0.f, 4.f);
+			math::Vec3f n = vec.Normalized();
+			float mag = n.Magnitude();
+			Assert::AreEqual(1.f, mag, 0.0001f);
+
+		}
+		TEST_METHOD(Instance_Normalized_Direction)
+		{
+			math::Vec3f vec(20.f, -10.f, 15.f);
+			math::Vec3f n = vec.Normalized();
+
+			math::Vec3f cross = math::Vec3f::Cross(vec, n);
+			float crossMag = cross.Magnitude();
+
+			Assert::IsTrue(crossMag < 1e-5f);
+
+		}
 		TEST_METHOD(Static_Distance)
 		{
 			math::Vec3d vec1(2.f, 5.f, 7.f);
@@ -172,6 +206,45 @@ namespace UnitTestVec3
 			Assert::AreEqual(-34.f, result.x);
 			Assert::AreEqual(22.f, result.y);
 			Assert::AreEqual(-8.f, result.z);
+		}
+
+		TEST_METHOD(Static_Slerp_Ortho)
+		{
+			math::Vec3f vec1(1, 0, 0);
+			math::Vec3f vec2(0, 1, 0);
+			math::Vec3f result = math::Vec3f::Slerp(vec1, vec2, 0.5f);
+
+			Assert::AreEqual(0.7071f, result.x, 0.001f);
+			Assert::AreEqual(0.7071f, result.y, 0.001f);
+			Assert::AreEqual(0.0f, result.z, 0.001f);
+		}
+		TEST_METHOD(Static_Slerp_2) 
+		{
+			math::Vec3f vec1(1, 0, 0);
+			math::Vec3f vec2(-1, 0, 0);
+			math::Vec3f result = math::Vec3f::Slerp(vec1, vec2, 0.0f);
+			Assert::AreEqual(vec1.Normalized().x, result.x, 0.001f);
+			Assert::AreEqual(vec1.Normalized().y, result.y, 0.001f);
+			Assert::AreEqual(vec1.Normalized().z, result.z, 0.001f);
+
+			math::Vec3f result1 = math::Vec3f::Slerp(vec1, vec2, 1.0f);
+			Assert::AreEqual(vec2.Normalized().x, result1.x, 0.001f);
+			Assert::AreEqual(vec2.Normalized().y, result1.y, 0.001f);
+			Assert::AreEqual(vec2.Normalized().z, result1.z, 0.001f);
+		}
+		TEST_METHOD(Static_SlerpUnclamped)
+		{
+			math::Vec3f vec1(1, 0, 0);
+			math::Vec3f vec2(0, 1, 0);
+			math::Vec3f result = math::Vec3f::Slerp(vec1, vec2, 1.5f);
+			Assert::IsTrue(result.y > 0.7071f);
+		}
+		TEST_METHOD(Static_SlerpUnclamped2)
+		{
+			math::Vec3f vec1(1, 0, 0);
+			math::Vec3f vec2(0, 1, 0);
+			math::Vec3f result = math::Vec3f::Slerp(vec1, vec2, -0.5f);
+			Assert::IsTrue(result.x > 0.7071f);
 		}
 	};
 }

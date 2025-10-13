@@ -222,17 +222,34 @@ namespace math {
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
 
-		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a, b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+		Vec3<T> aNorm = a.Normalized();
+		Vec3<T> bNorm = b.Normalized();
+		 
+		T dot = Dot(aNorm, bNorm);
+		dot = std::fmax(T(-1), std::fmin(T(1.0f), dot));
+
 		T theta = std::acos(dot);
-		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+
+		T mag = (1 - t) * a.Magnitude() + t * b.Magnitude();
+
+		return (aNorm * (std::sin((1 - t) * theta) / std::sin(theta)) + bNorm * (std::sin(t * theta) / std::sin(theta))) * mag;
 	}
 
 	template<typename T>
 	inline Vec3<T> Vec3<T>::SlerpUnclamped(const Vec3& a, const Vec3& b, float t)
 	{
-		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a,b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+
+		Vec3<T> aNorm = a.Normalized();
+		Vec3<T> bNorm = b.Normalized();
+
+		T dot = Dot(aNorm, bNorm);
+		dot = std::fmax(T(-1), std::fmin(T(1.0f), dot));
 		T theta = std::acos(dot);
-		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+
+		if (std::abs(theta) < 1e-5f) return LerpUnclamped(aNorm, bNorm, t).Normalized();
+
+		T mag = (1 - t) * a.Magnitude() + t * b.Magnitude();
+		return (aNorm * (std::sin((1 - t) * theta) / std::sin(theta)) + bNorm * (std::sin(t * theta) / std::sin(theta))) * mag;
 	}
 	template<typename T>
 	inline Vec3<T> Vec3<T>::Project(const Vec3& vec, const Vec3& onNormal)
@@ -291,9 +308,24 @@ namespace math {
 	}
 
 	template<typename T>
-	inline T Vec3<T>::OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal)
+	inline void Vec3<T>::OrthoNormalize(Vec3& normal,Vec3& tangent)
 	{
-		return T();
+		normal = normal.Normalized();
+
+		tangent = tangent - normal * Dot(normal, tangent);
+		tangent = tangent.Normalized();
+
+	}
+
+	template<typename T>
+	inline void Vec3<T>::OrthoNormalize(Vec3& normal, Vec3& tangent, Vec3& binormal)
+	{
+		normal = normal.Normalized();
+		tangent = tangent - normal * Dot(normal, tangent);
+		tangent = tangent.Normalized();
+
+		binormal = binormal - normal * Dot(normal, binormal) - tangent * Dot(tangent, binormal);
+		binormal = binormal.Normalized();
 	}
 
 	template<typename T>

@@ -92,7 +92,9 @@ namespace math {
 
 	    Vec3 Normalize(const Vec3& rhs) const; 
 
-		static T OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal);
+		static void OrthoNormalize(Vec3& normal, Vec3& tangent);
+
+		static void OrthoNormalize(Vec3& normal, Vec3& tangent, Vec3& binormal);
 
 		static float Reflect(const Vec3& inDirection, const Vec3& inNormal);
 
@@ -105,5 +107,4 @@ namespace math {
 
 }
 #include "Vec3.inl"
-#include "Vec2.h"
 
