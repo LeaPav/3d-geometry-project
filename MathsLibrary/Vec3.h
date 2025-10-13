@@ -40,6 +40,22 @@ namespace math {
 		static constexpr Vec3 negativeInfinity();
 		static constexpr Vec3 positiveInfinity();
 
+		// properties
+
+		float Magnitude() const { return std::sqrt(x * x + y * y + z * z); }
+		Vec3 Normalized() const {
+			float magnitude = Magnitude(); if (magnitude < 0.00001f) { return Vec3(0.0f, 0.0f, 0.0f); } return Vec3(x / magnitude, y / magnitude, z / magnitude);
+		}
+		float SqrMagnitude() const { return x * x + y * y + z * z; }
+
+		//public methods
+
+		bool Equals(const Vec3& rhs) const { return (x == rhs.x) && (y == rhs.y) && (z == rhs.z); }
+
+		void Set(const Vec3& rhs) { x = rhs.x; y = rhs.y; z = rhs.z }
+
+		std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std_to_string(z) + ")"; }
+
 		// static methods
 
 		static float Angle(const Vec3& from, const Vec3& to);
@@ -73,6 +89,20 @@ namespace math {
 		static Vec3 MoveTowards(const Vec3& current, const Vec3& target, float maxDistanceDelta);;
 
 		static Vec3 RotateTowards(const Vec3& current, const Vec3& target, float maxRadiansDelta, float maxMagnitudeDelta);
+
+		static Vec3 ClampMagnitude(const Vec3& rhs, float maxLength);
+
+		static Vec3 Normalize(const Vec3& rhs) const; 
+
+		static T OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal);
+		// {
+
+		//	Vec3 vector1 = Normalized();
+
+		//}
+
+		static float Reflect(const Vec3& inDirection, const Vec3& inNormal);
+
 	};
 
 	using Vec3f = Vec3<float>;

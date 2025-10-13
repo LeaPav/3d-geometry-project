@@ -220,7 +220,15 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Vec3<T>::MoveTowards(const Vec3& current, const Vec3& target, float maxDistanceDelta)
 	{
-		Vec3<T> delta = target - current;
+		Vec3 delta = target - current;
+		float distance = delta.Magnitude();
+
+		if (distance <= maxDistanceDelta || distance == 0.0f) { return target; }
+
+		Vec3 direction = delta / distance;
+		return current + direction * maxDistanceDelta;
+
+		//déplace une valeur or objet d'une position actuelle vers une position cible à une vitesse constante;
 		
 	}
 	template<typename T>
@@ -228,4 +236,44 @@ namespace math {
 	{
 		
 	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::ClampMagnitude(const Vec3& rhs, float maxLength)
+	{
+		float magnitude = rhs.Magnitude();
+		if (magnitude <= maxLength) { return rhs; }
+		else { return rhs.Normalized() * maxLength; }
+
+		//	//limiter la longeur d'un vecteur sans changer sa direction
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Normalize(const Vec3& rhs)
+	{
+		float magnitude = rhs.Magnitude(); 
+		if (magnitude < 0.00001f) { 
+			return Vec3(0.0f, 0.0f, 0.0f); 
+		} 
+		return Vec3(x / magnitude, y / magnitude, z / magnitude); 
+	}
+
+	//template<typename T>
+	//inline Vec3<T> Vec3<T>::OrthoNormalize(const Vec3& rhs)
+	//{
+	//	float magnitude = rhs.Magnitude();
+	//	if (magnitude <= maxLength) { return rhs; }
+	//	else { return rhs.Normalized() * maxLength; }
+
+	//	//	//limiter la longeur d'un vecteur sans changer sa direction
+	//}
+	//
+
+	template<typename T>
+	inline float Vec3<T>::Reflect(const Vec3& inDirection, const Vec3& inNormal)
+	{
+		Vec3 n = inNormal.Normalized();
+		float scal = Dot(inDirection, n);
+		return inDirection - n * (2.0f * scal); // formule de réflexion
+	}
+
 }
