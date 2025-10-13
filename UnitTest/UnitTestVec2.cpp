@@ -4,7 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace MathsTests
+namespace UnitTestVec2
 {
 	TEST_CLASS(Vec2)
 	{
@@ -84,15 +84,27 @@ namespace MathsTests
 		}
 		TEST_METHOD(Static_Angle)
 		{
+			float pi = 3.14159265f;
+
 			math::Vec2f vec1(1.f, 0.f);
 			math::Vec2f vec2(0, 1.0f);
-			Assert::AreEqual(1.5708f, math::Vec2f::Angle(vec1, vec2), 0.001f);
+			Assert::AreEqual(pi /2, math::Vec2f::Angle(vec1, vec2), 0.001f);
 		}
 		TEST_METHOD(Static_SignedAngle)
 		{
+			float pi = 3.14159265f;
+
 			math::Vec2f vec1(1.f, 0.f);
 			math::Vec2f vec2(0, -1.0f);
-			Assert::AreEqual(-1.57079632679f, math::Vec2f::SignedAngle(vec1, vec2), 0.001f);
+			Assert::AreEqual(-pi / 2, math::Vec2f::SignedAngle(vec1, vec2), 0.001f);
+		}
+		TEST_METHOD(Static_SignedAngle2)
+		{
+			float pi = 3.14159265f;
+
+			math::Vec2f vec1(1.f, 0.f);
+			math::Vec2f vec2(-1.0, 0.f);
+			Assert::AreEqual(pi, math::Vec2f::SignedAngle(vec1, vec2), 0.001f);
 		}
 		TEST_METHOD(Static_Lerp)
 		{
