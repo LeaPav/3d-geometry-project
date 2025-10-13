@@ -54,7 +54,7 @@ public:
 
     Vec3 Normalize(const Vec3& rhs) const { float magnitude = rhs.Magnitude(); if (magnitude < 0.00001f) { return Vec3(0.0f, 0.0f, 0.0f); } return Vec3(x / magnitude, y / magnitude, z / magnitude); }
 
-    static T OrthoNormalize(/*const Vec3& normal, const Vec3& tangent, const Vec3& binormal*/ ) {
+    static T OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal ) {
         
         Vec3 vector1 = Normalized();
 
