@@ -167,11 +167,13 @@ namespace math {
         T dy = a.y - b.y;
         return std::sqrt(dx * dx + dy * dy);
     }
+
     template<typename T>
     constexpr T Vec2<T>::Dot(const Vec2& a, const Vec2& b)
     {
         return a.x * b.x + a.y * b.y; // produit scalaire
     }
+
     template<typename T>
     inline Vec2<T> Vec2<T>::Lerp(const Vec2& a, const Vec2& b, float t)
     {

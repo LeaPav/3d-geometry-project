@@ -3,14 +3,18 @@
 
 namespace math {
 
-	template <typename T>
-	constexpr Vec4<T>::Vec4() : x(0), y(0), z(0), w(0) {}
+	//static properties
 
 	template <typename T>
-	constexpr Vec4<T>::Vec4(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
+	constexpr Quaternion<T>::Quaternion() : x(0), y(0), z(0), w(0) {}
+
+	template <typename T>
+	constexpr Quaternion<T>::Quaternion(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
+
+	//properties
 
 	template<typename T>
-	inline Vec4<T> Vec4<T>::EulerAngles() //impossible de mettre Vec3<T>
+	inline Quaternion<T> Quaternion<T>::EulerAngles() //impossible de mettre Vec3<T>
 	{
 		//rotation autour de X
 		T sinr_cosp = 2 * (w * x + y * z);
@@ -40,12 +44,40 @@ namespace math {
 		return Vec3<T>(roll_deg, pitch_deg, yaw_deg);
 	}
 
+	template <typename T>
+	constexpr Quaternion<T> Quaternion<T>::Normalized() const {
+		 float magnitude = std::sqrt(x * x + y * y + z * z + w * w); 
 
-	//static properties
+		 if (magnitude < 0.00001f) { 
+			 return Quaternion(0.0f, 0.0f, 0.0f, 0.0f); 
+		 }
 
+		 return Quaternion(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
+	}
 
-	//properties
+	template<typename T>
+	inline bool Quaternion<T>::Equals(const Quaternion& rhs) const
+	{
+		return (x == rhs.x) && (y == rhs.y) && (z == rhs.z) && (w == rhs.w);
+	}
 
+	template<typename T>
+	inline void Quaternion<T>::Set(const Quaternion& rhs)
+	{
+		return  x = rhs.x, y = rhs.y, z = rhs.z, w = rhs.w;
+	}
+
+	template<typename T>
+	inline void Quaternion<T>::SetFromToRotation(const Quaternion& fromDirection, const Quaternion& toDirection)
+	{
+		Vec3<T> a = fromDirection.Normalized();
+		Vec3<T> b = toDirection.Normalized();
+
+		Vec3<T> cross = (a.y * b.z - a.z * b.x, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+		T dot = a.x * b.x + a.y * b.y + a.z * b.z;
+
+		return T();
+	}
 
 
 
@@ -84,7 +116,7 @@ namespace math {
 	//static methods
 
 	template <typename T>
-	inline float math::Vec4<T>::Angle(const Vec4& from, const Vec4& to)
+	inline float math::Quaternion<T>::Angle(const Quaternion& from, const Quaternion& to)
 	{
 		float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y + from.z * from.z + from.w * from.w);
 		float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y + to.z * to.z + to.w * to.w);
@@ -103,7 +135,7 @@ namespace math {
 	//AngleAxis
 
 	template<typename T>
-	constexpr T Vec4<T>::Dot(const Vec4& a, const Vec4& b)
+	constexpr T Quaternion<T>::Dot(const Quaternion& a, const Quaternion& b)
 	{
 		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w; // produit scalaire
 	}
@@ -115,16 +147,16 @@ namespace math {
 	}
 
 	template <typename T>
-	inline Vec4<T> Vec4<T>::Lerp(const Vec4& a, const Vec4& b, float t)
+	inline Quaternion<T> Quaternion<T>::Lerp(const Quaternion& a, const Quaternion& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
-		return Vec4(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		return Quaternion(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
 	}
 
 	template <typename T>
-	inline Vec4<T> Vec4<T>::LerpUncampled(const Vec4& a, const Vec4& b, float t)
+	inline Quaternion<T> Quaternion<T>::LerpUncampled(const Quaternion& a, const Quaternion& b, float t)
 	{
-		return Vec4(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		return Quaternion(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
 	}
 
 	template <typename T>
@@ -152,7 +184,7 @@ namespace math {
 	}
 
 	template <typename T>
-	inline Vec4<T> Vec4<T>::Slerp(const Vec4& a, const Vec4& b, float t)
+	inline Quaternion<T> Quaternion<T>::Slerp(const Quaternion& a, const Quaternion& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
 
@@ -163,7 +195,7 @@ namespace math {
 	}
 
 	template <typename T>
-	inline Vec4<T> Vec4<T>::SlerpUncampled(const Vec4& a, const Vec4& b, float t)
+	inline Quaternion<T> Quaternion<T>::SlerpUncampled(const Quaternion& a, const Quaternion& b, float t)
 	{
 		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a, b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
 		T theta = std::acos(dot);
@@ -174,13 +206,13 @@ namespace math {
 	//operators
 	
 	template<typename T>
-	constexpr Vec4<T> Vec4<T>::operator*(T scalar) const
+	constexpr Quaternion<T> Quaternion<T>::operator*(T scalar) const
 	{
-		return Vec4(x * scalar, y * scalar, z * scalar, w * scalar);
+		return Quaternion(x * scalar, y * scalar, z * scalar, w * scalar);
 	}
 
 	template<typename T>
-	constexpr bool Vec4<T>::operator==(const Vec4& vec) const
+	constexpr bool Quaternion<T>::operator==(const Quaternion& vec) const
 	{
 		return (x == vec.x) && (y == vec.y) && (z == vec.z) && (w == vec.w);
 	}
