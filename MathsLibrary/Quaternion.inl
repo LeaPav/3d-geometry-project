@@ -63,7 +63,7 @@ namespace math {
 		return std::acos(cosTheta);
 	}
 
-	template <typename T>
+	//template <typename T>
 	//AngleAxis
 
 	template<typename T>
