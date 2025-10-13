@@ -72,42 +72,72 @@ namespace UnitTestVec2
 		}
 		TEST_METHOD(Property_Magnitude)
 		{
-			math::Vec2f vec(4.f, 2.f);
+			math::Vec2f vec(4.f, 3.f);
 			Assert::AreEqual(5.f, vec.Magnitude(), 0.0001f);
 		
 		}
 		TEST_METHOD(Property_Normalized)
 		{
-			
+			math::Vec2f vec(5.f, 3.f);
+			math::Vec2f n = vec.Normalized();
+			float mag = n.Magnitude();
+			Assert::AreEqual(1.f, mag, 0.0001f);
 		}
 		TEST_METHOD(Property_SqrMagnitude)
 		{
 			math::Vec2f vec(2.f, 4.f);
-			Assert::AreEqual(18.f, vec.SqrMagnitude(), 0.0001f);
+			Assert::AreEqual(20.f, vec.SqrMagnitude(), 0.0001f);
+		}
+
+		TEST_METHOD(Public_Method_Equals)
+		{
+			math::Vec2f vec1(1.f, 10.f);
+			math::Vec2f vec2(1.f,10.f);
+			Assert::IsTrue(vec1.Equals(vec2));
+
+			math::Vec2f vec3(4.f, 10.f);
+			math::Vec2f vec4(4.f, 10.2f);
+			Assert::IsFalse(vec3.Equals(vec4));
+		}
+		TEST_METHOD(Public_Method_Normalize)
+		{
+			
+		}
+		TEST_METHOD(Public_Method_Set)
+		{
+			math::Vec2f vec(0.f, 0.f);
+			vec.Set(2.1f, 1.f);
+			Assert::AreEqual(2.1f, vec.x);
+			Assert::AreEqual(1.f, vec.y);
+
+			math::Vec2f vec1(2.3f, 2.f);
+			math::Vec2f vec2(4.7f, 5.f);
+			vec2.Set(vec1.x, vec1.y);
+			Assert::IsTrue(vec2.Equals(vec1));
+		}
+		TEST_METHOD(Public_Method_ToString)
+		{
+			math::Vec2f vec(2.f, 4.f);
+			std::string s = vec.ToString();
+			Assert::IsTrue(s.find("(") == 0);
+			Assert::IsTrue(s.find(",") != std::string::npos);
+			Assert::IsTrue(s.find(")") == s.length() - 1);
 		}
 		TEST_METHOD(Static_ClampMagnitude)
 		{
-			math::Vec2f vec1(0.f, 0.f);
-			math::Vec2f vec2(3.0f, 4.0f);
-			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+
 		}
 		TEST_METHOD(Static_MoveTowards)
 		{
-			math::Vec2f vec1(0.f, 0.f);
-			math::Vec2f vec2(3.0f, 4.0f);
-			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+		
 		}
 		TEST_METHOD(Static_Perpendicular)
 		{
-			math::Vec2f vec1(0.f, 0.f);
-			math::Vec2f vec2(3.0f, 4.0f);
-			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+	
 		}
 		TEST_METHOD(Static_Reflect)
 		{
-			math::Vec2f vec1(0.f, 0.f);
-			math::Vec2f vec2(3.0f, 4.0f);
-			Assert::AreEqual(5.0f, math::Vec2f::Distance(vec1, vec2), 0.001f);
+		
 		}
 		TEST_METHOD(Static_Distance)
 		{
