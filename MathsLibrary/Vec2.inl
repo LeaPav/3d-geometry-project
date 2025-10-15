@@ -178,7 +178,7 @@ namespace math {
     }
 
     template<typename T>
-    inline float Vec2<T>::Reflect(const Vec2& inDirection, const Vec2& inNormal)
+    inline Vec2<T> Vec2<T>::Reflect(const Vec2& inDirection, const Vec2& inNormal)
     {
         Vec2 n = inNormal.Normalized();
         float scal = Dot(inDirection, n);

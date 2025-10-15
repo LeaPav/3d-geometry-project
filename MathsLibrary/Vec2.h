@@ -62,7 +62,7 @@ namespace math{
 
         static Vec2 Perpendicular(const Vec2& rhs);
 
-        static float Reflect(const Vec2& inDirection, const Vec2& inNormal);
+        static Vec2 Reflect(const Vec2& inDirection, const Vec2& inNormal);
 
         static float Angle(const Vec2& from, const Vec2& to); 
 

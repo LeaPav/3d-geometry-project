@@ -101,7 +101,11 @@ namespace UnitTestVec2
 		}
 		TEST_METHOD(Public_Method_Normalize)
 		{
-			
+			/*math::Vec2f vec(2.f, 4.f);
+			math::Vec2f vecNorm = vecNorm.Normalize(vec);
+			Assert::IsTrue(std::abs(vec.Magnitude() - 1.f) < 1e-5f);
+			Assert::IsTrue(std::abs(vec.x / vec.y - 3.f / 4.f) < 1e-5f);*/
+
 		}
 		TEST_METHOD(Public_Method_Set)
 		{
@@ -125,18 +129,41 @@ namespace UnitTestVec2
 		}
 		TEST_METHOD(Static_ClampMagnitude)
 		{
+			math::Vec2f vec(5.f, 3.f);
+			math::Vec2f vecClamped = math::Vec2f::ClampMagnitude(vec, 2.f);
 
+			// Norme de 2
+			Assert::IsTrue(std::abs(vecClamped.Magnitude() - 2.f) < 1e-5f);
+
+			// direction conservee
+			Assert::IsTrue(std::abs(vec.x / vec.y - vecClamped.x / vecClamped.y) < 1e-5f);
 		}
 		TEST_METHOD(Static_MoveTowards)
 		{
-		
+			math::Vec2f current(1.f, 1.f);
+			math::Vec2f target(4.f, 4.f);
+
+			math::Vec2f result = math::Vec2f::MoveTowards(current, target, 5.f);
+			Assert::IsTrue(target == result);
 		}
 		TEST_METHOD(Static_Perpendicular)
 		{
+			math::Vec2f v(1.f, 0.f);
+			math::Vec2 p = math::Vec2f::Perpendicular(v);
+			Assert::IsTrue(std::abs(math::Vec2f::Dot(v, p)) < 1e-5f);
+
+			Assert::IsTrue(std::abs(p.Magnitude() - v.Magnitude()) < 1e-5f);
 	
 		}
 		TEST_METHOD(Static_Reflect)
 		{
+			math::Vec2f dir(1, -1);
+			math::Vec2f normal(0, 1);
+
+			math::Vec2f r = math::Vec2f::Reflect(dir, normal);
+
+			Assert::IsTrue(std::abs(r.x - 1.f) < 1e-5f);
+			Assert::IsTrue(std::abs(r.y - 1.f) < 1e-5f);
 		
 		}
 		TEST_METHOD(Static_Distance)
