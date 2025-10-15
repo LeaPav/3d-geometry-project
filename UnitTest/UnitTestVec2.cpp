@@ -101,10 +101,11 @@ namespace UnitTestVec2
 		}
 		TEST_METHOD(Public_Method_Normalize)
 		{
-			/*math::Vec2f vec(2.f, 4.f);
-			math::Vec2f vecNorm = vecNorm.Normalize(vec);
-			Assert::IsTrue(std::abs(vec.Magnitude() - 1.f) < 1e-5f);
-			Assert::IsTrue(std::abs(vec.x / vec.y - 3.f / 4.f) < 1e-5f);*/
+			math::Vec2f vec(2.f, 4.f);
+			vec.Normalize();
+
+			Assert::IsTrue(std::fabs(vec.Magnitude() - 1) < 1e-5f);
+			Assert::IsTrue(vec.x > 0 && vec.y > 0);
 
 		}
 		TEST_METHOD(Public_Method_Set)

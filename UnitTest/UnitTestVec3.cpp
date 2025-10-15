@@ -168,7 +168,9 @@ namespace UnitTestVec3
 		TEST_METHOD(Method_Normalize)
 		{
 			math::Vec3f vec(2.f, 4.f, 5.f);
-
+			vec.Normalize();
+			Assert::IsTrue(std::fabs(vec.Magnitude() - 1) < 1e-5f);
+			Assert::IsTrue(vec.x > 0 && vec.y > 0 && vec.z > 0);
 
 		}
 
@@ -180,8 +182,28 @@ namespace UnitTestVec3
 			// Norme de 2
 			Assert::IsTrue(std::abs(vecClamped.Magnitude() - 2.f) < 1e-5f);
 
-			// direction conservee
-			//Assert::IsTrue(std::abs(vec.x / vec.y - vecClamped.x / vecClamped.y) < 1e-5f);
+			math::Vec3f dir1 = vec.Normalized();
+			math::Vec3f dirClamped1 = vecClamped.Normalized();
+
+			Assert::IsTrue(std::fabs(dir1.x - dirClamped1.x) < 1e-5f);
+			Assert::IsTrue(std::fabs(dir1.y - dirClamped1.y) < 1e-5f);
+			Assert::IsTrue(std::fabs(dir1.z - dirClamped1.z) < 1e-5f);
+
+			// vec plus petit que la limite
+			math::Vec3f vec2(0.5f, 0.5f, 0.5f);
+			math::Vec3f clamped2 = math::Vec3f::ClampMagnitude(vec2, 2.f);
+
+			Assert::IsTrue(std::fabs(clamped2.x - vec2.x) < 1e-6f);
+			Assert::IsTrue(std::fabs(clamped2.y - vec2.y) < 1e-6f);
+			Assert::IsTrue(std::fabs(clamped2.z - vec2.z) < 1e-6f);
+
+			// vecteur nul
+			math::Vec3f vec3(0.f, 0.f, 0.f);
+			math::Vec3f clamped3 = math::Vec3f::ClampMagnitude(vec3, 2.f);
+
+			Assert::AreEqual(0.f, clamped3.x, 1e-6f);
+			Assert::AreEqual(0.f, clamped3.y, 1e-6f);
+			Assert::AreEqual(0.f, clamped3.z, 1e-6f);
 		}
 		TEST_METHOD(Static_Distance)
 		{
@@ -322,17 +344,6 @@ namespace UnitTestVec3
 
 		TEST_METHOD(Static_RotateTowards)
 		{
-			/*math::Vec3f current(1, 0, 0);
-			math::Vec3f target(0, 1, 0);
-
-			float maxRadiansDelta = pi / 4;
-			float maxMagnitudeDelta = 10.f;
-
-			math::Vec3f result = math::Vec3f::RotateTowards(current, target, maxRadiansDelta, maxMagnitudeDelta);
-
-			float angleMoved = math::Vec3f::Angle(current, result);
-			Assert::IsTrue(angleMoved <= maxRadiansDelta + 0.001f);*/
-
 			math::Vec3f v1{ 1.f, 0.f, 0.f };
 			math::Vec3f v2{ 0.f, 2.f, 0.f };
 			math::Vec3f result{ math::Vec3f::RotateTowards(v1, v2, 0.7853981f, 0.f) };

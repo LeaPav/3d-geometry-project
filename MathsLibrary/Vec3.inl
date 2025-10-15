@@ -114,8 +114,8 @@ namespace math {
 	inline Vec3<T> Vec3<T>::Normalized() const
 	{
 		float magnitude = Magnitude(); 
-		if (magnitude < 0.00001f) { 
-			return Vec3(0.0f, 0.0f, 0.0f); } 
+		if (magnitude < static_cast<T>(0.00001)) {
+			return Vec3(0, 0, 0); } 
 		return Vec3(x / magnitude, y / magnitude, z / magnitude);
 	}
 
@@ -191,25 +191,26 @@ namespace math {
 	inline Vec3<T> Vec3<T>::Lerp(const Vec3& a, const Vec3& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
-		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
+		return a + (b - a) * t;
 	}
 
 	template<typename T>
 	inline Vec3<T> Vec3<T>::LerpUnclamped(const Vec3& a, const Vec3& b, float t)
 	{
-		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
+		return a + (b - a) * t;
 	}
 
 	template<typename T>
 	constexpr Vec3<T> Vec3<T>::Max(const Vec3& a, const Vec3& b)
 	{
-		return Vec3((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y, (a.z > b.z) ? a.z : b.z);
+		return Vec3(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
+
 	}
 
 	template<typename T>
 	constexpr Vec3<T> Vec3<T>::Min(const Vec3& a, const Vec3& b)
 	{
-		return Vec3((a.x < b.x) ? a.x : b.x, (a.y < b.y) ? a.y : b.y, (a.z < b.z) ? a.z : b.z);
+		return Vec3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
 	}
 
 	template<typename T>
@@ -293,20 +294,27 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Vec3<T>::RotateTowards(const Vec3& current, const Vec3& target, float maxRadiansDelta, float maxMagnitudeDelta)
 	{
-		if (current == target) return target;
-		float angle = Angle(current, target);
-		
+	
 		float currentMag = current.Magnitude();
-		float currentTarget = target.Magnitude();
+		float targetMag = target.Magnitude();
 
-		if (maxRadiansDelta < 0.0f) {
-			float t = std::fmin(1.0f, std::abs(maxRadiansDelta) / angle);
-			Vec3<T> opposite = Slerp(current, opposite, maxMagnitudeDelta);
-			return MoveTowards(current, opposite, maxMagnitudeDelta);
+		if (current == target) return target;
+
+		if (currentMag < 0.f) {
+			float newMag = std::min(targetMag, maxMagnitudeDelta);
+			return target.Normalized() * newMag;
 		}
-		float tDir = (angle < 1e-5f) ? 0.0f : std::fmin(1.0f, maxRadiansDelta / angle);
-		Vec3<T> rotate = Slerp(current, target, tDir);
-		return MoveTowards(current, rotate, maxMagnitudeDelta);
+		Vec3 currentDir = current / currentMag;
+		Vec3 targetDir = target.Normalized();
+
+		float angle = Angle(currentDir, targetDir);
+
+		float t = (angle < 0.f) ? 1.f : std::fmin(1.f, maxRadiansDelta / angle);
+
+		Vec3 newDir = Slerp(currentDir, targetDir, t).Normalized();
+		float newMag = currentMag + std::fmax(-maxMagnitudeDelta, std::fmin(maxMagnitudeDelta, targetMag - currentMag));
+
+		return newDir * newMag;
 
 	}
 
@@ -321,13 +329,30 @@ namespace math {
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::Normalize(const Vec3& rhs) const
+	inline Vec3<T> Vec3<T>::Normalize(const Vec3<T>& rhs)
 	{
-		float magnitude = rhs.Magnitude();
-		if (magnitude < 0.00001f) {
-			return Vec3(0.0f, 0.0f, 0.0f);
+		T magnitude = rhs.Magnitude();
+
+		if (magnitude < static_cast<T>(0.00001))
+			return Vec3<T>(0, 0, 0);
+
+		return Vec3(rhs.x / magnitude, rhs.y / magnitude, rhs.z / magnitude);
+
+	}
+
+	template<typename T>
+	inline void Vec3<T>::Normalize()
+	{
+		float magnitude = Magnitude();
+		if (magnitude < static_cast<T>(0.00001)) {
+			x = 0.0f;
+			y = 0.0f;
+			z = 0.0f;
+			return;
 		}
-		return Vec3(x / magnitude, y / magnitude, z / magnitude);
+		x /= magnitude;
+		y /= magnitude;
+		z /= magnitude;
 	}
 
 	template<typename T>

@@ -109,7 +109,7 @@ namespace math {
         float magnitude = Magnitude(); 
         if (magnitude < 0.00001f) {
             return Vec2(0.0f, 0.0f); } 
-        return Vec2(x / magnitude, y / magnitude);;
+        return Vec2(x / magnitude, y / magnitude);
     }
 
     template<typename T>
@@ -125,13 +125,16 @@ namespace math {
     }
 
     template<typename T>
-    inline Vec2<T> Vec2<T>::Normalize(const Vec2& rhs) const
+    inline void Vec2<T>::Normalize() 
     {
-        float magnitude = rhs.Magnitude(); 
-        if (magnitude < 0.00001f) { 
-            return Vec2(0.0f, 0.0f); 
+        float magnitude = Magnitude(); 
+        if (magnitude < static_cast<T>(0.00001)) { 
+            x = 0.0f;
+            y = 0.0f;
+            return;
         } 
-        return Vec2(x / magnitude, y / magnitude);
+        x /= magnitude;
+        y /= magnitude;
     }
 
     template<typename T>
@@ -227,25 +230,25 @@ namespace math {
     inline Vec2<T> Vec2<T>::Lerp(const Vec2& a, const Vec2& b, float t)
     {
         t = std::fmax(0.0f, std::fmin(1.0f, t));
-        return Vec2(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+        return a + (b - a) * t;
     }
 
     template<typename T>
     inline Vec2<T> Vec2<T>::LerpUnclamped(const Vec2& a, const Vec2& b, float t)
     {
-        return Vec2(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+        return a + (b - a) * t;
     }
 
     template<typename T>
     constexpr Vec2<T> Vec2<T>::Max(const Vec2& a, const Vec2& b)
     {
-        return Vec2((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y);
+        return Vec2(std::max(a.x, b.x), std::max(a.y, b.y));
     }
 
     template<typename T>
     constexpr Vec2<T> Vec2<T>::Min(const Vec2& a, const Vec2& b)
     {
-        return Vec2((a.x < b.x) ? a.x : b.x, (a.y < b.y) ? a.y : b.y);
+        return Vec2(std::min(a.x, b.x), std::min(a.y, b.y));
     }
 
     template<typename T>

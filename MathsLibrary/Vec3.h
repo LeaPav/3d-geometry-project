@@ -3,7 +3,6 @@
 #include <cmath>
 #include <iostream>
 
-
 namespace math {
 
 	template <typename T>
@@ -55,6 +54,8 @@ namespace math {
 
 		std::string ToString() const; 
 
+		void Normalize();
+
 		// static methods
 
 		static float Angle(const Vec3& from, const Vec3& to);
@@ -91,7 +92,7 @@ namespace math {
 
 		static Vec3 ClampMagnitude(const Vec3& rhs, float maxLength);
 
-	    Vec3 Normalize(const Vec3& rhs) const; 
+		static Vec3 Normalize(const Vec3& rhs);
 
 		static void OrthoNormalize(Vec3& normal, Vec3& tangent);
 
