@@ -20,7 +20,7 @@ namespace math{
 
         //static Properties
 
-        static Quaternion identity();
+        static Quaternion Identity();
 
         // properties
 
