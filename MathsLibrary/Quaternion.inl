@@ -13,7 +13,7 @@ namespace math {
 	//static properties
 
 	template<typename T>
-	inline Quaternion<T> Quaternion<T>::Identity()
+	inline static Quaternion<T> Quaternion<T>::Identity()
 	{
 		return Quaternion<T>(0, 0, 0, 1);
 	}
@@ -43,12 +43,12 @@ namespace math {
 		T cosy_cosp = 1 - 2 * (y * y + z * z);
 		T yaw = std::atan2(siny_cosp, cosy_cosp);
 	
-		T deg = 180.0 / 3.14159265f;
-		T roll_deg = roll * deg;
-		T pitch_deg = pitch * deg;
-		T yaw_deg = yaw * deg;
+		//T deg = 180.0 / 3.14159265f;
+		//T roll_deg = roll * deg;
+		//T pitch_deg = pitch * deg;
+		//T yaw_deg = yaw * deg;
 	
-		return Vec3<T>(roll_deg, pitch_deg, yaw_deg);
+		return Vec3<T>(roll, pitch, yaw);
 	}
 
 
@@ -56,8 +56,8 @@ namespace math {
 	constexpr Quaternion<T> Quaternion<T>::Normalized() const {
 		 T magnitude = std::sqrt(x * x + y * y + z * z + w * w); 
 
-		 if (magnitude < 0.00001f) { 
-			 return Quaternion<T>(0.0f, 0.0f, 0.0f, 0.0f); 
+		 if (magnitude < T(0.00001)) { 
+			 return Quaternion<T>(0, 0, 0, 0); 
 		 }
 
 		 return Quaternion<T>(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
@@ -74,7 +74,7 @@ namespace math {
 	}
 
 	template<typename T>
-	inline void Quaternion<T>::Set(const Quaternion& rhs)
+	inline void Quaternion<T>::Set(const Quaternion<T>& rhs)
 	{
 		x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w;
 	}
@@ -90,14 +90,14 @@ namespace math {
 	
 		T dot = a.x * b.x + a.y * b.y + a.z * b.z;
 		
-		if (dot > 1 - 0.00001f) {
+		if (dot > 1 - T(0.00001)) {
 			return;
 		}
 
 		Vec3<T> orthogonal = Vec3<T>(1, 0, 0);
 
-		if (dot < -1 + 0.00001f) {
-			if (fabs(a.x) > 0.9f) {
+		if (dot < -1 + T(0.00001)) {
+			if (std::fabs(a.x) > 0.9f) {
 				orthogonal = Vec3<T>(0, 1, 0);
 			}
 
@@ -119,7 +119,70 @@ namespace math {
 	template <typename T>
 	inline void Quaternion<T>::SetLookRotation(const Vec3<T>& view, const Vec3<T>& up)
 	{
+		Vec3<T> view = view.Normalized();
+		Vec3<T> up = up.Normalized();
+
+		Vec3<T> axisX = up.Cross(view).Normalized();
+		Vec3<T> axisY = view.Cross(axisX);
+
+		T m00 = axisX.x, m01 = axisY.x, m02 = view.x;
+		T m10 = axisX.y, m11 = axisY.y, m12 = view.y;
+		T m20 = axisX.z, m21 = axisY.z, m22 = view.z;
+
+		T trace = m00 + m11 + m22;
 		
+		if (trace > 0) {
+			T scaling = std::sqrt(1 + trace) * 2;
+
+			if (std::abs(scaling) < T(0.00001)) {
+				*this = Quaternion<T>::Identity();
+				return;
+			}
+
+			w = scaling / 4;
+			x = (m21 - m12) / scaling;
+			y = (m02 - m20) / scaling;
+			z = (m10 - m01) / scaling;
+
+		}else if (m00 > m11 && m00 > m22){
+			T scaling = std::sqrt(1 + m00 - m11 - m22) * 2;
+
+			if (std::abs(scaling) < T(0.00001)) {
+				*this = Quaternion<T>::Identity();
+				return;
+			}
+
+			x = scaling / 4;
+			w = (m21 - m12) / scaling;
+			y = (m10 + m01) / scaling;
+			z = (m20 + m02) / scaling;
+
+		}else if (m11 > m00 && m11 > m22){
+			T scaling = std::sqrt(1 + m11 - m00 - m22) * 2;
+
+			if (std::abs(scaling) < T(0.00001)) {
+				*this = Quaternion<T>::Identity();
+				return;
+			}
+
+			y = scaling / 4;
+			w = (m02 - m20) / scaling;
+			x = (m10 + m01) / scaling;
+			z = (m21 - m12) / scaling;
+
+		}else{
+			T scaling = std::sqrt(1 + m22 - m11 - m00) * 2;
+
+			if (std::abs(scaling) < T(0.00001)) {
+				*this = Quaternion<T>::Identity();
+				return;
+			}
+
+			z = scaling / 4;
+			w = (m10 - m01) / scaling;
+			x = (m20 + m02) / scaling;
+			y = (m21 - m12) / scaling;
+		}
 	}
 
 	template<typename T>
@@ -187,8 +250,8 @@ namespace math {
 	{
 	    T magnitude = std::sqrt(x * x + y * y + z * z + w * w);
 	    
-	    if (magnitude < 0.00001f) {
-	        return Quaternion<T>(0.0f, 0.0f, 0.0f, 0.0f);
+	    if (magnitude < T(0.00001)) {
+	        return Quaternion<T>(0, 0, 0, 0);
 	    }
 
 	   return Quaternion<T>(x/ magnitude, y/ magnitude, z/ magnitude, w/ magnitude);
