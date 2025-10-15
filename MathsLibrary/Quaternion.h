@@ -42,7 +42,7 @@ namespace math{
         static float Angle(const Quaternion& from, const Quaternion& to);
         static float AngleAxis(float angle, const Vec3<T>& axis);
         static constexpr T Dot(const Quaternion& a, const Quaternion& b);
-        static T Euler(float x, float y , flaot z);
+        static T Euler(float x, float y , float z);
         static T FromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection);
         static T Inverse(const Quaternion& rotation);
         static Quaternion Lerp(const Quaternion& a, const Quaternion& b, float t);

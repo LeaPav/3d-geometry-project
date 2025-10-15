@@ -188,6 +188,8 @@ namespace math {
 	template<typename T>
 	inline void Quaternion<T>::ToAngleAxis(float angle, const Vec3<T>& axis)
 	{
+
+
 	}
 
 	//static methods
@@ -221,7 +223,19 @@ namespace math {
 	}
 
 	template <typename T>
-	T Euler()
+	inline T Euler(float x, float y, float z)
+	{
+		return T();
+	}
+
+	template<typename T>
+	inline T Quaternion<T>::FromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection)
+	{
+		return T();
+	}
+
+	template<typename T>
+	inline T Quaternion<T>::Inverse(const Quaternion& rotation)
 	{
 		return T();
 	}
