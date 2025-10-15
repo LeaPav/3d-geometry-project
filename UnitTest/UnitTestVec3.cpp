@@ -123,6 +123,66 @@ namespace UnitTestVec3
 			Assert::IsTrue(crossMag < 1e-5f);
 
 		}
+
+		TEST_METHOD(Method_Equals)
+		{
+			math::Vec3f vec1(3.1f, 2.4f, 5.f);
+			math::Vec3f vec2(3.1f, 2.4f, 5.f);
+			Assert::IsTrue(vec1.Equals(vec2));
+
+			math::Vec3f vec3(1.f, 12.3f, 7.f);
+			math::Vec3f vec4(1.f, 12.5f, 7.f);
+			Assert::IsFalse(vec3.Equals(vec4));
+
+		}
+
+		TEST_METHOD(Method_Set)
+		{
+
+			math::Vec3f v(3.f, 7.6f, 15.3f);
+			v.Set(7.f, 2.1f, 6.f);
+			Assert::AreEqual(v.x, 7.f);
+			Assert::AreEqual(v.y, 2.1f);
+			Assert::AreEqual(v.z, 6.f);
+
+			math::Vec3f vec1(5.6f, 8.f, 6.1f);
+			math::Vec3f vec2(12.f, 15.4f, 7.4f);
+			vec1.Set(vec2.x, vec2.y, vec2.z);
+
+			Assert::IsTrue(vec1.Equals(vec2));
+		
+		}
+
+		TEST_METHOD(Method_ToString)
+		{
+			math::Vec3f vec(2.f, 4.f, 5.f);
+			std::string s = vec.ToString();
+			
+			Assert::IsTrue(s.find("(") == 0);
+			Assert::IsTrue(s.find(",") != std::string::npos);
+			Assert::IsTrue(s.find(",", s.find(",") + 1) != std::string::npos);
+			Assert::IsTrue(s.find(")") == s.length() - 1);
+
+		}
+
+		TEST_METHOD(Method_Normalize)
+		{
+			math::Vec3f vec(2.f, 4.f, 5.f);
+
+
+		}
+
+		TEST_METHOD(Static_ClampMagnitude)
+		{
+			math::Vec3f vec(5.f, 3.f, 2.f);
+			math::Vec3f vecClamped = math::Vec3f::ClampMagnitude(vec, 2.f);
+
+			// Norme de 2
+			Assert::IsTrue(std::abs(vecClamped.Magnitude() - 2.f) < 1e-5f);
+
+			// direction conservee
+			//Assert::IsTrue(std::abs(vec.x / vec.y - vecClamped.x / vecClamped.y) < 1e-5f);
+		}
 		TEST_METHOD(Static_Distance)
 		{
 			math::Vec3d vec1(2.f, 5.f, 7.f);
@@ -208,9 +268,61 @@ namespace UnitTestVec3
 			Assert::AreEqual(-8.f, result.z);
 		}
 
+		TEST_METHOD(Static_MoveTowards)
+		{
+			math::Vec3f current(0.f, 0.f, 0.f);
+			math::Vec3f target(1.f, 1.f, 1.f);
+
+			math::Vec3f result = math::Vec3f::MoveTowards(current, target, 5.f);
+			Assert::IsTrue(target == result);
+		}
+		TEST_METHOD(Static_OrthoNormalize)
+		{
+			math::Vec3f v(1.f, -1.f, 0.f);
+			math::Vec3f v2(1.f, 1.f, 0.f);
+			
+			math::Vec3f::OrthoNormalize(v, v2);
+
+			Assert::IsTrue(std::fabs(v.Magnitude() - 1.f) < 1e-5f);
+			Assert::IsTrue(std::fabs(v2.Magnitude() - 1.f) < 1e-5f);
+
+			Assert::IsTrue(std::fabs(math::Vec3f::Dot(v, v2)) < 1e-5f);
+		}
+
+		TEST_METHOD(Static_Project)
+		{
+			math::Vec3f vec(1.f, 2.f, 3.f);
+			math::Vec3f onNormal(0.f, 1.f, 0.f);
+
+			math::Vec3f result = math::Vec3f::Project(vec, onNormal);
+			math::Vec3f expected(0.f, 2.f, 0.f);
+
+			Assert::IsTrue(result == expected);
+		}
+		TEST_METHOD(Static_ProjectOnPlane)
+		{
+			math::Vec3f vec(1.f, 2.f, 3.f);
+			math::Vec3f planeNormal(0.f, 1.f, 0.f);
+
+			math::Vec3f result = math::Vec3f::ProjectOnPlane(vec, planeNormal);
+			math::Vec3f expected(1.f, 0.f, 3.f);
+
+			Assert::IsTrue(result == expected);
+		}
+		TEST_METHOD(Static_Reflect)
+		{
+			math::Vec3f v(1.f, -1.f, 0.f);
+			math::Vec3f normal(0.f, 1.f, 0.f);
+
+			math::Vec3f result = math::Vec3f::Reflect(v, normal);
+			math::Vec3f expected(1.f, 1.f, 0.f);
+
+			Assert::IsTrue(result == expected);
+		}
+
 		TEST_METHOD(Static_RotateTowards)
 		{
-			math::Vec3f current(1, 0, 0);
+			/*math::Vec3f current(1, 0, 0);
 			math::Vec3f target(0, 1, 0);
 
 			float maxRadiansDelta = pi / 4;
@@ -219,7 +331,16 @@ namespace UnitTestVec3
 			math::Vec3f result = math::Vec3f::RotateTowards(current, target, maxRadiansDelta, maxMagnitudeDelta);
 
 			float angleMoved = math::Vec3f::Angle(current, result);
-			Assert::IsTrue(angleMoved <= maxRadiansDelta + 0.001f);
+			Assert::IsTrue(angleMoved <= maxRadiansDelta + 0.001f);*/
+
+			math::Vec3f v1{ 1.f, 0.f, 0.f };
+			math::Vec3f v2{ 0.f, 2.f, 0.f };
+			math::Vec3f result{ math::Vec3f::RotateTowards(v1, v2, 0.7853981f, 0.f) };
+
+			Assert::AreEqual(0.7071067f, result.x, 0.00001f);
+			Assert::AreEqual(0.7071067f, result.y, 0.00001f);
+			Assert::AreEqual(0.f, result.z);
+			Assert::AreEqual(v1.Magnitude(), result.Magnitude(), 0.00001f);
 		}
 		TEST_METHOD(Static_Slerp_Ortho)
 		{

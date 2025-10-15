@@ -1,6 +1,8 @@
 #pragma once
 #include <limits>
 #include <cmath>
+#include <iostream>
+
 
 namespace math {
 
@@ -95,7 +97,7 @@ namespace math {
 
 		static void OrthoNormalize(Vec3& normal, Vec3& tangent, Vec3& binormal);
 
-		static float Reflect(const Vec3& inDirection, const Vec3& inNormal);
+		static Vec3 Reflect(const Vec3& inDirection, const Vec3& inNormal);
 
 	};
 

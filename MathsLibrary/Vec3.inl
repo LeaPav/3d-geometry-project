@@ -142,7 +142,7 @@ namespace math {
 	template<typename T>
 	inline std::string Vec3<T>::ToString() const
 	{
-		 return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std_to_string(z) + ")"; 
+		 return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")"; 
 	}
 
 	template<typename T>
@@ -296,6 +296,9 @@ namespace math {
 		if (current == target) return target;
 		float angle = Angle(current, target);
 		
+		float currentMag = current.Magnitude();
+		float currentTarget = target.Magnitude();
+
 		if (maxRadiansDelta < 0.0f) {
 			float t = std::fmin(1.0f, std::abs(maxRadiansDelta) / angle);
 			Vec3<T> opposite = Slerp(current, opposite, maxMagnitudeDelta);
@@ -349,7 +352,7 @@ namespace math {
 	}
 
 	template<typename T>
-	inline float Vec3<T>::Reflect(const Vec3& inDirection, const Vec3& inNormal)
+	inline Vec3<T> Vec3<T>::Reflect(const Vec3& inDirection, const Vec3& inNormal)
 	{
 		Vec3 n = inNormal.Normalized();
 		float scal = Dot(inDirection, n);
