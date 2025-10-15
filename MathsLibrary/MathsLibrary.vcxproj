@@ -13,7 +13,7 @@
   <ItemGroup>
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Mat3x3.h" />
+    <ClInclude Include="Mat4x4.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
   </ItemGroup>
@@ -21,7 +21,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Mat3x3.inl" />
+    <None Include="Mat4x4.inl" />
     <None Include="Vec2.inl" />
     <None Include="Vec3.inl" />
   </ItemGroup>

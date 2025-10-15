@@ -16,18 +16,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector2.h">
-	<Filter>Fichiers d%27en-tête</Filter>
-	</ClInclude>
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
     <ClInclude Include="Vec2.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Vector3.h">
-	 <Filter>Fichiers d%27en-tête</Filter>
-	 </ClInclude>
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
     <ClInclude Include="Vec3.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Mat3x3.h">
+    <ClInclude Include="Mat4x4.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -43,7 +43,7 @@
     <None Include="Vec3.inl">
       <Filter>Fichiers d%27en-tête</Filter>
     </None>
-    <None Include="Mat3x3.inl">
+    <None Include="Mat4x4.inl">
       <Filter>Fichiers d%27en-tête</Filter>
     </None>
   </ItemGroup>
