@@ -1,6 +1,7 @@
 #include "Quaternion.h"
 #include "Vec3.h"
 
+
 namespace math {
 
 	//static properties
@@ -25,7 +26,7 @@ namespace math {
 		T sinp = 2 * (w * y - z * x);
 		T pitch;
 		if (std::abs(sinp) >= 1) {
-			pitch = (sinp < 0 ? -1 : 1) * M_PI / 2;
+			pitch = (sinp < 0 ? -1 : 1) * 3.14159265f / 2;
 		}
 		else {
 			pitch = std::asin(sinp);
@@ -36,7 +37,7 @@ namespace math {
 		T cosy_cosp = 1 - 2 * (y * y + z * z);
 		T yaw = std::atan2(siny_cosp, cosy_cosp);
 
-		T deg = 180.0 / M_PI;
+		T deg = 180.0 / 3.14159265f;
 		T roll_deg = roll * deg;
 		T pitch_deg = pitch * deg;
 		T yaw_deg = yaw * deg;
@@ -67,16 +68,25 @@ namespace math {
 		return  x = rhs.x, y = rhs.y, z = rhs.z, w = rhs.w;
 	}
 
+
 	template<typename T>
-	inline void Quaternion<T>::SetFromToRotation(const Quaternion& fromDirection, const Quaternion& toDirection)
+	inline void Quaternion<T>::SetFromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection)
 	{
+	
 		Vec3<T> a = fromDirection.Normalized();
 		Vec3<T> b = toDirection.Normalized();
-
-		Vec3<T> cross = (a.y * b.z - a.z * b.x, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+	
+		Vec3<T> cross = Vec3<T>(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+	
 		T dot = a.x * b.x + a.y * b.y + a.z * b.z;
+		
+		
+	
+		if (a >= 1 && b >= 1) {
+			return a.dot(b);
+		}
 
-		return T();
+	
 	}
 
 
@@ -128,7 +138,7 @@ namespace math {
 		float cosTheta = dot / (magnitudeFrom * magnitudeTo);
 		cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
 
-		return std::acos(cosTheta);
+		return std::acos(cosTheta) * (180.0f / 3.14159265f );
 	}
 
 	//template <typename T>
