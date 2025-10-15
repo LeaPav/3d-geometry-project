@@ -63,11 +63,14 @@ namespace math {
 		 return Quaternion<T>(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
 	}
 
+	//this[int]
+
+	//public methods
+
 	template<typename T>
 	inline bool Quaternion<T>::Equals(const Quaternion& rhs) const
 	{
 		return (x == rhs.x) && (y == rhs.y) && (z == rhs.z) && (w == rhs.w);
-
 	}
 
 	template<typename T>
@@ -75,7 +78,6 @@ namespace math {
 	{
 		x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w;
 	}
-
 
 	template<typename T>
 	inline void Quaternion<T>::SetFromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection)
@@ -114,38 +116,16 @@ namespace math {
 
 	}
 
+	template <typename T>
+	inline void Quaternion<T>::SetLookRotation(const Vec3<T>& view, const Vec3<T>& up)
+	{
+		
+	}
 
-	//public methods
-
-	//template <typename T>
-	//bool Equals(const Vec4& rhs) const
-	//{
-	//	 return (x == rhs.x) && (y == rhs.y) && (z == rhs.z) && (w == rhs.w);
-	//}
-
-	//template <typename T>
-	//void Set(const Vec4& rhs)
-	//{
-	//}
-
-	//template <typename T>
-	//T SetFromToRotation(const Vec3& fromDirection, const Vec3& toDirection)
-	//{
-	//	return T();
-	//}
-
-	//template <typename T>
-	//T SetLookRotation(const Vec3& view, Vec3 up)
-	//{
-	//	return T();
-	//}
-
-	//template <typename T>
-	//T ToAngleAxis()
-	//{
-	//	return T();
-	//}
-
+	template<typename T>
+	inline void Quaternion<T>::ToAngleAxis(float angle, const Vec3<T>& axis)
+	{
+	}
 
 	//static methods
 
@@ -165,8 +145,11 @@ namespace math {
 		return std::acos(cosTheta) * (180.0f / 3.14159265f );
 	}
 
-	//template <typename T>
-	//AngleAxis
+	template<typename T>
+	inline float Quaternion<T>::AngleAxis(float angle, const Vec3<T>& axis)
+	{
+		return 0.0f;
+	}
 
 	template<typename T>
 	constexpr T Quaternion<T>::Dot(const Quaternion& a, const Quaternion& b)
@@ -199,17 +182,17 @@ namespace math {
 		return T();
 	}
 
-	/*template <typename T>
-	Vec4 Normalize(const Vec4& rhs) const
+	template <typename T>
+	inline Quaternion<T> Quaternion<T>::Normalize(const Quaternion& rhs)
 	{
-	    float magnitude = std::sqrt(x * x + y * y + z * z + w * w);
+	    T magnitude = std::sqrt(x * x + y * y + z * z + w * w);
 	    
 	    if (magnitude < 0.00001f) {
-	        return Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	        return Quaternion<T>(0.0f, 0.0f, 0.0f, 0.0f);
 	    }
 
-	   return Vec4(x/ magnitude, y/ magnitude, z/ magnitude, w/ magnitude);
-	}*/
+	   return Quaternion<T>(x/ magnitude, y/ magnitude, z/ magnitude, w/ magnitude);
+	}
 
 	template <typename T>
 	T RotateTowards()
@@ -237,17 +220,19 @@ namespace math {
 	}
 
 
-	//operators
-	
-	template<typename T>
-	constexpr Quaternion<T> Quaternion<T>::operator*(T scalar) const
-	{
-		return Quaternion(x * scalar, y * scalar, z * scalar, w * scalar);
-	}
 
-	template<typename T>
-	constexpr bool Quaternion<T>::operator==(const Quaternion& vec) const
-	{
-		return (x == vec.x) && (y == vec.y) && (z == vec.z) && (w == vec.w);
-	}
+
+	//operators
+
+	//template<typename T>
+	//constexpr Quaternion<T> Quaternion<T>::operator*(const Quaternion& lhs, const Quaternion& rhs) const
+	//{
+	//	return Quaternion(x * scalar, y * scalar, z * scalar, w * scalar);
+	//}
+	//
+	//template<typename T>
+	//constexpr bool Quaternion<T>::operator==(const Quaternion& lhs, const Quaternion& rhs) const
+	//{
+	//	return (x == vec.x) && (y == vec.y) && (z == vec.z) && (w == vec.w);
+	//}
 }
