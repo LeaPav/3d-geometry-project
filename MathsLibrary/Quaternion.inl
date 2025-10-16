@@ -186,10 +186,19 @@ namespace math {
 	}
 
 	template<typename T>
-	inline void Quaternion<T>::ToAngleAxis(float angle, const Vec3<T>& axis)
+	inline void Quaternion<T>::ToAngleAxis(T& angle, Vec3<T>& axis)
 	{
+		angle = 2 * std::acos(w);
 
+		T sinDivision = std::sqrt(1 - w * w);
 
+		if (sinDivision > T(0.00001)) {
+			axis = Vec3<T>(x, y, z) / sinDivision;
+			axis = axis.Normalized();
+
+		}else{
+			axis = Vec3<T>(1, 0, 0);
+		}
 	}
 
 	//static methods
@@ -213,6 +222,7 @@ namespace math {
 	template<typename T>
 	inline float Quaternion<T>::AngleAxis(float angle, const Vec3<T>& axis)
 	{
+
 		return 0.0f;
 	}
 

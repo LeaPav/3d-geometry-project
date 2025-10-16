@@ -33,7 +33,7 @@ namespace math{
         void Set(const Quaternion& rhs);
         void SetFromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection);
         void SetLookRotation(const Vec3<T>& view, const Vec3<T>& up);
-        void ToAngleAxis(float angle, const Vec3<T>& axis);
+        void ToAngleAxis(T& angle, Vec3<T>& axis);
         std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")"; }
 
 
