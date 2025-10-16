@@ -14,6 +14,7 @@ namespace math{
 
         constexpr Vec2() ;
         constexpr Vec2(T x, T y) ;
+        constexpr Vec2(const sf::Vector2f& v);
         
         
         // operators

@@ -21,7 +21,10 @@ void Player::handleInput(float deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) {
 		move.x -= speed * deltaTime;
 	}
-	shape.move(move);
+
+	math::Vec2f pos = shape.getPosition();
+	math::Vec2f newPos = pos + move;
+	shape.setPosition(newPos);
 }
 
 void Player::update(float deltaTime)

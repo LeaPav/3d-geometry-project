@@ -8,6 +8,9 @@ namespace math {
     constexpr Vec2<T>::Vec2(T x, T y) : x(x), y(y) { }
 
     template<typename T>
+    inline constexpr Vec2<T>::Vec2(const sf::Vector2f& v) : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) { }
+
+    template<typename T>
     constexpr Vec2<T> Vec2<T>::operator+(const Vec2& rhs) const
     {
         return Vec2(x + rhs.x, y + rhs.y);
