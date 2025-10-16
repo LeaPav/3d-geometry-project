@@ -297,13 +297,35 @@ namespace math {
 	template<typename T>
 	inline Mat4x4<T> Mat4x4<T>::Ortho(float left, float right, float bottom, float top, float zNear, float zFar)
 	{
-		return Mat4x4();
+		Mat4x4 result = Mat4x4<T>::Identity();
+
+		result.mat[0] = 2.f / (right - left);
+		result.mat[5] = 2.f / (top - bottom);
+		result.mat[10] = 2.f / (zNear - zFar);
+
+		result.mat[12] = -(right + left) / (right - left);
+		result.mat[13] = -(top + bottom) / (top - bottom);
+		result.mat[14] = -(zFar + zNear) / (zFar - zNear);
+
+		return result;
 	}
 
 	template<typename T>
 	inline Mat4x4<T> Mat4x4<T>::Perspective(float fov, float aspect, float zNear, float zFar)
 	{
-		return Mat4x4();
+		T fovRad = fov * static_cast<T>(3.14159265f) / 180.f;
+		T f = 1.f / std::tan(fovRad / 2.0f);
+
+		Mat4x4<T> result = Mat4x4<T>::Zero();
+
+		result.mat[0] = f / aspect;
+		result.mat[5] = f;
+		result.mat[10] = (zFar + zNear) / (zNear - zFar);
+		result.mat[14] = (2 * zFar * zNear) / (zNear - zFar);
+		result.mat[11] = -1;
+
+		return result;
+
 	}
 
 
