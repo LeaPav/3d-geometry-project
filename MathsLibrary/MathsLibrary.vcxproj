@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Quaternion.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Mat4x4.h" />
@@ -22,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Mat4x4.inl" />
+    <None Include="Quaternion.inl" />
     <None Include="Vec2.inl" />
     <None Include="Vec3.inl" />
   </ItemGroup>
