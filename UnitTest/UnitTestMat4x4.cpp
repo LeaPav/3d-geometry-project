@@ -280,7 +280,7 @@ namespace UnitTestMat4x4
 			Assert::IsTrue(m.ValidTRS());
 
 			math::Mat4x4f invalid = math::Mat4x4f::Zero();
-			Assert::IsFalse(invalid.ValidTRS(),);
+			Assert::IsFalse(invalid.ValidTRS());
 		}
 	};
 }
