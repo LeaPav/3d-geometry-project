@@ -153,6 +153,48 @@ namespace math {
 	}
 
 	template<typename T>
+	inline Quaternion<T> Mat4x4<T>::Rotation() const
+	{
+		T m00 = mat[0], m01 = mat[4], m02 = mat[8];
+		T m10 = mat[1], m11 = mat[5], m12 = mat[9];
+		T m20 = mat[2], m21 = mat[6], m22 = mat[10];
+
+		T trace = m00 + m11 + m22;
+		Quaternion<R> q;
+
+		if (trace > 0) {
+			T s = std::sqrt(trace + 1.0) * 2;
+			q.w = 0.25 * s;
+			q.x = (m21 - m12) / s;
+			q.y = (m02 - m20) / s;
+			q.z = (m10 - m01) / s;
+		}
+		else if ((m00 > m11) && (m00 > m22)) {
+			T s = std::sqrt(1.0 + m00 - m11 - m22) * 2;
+			q.w = (m21 - m12) / s;
+			q.x = 0.25 * s;
+			q.y = (m01 + m10) / s;
+			q.z = (m02 + m20) / s;
+		}
+		else if (m11 > m22) {
+			T s = std::sqrt(1.0 + m11 - m00 - m22) * 2;
+			q.w = (m02 - m20) / s;
+			q.x = (m01 + m10) / s;
+			q.y = 0.25 * s;
+			q.z = (m12 + m21) / s;
+		}
+		else
+		{
+			T s = std::sqrt(1.0 + m22 - m00 - m11) * 2; 
+			q.w = (m10 - m01) / s;
+			q.x = (m02 + m20) / s;
+			q.y = (m12 + m21) / s;
+			q.z = 0.25 * s;
+		}
+		return q;
+	}
+
+	template<typename T>
 	inline Vec3<T> Mat4x4<T>::GetPosition() const
 	{
 		return Vec3<T>(mat[0 + 3 * 4], mat[1 + 3 * 4], mat[2 + 3 * 4]);
@@ -199,6 +241,12 @@ namespace math {
 	}
 
 	template<typename T>
+	inline bool Mat4x4<T>::ValidTRS() const
+	{
+		return mat[3] == 0 && mat[7] == 0 && mat[11] == 0 && mat[15] == 1;
+	}
+
+	template<typename T>
 	inline void Mat4x4<T>::SetColumn(int index, const Vec3<T>& column)
 	{
 		mat[index*4+0] = column.x;
@@ -212,6 +260,12 @@ namespace math {
 		mat[0*4 + index] = row.x;
 		mat[1 * 4 + index] = row.y;
 		mat[2 * 4 + index] = row.z;
+	}
+
+	template<typename T>
+	inline void Mat4x4<T>::SetTRS(const Vec3<T>& pos, const Quaternion<T>& q, const Vec3<T>& s)
+	{
+		*this = TRS(pos, q, s);
 	}
 
 	template<typename T>
@@ -361,8 +415,59 @@ namespace math {
 		return result;
 
 	}
-	using Mat4x4f = Mat4x4<float>;
-	using Mat4x4d = Mat4x4<double>;
-	using Mat4x4i = Mat4x4<int>;
+	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::Rotate(const Quaternion<T>& q)
+	{
+		Mat4x4<T> m;
+
+		T xx = q.x * q.x;
+		T yy = q.y * q.y;
+		T zz = q.z * q.z;
+		T xy = q.x * q.y;
+		T xz = q.x * q.z;
+		T yz = q.y * q.z;
+		T wx = q.w * q.x;
+		T wy = q.w * q.y;
+		T wz = q.w * q.z;
+
+		m.mat[0] = 1 - 2 * (yy + zz);
+		m.mat[1] = 2 * (xy + wz);
+		m.mat[2] = 2 * (xz - wy);
+		m.mat[3] = 0;
+
+		m.mat[4] = 2 * (xy - wz);
+		m.mat[5] = 1 - 2 * (xx + zz);
+		m.mat[6] = 2 * (yz + wx);
+		m.mat[7] = 0;
+
+		m.mat[8] = 2 * (xz + wy);
+		m.mat[9] = 2 * (yz - wx);
+		m.mat[10] = 1 - 2 * (xx + yy);
+		m.mat[11] = 0;
+
+		m.mat[12] = 0; m.mat[13] = 0; m.mat[14] = 0; m.mat[15] = 1;
+
+		return m;
+
+	}
+
+	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::TRS(const Vec3<T>& pos, const Quaternion<T>& q, const Vec3<T>& s)
+	{
+		Mat4x4<T> result;
+
+		Mat4x4<T> rot = Rotate(q);
+
+		rot.mat[0] *= s.x; rot.mat[1] *= s.x; rot.mat[2] *= s.x;
+		rot.mat[4] *= s.y; rot.mat[5] *= s.y; rot.mat[6] *= s.y;
+		rot.mat[8] *= s.z; rot.mat[9] *= rot.mat[10] *= s.z;
+
+		rot.mat[12] = pos.x;
+		rot.mat[13] = pos.y;
+		rot.mat[14] = pos.z;
+
+		return rot;
+	}
+	
 
 }

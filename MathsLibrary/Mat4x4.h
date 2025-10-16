@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include "Vec3.h"
+#include "Quaternion.h"
 
 
 namespace math {
@@ -61,7 +62,7 @@ namespace math {
 
 		Mat4x4 Transpose() const;
 
-		// Quaternion rotation() const;
+		Quaternion<T> Rotation() const;
 	
 
 		// Public Methods
@@ -72,13 +73,13 @@ namespace math {
 		
 		void SetColumn(int index, const Vec3<T>& column);
 		void SetRow(int index, const Vec3<T>& row);
-		// void SetTRS(Vec3 pos, Quaternion q, Vec3 s);
+		void SetTRS(const Vec3<T>& pos, const Quaternion<T>& q, const Vec3<T>& s);
 
 		Vec3<T> MultiplyPoint(const Vec3<T>& point) const;
 		Vec3<T> MultiplyPoint3x4(const Vec3<T>& point) const;
 		Vec3<T> MultiplyVector(const Vec3<T>& vector) const;
 
-		//bool ValidTRS() const;
+		bool ValidTRS() const;
 
 		std::string ToString() const;
 
@@ -98,12 +99,14 @@ namespace math {
 
 		static Mat4x4 Perspective(T fov, T aspect, T zNear, T zFar);
 
-		//static Mat4x4 Rotate(Quaternion q);
+		static Mat4x4 Rotate(const Quaternion<T>& q);
 
-		// static Mat4x4 TRS(Vec3 pos, Quaternion q, Vec3 s);
+		static Mat4x4 TRS(const Vec3<T>& pos, const Quaternion<T>& q, const Vec3<T>& s);
 	};
-	
 
+	using Mat4x4f = Mat4x4<float>;
+	using Mat4x4d = Mat4x4<double>;
+	using Mat4x4i = Mat4x4<int>;
 
 }
 
