@@ -65,7 +65,7 @@ namespace math {
 		// Public Methods
 
 		Vec3<T> GetPosition() const;
-
+		Vec3<T> GetColumn(int index) const;
 		
 		Vec3<T> MultiplyPoint(const Vec3<T>& point) const;
 		Vec3<T> MultiplyPoint3x4(const Vec3<T>& point) const;
@@ -75,23 +75,25 @@ namespace math {
 
 		// Static Methods
 
-		static Mat4x4 Frustum(float left, float right, float bottom, float top, float zNear, float zFar);
+		static Mat4x4 Frustum(T left, T right, T bottom, T top, T zNear, T zFar);
 
 		static Mat4x4 Scale(const Vec3<T>& vector);
 
 		static Mat4x4 Translate(const Vec3<T>& vector);
 
-		static bool Inverse3DAffine(const Mat4x4<T>& input, const Mat4x4<T>& result);
+		static bool Inverse3DAffine(const Mat4x4<T>& input, Mat4x4<T>& result);
 
 		static Mat4x4 LookAt(const Vec3<T>& from, const Vec3<T>& to, const Vec3<T>& up);
 
-		static Mat4x4 Ortho(float left, float right, float bottom, float top, float zNear, float zFar);
+		static Mat4x4 Ortho(T left, T right, T bottom, T top, T zNear, T zFar);
 
-		static Mat4x4 Perspective(float fov, float aspect, float zNear, float zFar);
+		static Mat4x4 Perspective(T fov, T aspect, T zNear, T zFar);
 
 		 
 	};
 	
+
+
 }
 
 #include "Mat4x4.inl"

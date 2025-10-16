@@ -66,7 +66,7 @@ namespace math {
 		for (int c = 0; c < 4; c++) {
 			if (c == col) continue;
 			for (int r = 0; r < 4; r++) {
-				if (r == cow) continue;
+				if (r == row) continue;
 				sub[index++] = mat[c * 4 + r];
 			}
 		}
@@ -103,24 +103,15 @@ namespace math {
 		if (det == static_cast<T>(0))
 			throw std::runtime_error("matrix not invertible");
 
-		Mat4x4<T> coFactorMatrix;
-
-		for (int = col = 0; col < 4; col++) {
-			for (int row = 0; row < 4; row++) {
-				T c = Cofactor(row, col);
-				coFactorMatrix.mat[row * 4 + col] = c;
-			}
-		}
-
 		Mat4x4<T> transposed;
 		for (int col = 0; col < 4; col++) {
 			for (int row = 0; row < 4; row++) {
-				transposed.mat[col * 4 + row] = coFactorMatrix.mat[row * 4 + col];
+				transposed(col, row) = Cofactor(row, col);
 			}
 		}
 
 		for (int i = 0; i < 16; i++) {
-			adjugate.mat[i] /= det;
+			transposed.mat[i] /= det;
 		}
 		return transposed;
 	}
@@ -143,8 +134,8 @@ namespace math {
 		Vec3<T> scale;
 
 		scale.x = std::sqrt(mat[0] * mat[0] + mat[1]*mat[1] + mat[2] * mat[2]);
-		scale.x = std::sqrt(mat[4] * mat[4] + mat[5]*mat[5] + mat[6] * mat[6]);
-		scale.x = std::sqrt(mat[8] * mat[8] + mat[9]*mat[9] + mat[10] * mat[10]);
+		scale.y = std::sqrt(mat[4] * mat[4] + mat[5]*mat[5] + mat[6] * mat[6]);
+		scale.z = std::sqrt(mat[8] * mat[8] + mat[9]*mat[9] + mat[10] * mat[10]);
 
 		return scale;
 	}
@@ -184,9 +175,9 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Mat4x4<T>::MultiplyVector(const Vec3<T>& vector) const
 	{
-		T x = point.x;
-		T y = point.y;
-		T z = point.z;
+		T x = vector.x;
+		T y = vector.y;
+		T z = vector.z;
 
 		T xp = mat[0] * x + mat[4] * y + mat[8] * z;
 		T yp = mat[1] * x + mat[5] * y + mat[9] * z;
@@ -230,12 +221,27 @@ namespace math {
 	}
 
 	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::Frustum(T left, T right, T bottom, T top, T zNear, T zFar)
+	{
+		Mat4x4<T> m = Mat4x4<T>::Zero();
+		m(0, 0) = 2 * zNear / (right - left);
+		m(1, 1) = 2 * zNear / (top - bottom);
+		m(0, 2) = (right + left) / (right - left);
+		m(1, 2) = (top + bottom) / (top - bottom);
+		m(2, 2) = (zFar + zNear) / (zNear - zFar);
+		m(2, 3) = 2 * zFar * zNear / (zNear - zFar);
+		m(3, 2) = -1;
+
+		return m;
+	}
+
+	template<typename T>
 	inline Mat4x4<T> Mat4x4<T>::Scale(const Vec3<T>& vector)
 	{
 		Mat4x4<T> m;
-		m.mat[0 + 0 * 4] = v.x;
-		m.mat[1 + 1 * 4] = v.y;
-		m.mat[2 + 2 * 4] = v.z;
+		m.mat[0 + 0 * 4] = vector.x;
+		m.mat[1 + 1 * 4] = vector.y;
+		m.mat[2 + 2 * 4] = vector.z;
 		m.mat[3 + 3 * 4] = 1;
 		return m;
 	}
@@ -245,15 +251,15 @@ namespace math {
 	{
 		Mat4x4<T> m = Mat4x4<T>::Identity();
 
-		m.mat[12] = vec.x;
-		m.mat[13] = vec.y;
-		m.mat[14] = vec.z;
+		m.mat[12] = vector.x;
+		m.mat[13] = vector.y;
+		m.mat[14] = vector.z;
 
 		return m;
 	}
 
 	template<typename T>
-	inline bool Mat4x4<T>::Inverse3DAffine(const Mat4x4<T>& input, const Mat4x4<T>& result)
+	inline bool Mat4x4<T>::Inverse3DAffine(const Mat4x4<T>& input, Mat4x4<T>& result)
 	{
 		Mat4x4<T> r = Mat4x4<T>::Identity();
 		r.mat[0] = input.mat[0]; r.mat[1] = input.mat[1]; r.mat[2] = input.mat[2];
@@ -283,8 +289,8 @@ namespace math {
 	inline Mat4x4<T> Mat4x4<T>::LookAt(const Vec3<T>& from, const Vec3<T>& to, const Vec3<T>& up)
 	{
 		Vec3<T> f = (to - from).Normalized();
-		Vec3<T> r = Cross(f, up).Normalized();
-		Vec3<T> u = Cross(r, f);
+		Vec3<T> r = f.Cross(f, up).Normalized();
+		Vec3<T> u = f.Cross(r, f);
 		Mat4x4<T> result = Mat4x4<T>::Identity();
 
 		result.mat[0] = r.x; result.mat[1] = r.y; result.mat[2] = r.z; result.mat[3] = 0; 
@@ -295,7 +301,7 @@ namespace math {
 		return result;
  	}
 	template<typename T>
-	inline Mat4x4<T> Mat4x4<T>::Ortho(float left, float right, float bottom, float top, float zNear, float zFar)
+	inline Mat4x4<T> Mat4x4<T>::Ortho(T left, T right, T bottom, T top, T zNear, T zFar)
 	{
 		Mat4x4 result = Mat4x4<T>::Identity();
 
@@ -311,7 +317,7 @@ namespace math {
 	}
 
 	template<typename T>
-	inline Mat4x4<T> Mat4x4<T>::Perspective(float fov, float aspect, float zNear, float zFar)
+	inline Mat4x4<T> Mat4x4<T>::Perspective(T fov, T aspect, T zNear, T zFar)
 	{
 		T fovRad = fov * static_cast<T>(3.14159265f) / 180.f;
 		T f = 1.f / std::tan(fovRad / 2.0f);
@@ -327,6 +333,8 @@ namespace math {
 		return result;
 
 	}
-
+	using Mat4x4f = Mat4x4<float>;
+	using Mat4x4d = Mat4x4<double>;
+	using Mat4x4i = Mat4x4<int>;
 
 }
