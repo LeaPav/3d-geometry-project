@@ -36,13 +36,22 @@ namespace math {
 		// 0.00000 0.00000 0.00000 0.00000
 		static Mat4x4 Zero();
 
-		// operator
+		// operators
 
 		constexpr Mat4x4 operator*(const Mat4x4<T>& rhs) const;
 
+		T& operator()(int row, int col);
+
+		const T& operator()(int row, int col) const;
 		// Properties
 
-		constexpr float Determinant() const;
+		//  determinant of the submatrix obtained by removing row i and column j
+		T Minor(int row, int col) const;
+
+		//minor with an added sign, depending on the position in the matrix.
+		T Cofactor(int row, int col) const;
+
+		constexpr T Determinant() const;
 
 		Mat4x4 Inverse() const;
 
@@ -78,7 +87,7 @@ namespace math {
 
 		static Mat4x4 Ortho(float left, float right, float bottom, float top, float zNear, float zFar);
 
-		static Mat4x4 Persepective(float fov, float aspect, float zNear, float zFar);
+		static Mat4x4 Perspective(float fov, float aspect, float zNear, float zFar);
 
 		 
 	};

@@ -5,7 +5,9 @@ namespace math {
 	template<typename T>
 	constexpr Mat4x4<T>::Mat4x4()
 	{ 
-		for (int i = 0, i < 16, i++) { mat[i] = (i % 5 == 0) ? 1 : 0; }
+		for (int i = 0; i < 16; i++) {
+			mat[i] = (i % 5 == 0) ? 1 : 0; 
+		}
 	}
 
 	template<typename T>
@@ -22,7 +24,7 @@ namespace math {
 	{
 		Mat4x4 mat;
 		for (auto& m : mat.mat) {
-			e = 0;
+			m = 0;
 		}
 		return mat;
 	}
@@ -33,7 +35,7 @@ namespace math {
 		Mat4x4<T> result{};
 
 		for (int row = 0; row < 4; row++) {
-			for (int col = 0; col < 4, col++) {
+			for (int col = 0; col < 4; col++) {
 				result.mat[row + col * 4] = 0;
 				for (int k = 0; k < 4; k++) {
 					result.mat[row + col * 4] += mat[row + k * 4] * rhs.mat[k + col * 4];
@@ -44,15 +46,83 @@ namespace math {
 	}
 
 	template<typename T>
-	constexpr float Mat4x4<T>::Determinant() const
+	inline T& Mat4x4<T>::operator()(int row, int col)
 	{
-		
+		return mat[col * 4 + row];
+	}
+
+	template<typename T>
+	inline const T& Mat4x4<T>::operator()(int row, int col) const
+	{
+		return mat[col * 4 + row];
+	}
+
+	template<typename T>
+	inline T Mat4x4<T>::Minor(int row, int col) const
+	{
+		T sub[9];
+		int index = 0;
+
+		for (int c = 0; c < 4; c++) {
+			if (c == col) continue;
+			for (int r = 0; r < 4; r++) {
+				if (r == cow) continue;
+				sub[index++] = mat[c * 4 + r];
+			}
+		}
+		return
+			sub[0] * (sub[4] * sub[8] - sub[5] * sub[7])
+			- sub[1] * (sub[3] * sub[8] - sub[5] * sub[6])
+			+ sub[2] * (sub[3] * sub[7] - sub[4] * sub[6]);
+	}
+
+	template<typename T>
+	inline T Mat4x4<T>::Cofactor(int row, int col) const
+	{
+		T minor = Minor(row, col);
+		if ((row + col) % 2 != 0) {
+			minor = -minor;
+		}
+		return minor;
+	}
+
+	template<typename T>
+	constexpr T Mat4x4<T>::Determinant() const
+	{
+		T det = 0;
+		for (int col = 0; col < 4; col++) {
+			det += mat[col * 4 + 0] * Cofactor(0, col);
+		}
+		return det;
 	}
 
 	template<typename T>
 	inline Mat4x4<T> Mat4x4<T>::Inverse() const
 	{
-		
+		T det = Determinant();
+		if (det == static_cast<T>(0))
+			throw std::runtime_error("matrix not invertible");
+
+		Mat4x4<T> coFactorMatrix;
+
+		for (int = col = 0; col < 4; col++) {
+			for (int row = 0; row < 4; row++) {
+				T c = Cofactor(row, col);
+				coFactorMatrix.mat[row * 4 + col] = c;
+			}
+		}
+
+		Mat4x4<T> transposed;
+		for (int col = 0; col < 4; col++) {
+			for (int row = 0; row < 4; row++) {
+				transposed.mat[col * 4 + row] = coFactorMatrix.mat[row * 4 + col];
+			}
+		}
+
+		for (int i = 0; i < 16; i++) {
+			adjugate.mat[i] /= det;
+		}
+		return transposed;
 	}
 
 	template<typename T>
@@ -65,6 +135,30 @@ namespace math {
 			}
 		}
 		return true;
+	}
+
+	template<typename T>
+	inline Vec3<T> Mat4x4<T>::LossyScale() const
+	{
+		Vec3<T> scale;
+
+		scale.x = std::sqrt(mat[0] * mat[0] + mat[1]*mat[1] + mat[2] * mat[2]);
+		scale.x = std::sqrt(mat[4] * mat[4] + mat[5]*mat[5] + mat[6] * mat[6]);
+		scale.x = std::sqrt(mat[8] * mat[8] + mat[9]*mat[9] + mat[10] * mat[10]);
+
+		return scale;
+	}
+
+	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::Transpose() const
+	{
+		Mat4x4<T> result;
+		for (int col = 0; col < 4; col++) {
+			for (int row = 0; row < 4; row++) {
+				result.mat[col * 4 + row] = mat[row * 4 + col];
+			}
+		}
+		return result;
 	}
 
 	template<typename T>
@@ -113,9 +207,9 @@ namespace math {
 		T zp = mat[2] * x + mat[6] * y + mat[10] * z + mat[14];
 		T wp = mat[3] * x + mat[7] * y + mat[11] * z + mat[15];
 		if (wp != 0 && wp != 1) {
-			xp / wp;
-			yp / wp;
-			zp / wp;
+			xp /= wp;
+			yp /= wp;
+			zp /= wp;
 		}
 		return Vec3<T>(xp, yp, zp);
 	}
@@ -161,7 +255,56 @@ namespace math {
 	template<typename T>
 	inline bool Mat4x4<T>::Inverse3DAffine(const Mat4x4<T>& input, const Mat4x4<T>& result)
 	{
-		return false;
+		Mat4x4<T> r = Mat4x4<T>::Identity();
+		r.mat[0] = input.mat[0]; r.mat[1] = input.mat[1]; r.mat[2] = input.mat[2];
+		r.mat[4] = input.mat[4]; r.mat[5] = input.mat[5]; r.mat[6] = input.mat[6];
+		r.mat[8] = input.mat[8]; r.mat[9] = input.mat[9]; r.mat[10] = input.mat[10];
+
+		Vec3<T> A(input.mat[12], input.mat[13], input.mat[14]);
+
+		T detR = r.Determinant();
+		if (detR == static_cast<T>(0)) { result = input; return false; }
+
+		Mat4x4 inverseR = r.Inverse();
+		Vec3<T> newT = inverseR.MultiplyVector(A) * static_cast<T>(-1);
+
+		result = Mat4x4<T>::Identity();
+		result.mat[0] = inverseR.mat[0]; result.mat[1] = inverseR.mat[1]; result.mat[2] = inverseR.mat[2];
+		result.mat[4] = inverseR.mat[4]; result.mat[5] = inverseR.mat[5]; result.mat[6] = inverseR.mat[6];
+		result.mat[8] = inverseR.mat[8]; result.mat[9] = inverseR.mat[9]; result.mat[10] = inverseR.mat[10];
+		result.mat[12] = newT.x;
+		result.mat[13] = newT.y;
+		result.mat[14] = newT.z;
+
+		return true;
 	}
+
+	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::LookAt(const Vec3<T>& from, const Vec3<T>& to, const Vec3<T>& up)
+	{
+		Vec3<T> f = (to - from).Normalized();
+		Vec3<T> r = Cross(f, up).Normalized();
+		Vec3<T> u = Cross(r, f);
+		Mat4x4<T> result = Mat4x4<T>::Identity();
+
+		result.mat[0] = r.x; result.mat[1] = r.y; result.mat[2] = r.z; result.mat[3] = 0; 
+		result.mat[4] = u.x; result.mat[5] = u.y; result.mat[6] = u.z; result.mat[7] = 0;
+		result.mat[8] = -f.x; result.mat[9] = -f.y; result.mat[10] = -f.z; result.mat[11] = 0;
+		result.mat[12] = from.x; result.mat[13] = from.y; result.mat[14] = from.z; result.mat[15] = 1;
+
+		return result;
+ 	}
+	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::Ortho(float left, float right, float bottom, float top, float zNear, float zFar)
+	{
+		return Mat4x4();
+	}
+
+	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::Perspective(float fov, float aspect, float zNear, float zFar)
+	{
+		return Mat4x4();
+	}
+
 
 }
