@@ -160,7 +160,7 @@ namespace math {
 		T m20 = mat[2], m21 = mat[6], m22 = mat[10];
 
 		T trace = m00 + m11 + m22;
-		Quaternion<R> q;
+		Quaternion<T> q;
 
 		if (trace > 0) {
 			T s = std::sqrt(trace + 1.0) * 2;
@@ -460,7 +460,7 @@ namespace math {
 
 		rot.mat[0] *= s.x; rot.mat[1] *= s.x; rot.mat[2] *= s.x;
 		rot.mat[4] *= s.y; rot.mat[5] *= s.y; rot.mat[6] *= s.y;
-		rot.mat[8] *= s.z; rot.mat[9] *= rot.mat[10] *= s.z;
+		rot.mat[8] *= s.z; rot.mat[9] *= s.z; rot.mat[10] *= s.z;
 
 		rot.mat[12] = pos.x;
 		rot.mat[13] = pos.y;

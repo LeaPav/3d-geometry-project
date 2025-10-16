@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "Mat4x4.h"
+#include "Vec3.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -207,6 +208,79 @@ namespace UnitTestMat4x4
 			Assert::AreEqual(row2.y, got.y);
 			Assert::AreEqual(row2.z, got.z);
 		}
-	
+		TEST_METHOD(TRS_Static)
+		{
+			math::Vec3f pos(1.0f, 2.0f, 3.0f);
+			math::Vec3f scale(2.0f, 2.0f, 2.0f);
+			math::Quaternionf rot = math::Quaternionf::Euler(0, 3.14159f / 4, 0).Normalized();
+
+			math::Mat4x4f m = math::Mat4x4f::TRS(pos, rot, scale);
+
+			math::Vec3f p = m.GetPosition();
+			Assert::AreEqual(pos.x, p.x, 0.0001f);
+			Assert::AreEqual(pos.y, p.y, 0.0001f);
+			Assert::AreEqual(pos.z, p.z, 0.0001f);
+
+			math::Vec3f s = m.LossyScale();
+			Assert::AreEqual(scale.x, s.x, 0.0001f);
+			Assert::AreEqual(scale.y, s.y, 0.0001f);
+			Assert::AreEqual(scale.z, s.z, 0.0001f);
+		}
+
+		TEST_METHOD(SetTRS_Instance)
+		{
+			math::Vec3f pos(0.5f, -1.0f, 2.0f);
+			math::Vec3f scale(1.5f, 0.5f, 2.0f);
+			math::Quaternionf rot = math::Quaternionf::Euler(3.14159f / 4, 0, 0).Normalized();
+
+			math::Mat4x4f m;
+			m.SetTRS(pos, rot, scale);
+
+			math::Vec3f p = m.GetPosition();
+			Assert::AreEqual(pos.x, p.x, 0.0001f);
+			Assert::AreEqual(pos.y, p.y, 0.0001f);
+			Assert::AreEqual(pos.z, p.z, 0.0001f);
+
+			math::Vec3f s = m.LossyScale();
+			Assert::AreEqual(scale.x, s.x, 0.0001f);
+			Assert::AreEqual(scale.y, s.y, 0.0001f);
+			Assert::AreEqual(scale.z, s.z, 0.0001f);
+		}
+		TEST_METHOD(Rotate_Static)
+		{
+			math::Quaternionf q = math::Quaternionf::Euler(0, 3.14159f / 2, 0).Normalized();
+			math::Mat4x4f m = math::Mat4x4f::Rotate(q);
+
+			math::Quaternionf rot = m.Rotation();
+
+			Assert::AreEqual(q.x, rot.x, 0.0001f);
+			Assert::AreEqual(q.y, rot.y, 0.0001f);
+			Assert::AreEqual(q.z, rot.z, 0.0001f);
+			Assert::AreEqual(q.w, rot.w, 0.0001f);
+		}
+		TEST_METHOD(Rotation_Property)
+		{
+			math::Quaternionf q = math::Quaternionf::Euler(3.14159f / 6, 3.14159f / 6, 0).Normalized();
+			math::Mat4x4f m = math::Mat4x4f::Rotate(q);
+
+			math::Quaternionf extracted = m.Rotation();
+
+			Assert::AreEqual(q.x, extracted.x, 0.0001f);
+			Assert::AreEqual(q.y, extracted.y, 0.0001f);
+			Assert::AreEqual(q.z, extracted.z, 0.0001f);
+			Assert::AreEqual(q.w, extracted.w, 0.0001f);
+		}
+		TEST_METHOD(ValidTRS_Check)
+		{
+			math::Vec3f pos(1, 2, 3);
+			math::Vec3f scale(1, 1, 1);
+			math::Quaternionf q = math::Quaternionf::Identity();
+
+			math::Mat4x4f m = math::Mat4x4f::TRS(pos, q, scale);
+			Assert::IsTrue(m.ValidTRS());
+
+			math::Mat4x4f invalid = math::Mat4x4f::Zero();
+			Assert::IsFalse(invalid.ValidTRS(),);
+		}
 	};
 }
