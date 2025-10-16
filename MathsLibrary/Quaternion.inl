@@ -244,38 +244,88 @@ namespace math {
 	}
 
 	template <typename T>
-	inline T Euler(T& x, T& y, T& z)
+	inline Quaternion<T> Quaternion<T>::Euler(T x, T y, T z)
 	{
-		return T();
+		T cosX = std::cos(x * 0.5);
+		T sinX = std::sin(x * 0.5);
+		T cosY = std::cos(y * 0.5);
+		T sinY = std::sin(y * 0.5);
+		T cosZ = std::cos(z * 0.5);
+		T sinZ = std::sin(z * 0.5);
+
+		Quaternion<T> qua;
+
+		qua.w = cosX * cosY * cosZ + sinX * sinY * sinZ;
+		qua.x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+		qua.y = cosX * sinY * cosZ + sinX * cosY * sinZ;
+		qua.z = cosX * cosY * sinZ - sinX * sinY * cosZ;
+
+		return qua;
 	}
 
 	template<typename T>
-	inline T Quaternion<T>::FromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection)
+	inline Quaternion<T> Quaternion<T>::FromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection)
 	{
-		return T();
+		Vec3<T> a = fromDirection.Normalized();
+		Vec3<T> b = toDirection.Normalized();
+
+		T dot = a.Dot(b);
+
+		if (dot > T(0.9999)) {
+			return Quaternion<T>::Identity();
+		}
+
+		Vec3<T> orthogonal = Vec3<T>(1, 0, 0).Cross(a);
+		
+		if (dot < T(-0.9999)) {
+
+			if (orthogonal.SqrMagnitude() < T(0.00001)) {
+				orthogonal = Vec3<T>(0, 1, 0).Cross(a);
+			}
+
+			orthogonal = orthogonal.Normalized();
+			return Quaternion<T>(orthogonal.x, orthogonal.y, orthogonal.z, 0);
+		}
+
+		Vec3<T> axis = a.Cross(b);
+
+		T w = std::sqrt((1 + dot) * 2);
+		T scaling = T(1) / w;
+
+		return Quaternion<T>(axis.x * scaling, axis.y * scaling, axis.z * scaling, w * T(0.5)).Normalized();
 	}
 
 	template<typename T>
-	inline T Quaternion<T>::Inverse(const Quaternion& rotation)
+	inline Quaternion<T> Quaternion<T>::Inverse(const Quaternion& rotation)
 	{
-		return T();
+		T sqrMagnitude = rotation.x * rotation.x + rotation.y * rotation.y + rotation.z * rotation.z + rotation.w * rotation.w;
+
+		if (sqrMagnitude < T(0.00001)) {
+			return Quaternion<T>::Identity();
+		}
+
+		return Quaternion<T>(-rotation.x / sqrMagnitude, -rotation.y / sqrMagnitude, -rotation.z / sqrMagnitude, rotation.w / sqrMagnitude);
 	}
 
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Lerp(const Quaternion& a, const Quaternion& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
-		return Quaternion(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		Quaternion<T> result(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+
+		return result.Normalized();
 	}
 
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::LerpUncampled(const Quaternion& a, const Quaternion& b, float t)
 	{
-		return Quaternion(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		Quaternion<T> result(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		
+		return result.Normalized();
 	}
 
 	template <typename T>
-	T LookRotation()
+	inline Quaternion<T> Quaternion<T>::LookRotation()
 	{
 		return T();
 	}
@@ -293,7 +343,7 @@ namespace math {
 	}
 
 	template <typename T>
-	T RotateTowards()
+	inline Quaternion<T> Quaternion<T>::RotateTowards()
 	{
 		return T();
 	}

@@ -42,12 +42,12 @@ namespace math{
         static T Angle(const Quaternion& from, const Quaternion& to);
         static Quaternion AngleAxis(const T& angle, const Vec3<T>& axis);
         static constexpr T Dot(const Quaternion& a, const Quaternion& b);
-        static T Euler(T& x, T& y , T& z);
-        static T FromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection);
-        static T Inverse(const Quaternion& rotation);
+        static Quaternion Euler(T x, T y , T z);
+        static Quaternion FromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection);
+        static Quaternion Inverse(const Quaternion& rotation);
         static Quaternion Lerp(const Quaternion& a, const Quaternion& b, float t);
         static Quaternion LerpUncampled(const Quaternion& a, const Quaternion& b, float t);
-        static T LookRotation();
+        static Quaternion LookRotation();
         static Quaternion Normalize(const Quaternion& rhs);
         static Quaternion RotateTowards();
         static Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t);
