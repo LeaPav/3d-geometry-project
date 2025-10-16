@@ -49,14 +49,14 @@ namespace math{
         static Quaternion LerpUncampled(const Quaternion& a, const Quaternion& b, float t);
         static Quaternion LookRotation(const Vec3<T>& forward, const Vec3<T>& upwards);
         static Quaternion Normalize(const Quaternion& rhs);
-        static Quaternion RotateTowards();
+        static Quaternion RotateTowards(const Quaternion& from, const Quaternion& to, const T maxDelta);
         static Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t);
         static Quaternion SlerpUncampled(const Quaternion& a, const Quaternion& b, float t);
 
         //operators
 
-    /*  static Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs) const;
-        static bool operator==(const Quaternion& lhs, const Quaternion& rhs) const;*/
+        static Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs) const;
+        static bool operator==(const Quaternion& lhs, const Quaternion& rhs) const;
 
     };
 

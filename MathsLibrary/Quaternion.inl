@@ -21,7 +21,7 @@ namespace math {
 	//properties
 
 	template<typename T>
-	inline Quaternion<T> Quaternion<T>::EulerAngles() //impossible de mettre Vec3<T>
+	inline Quaternion<T> Quaternion<T>::EulerAngles() 
 	{
 		//rotation autour de X
 		T sinr_cosp = 2 * (w * x + y * z);
@@ -42,11 +42,6 @@ namespace math {
 		T siny_cosp = 2 * (w * z + x * y);
 		T cosy_cosp = 1 - 2 * (y * y + z * z);
 		T yaw = std::atan2(siny_cosp, cosy_cosp);
-	
-		//T deg = 180.0 / 3.14159265f;
-		//T roll_deg = roll * deg;
-		//T pitch_deg = pitch * deg;
-		//T yaw_deg = yaw * deg;
 	
 		return Vec3<T>(roll, pitch, yaw);
 	}
@@ -240,7 +235,7 @@ namespace math {
 	template<typename T>
 	constexpr T Quaternion<T>::Dot(const Quaternion& a, const Quaternion& b)
 	{
-		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w; // produit scalaire
+		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	}
 
 	template <typename T>
@@ -379,9 +374,6 @@ namespace math {
 		return qua.Normalized();
 	}
 
-	/*			if (forw.LengthSquared() < T(0.00001)) return Quaternion<T>::Identity();
-if (axisX.LengthSquared() < T(0.00001)) axisX = Vec3<T>(1, 0, 0); // ou autre axe arbitraire
-*/
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Normalize(const Quaternion& rhs)
 	{
@@ -395,9 +387,18 @@ if (axisX.LengthSquared() < T(0.00001)) axisX = Vec3<T>(1, 0, 0); // ou autre ax
 	}
 
 	template <typename T>
-	inline Quaternion<T> Quaternion<T>::RotateTowards()
+	inline Quaternion<T> Quaternion<T>::RotateTowards(const Quaternion& from, const Quaternion& to, const T maxDelta)
 	{
-		return T();
+
+		T angle = angle(from, to);
+
+		if (angle < T(0.00001)) {
+			return to;
+		}
+
+		T t = std::min(T(1), std::abs(maxDelta) /angle);
+
+		return Quaternion<T>::Slerp(from, to, t);
 	}
 
 	template <typename T>
@@ -405,34 +406,44 @@ if (axisX.LengthSquared() < T(0.00001)) axisX = Vec3<T>(1, 0, 0); // ou autre ax
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
 
-		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a, b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+		Quaternion<T> qauternionA = a.Normalized();
+		Quaternion<T> quaternionB = b.Normalized();
+
+		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(qauternionA, quaternionB ))); 
 		T theta = std::acos(dot);
-		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+		return (qauternionA * (std::sin((1 - t) * theta) / std::sin(theta)) + quaternionB * (std::sin(t * theta) / std::sin(theta)));
 
 	}
 
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::SlerpUncampled(const Quaternion& a, const Quaternion& b, float t)
 	{
-		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a, b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+		Quaternion<T> quaternionA = a.Normalized();
+		Quaternion<T> quaternionB = b.Normalized();
+
+		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(quaternionA, quaternionB)));
 		T theta = std::acos(dot);
-		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+		return (quaternionA * (std::sin((1 - t) * theta) / std::sin(theta)) + quaternionB * (std::sin(t * theta) / std::sin(theta)));
 	}
-
-
 
 
 	//operators
 
-	//template<typename T>
-	//constexpr Quaternion<T> Quaternion<T>::operator*(const Quaternion& lhs, const Quaternion& rhs) const
-	//{
-	//	return Quaternion(x * scalar, y * scalar, z * scalar, w * scalar);
-	//}
-	//
-	//template<typename T>
-	//constexpr bool Quaternion<T>::operator==(const Quaternion& lhs, const Quaternion& rhs) const
-	//{
-	//	return (x == vec.x) && (y == vec.y) && (z == vec.z) && (w == vec.w);
-	//}
+	template<typename T>
+	constexpr Quaternion<T> Quaternion<T>::operator*(const Quaternion& lhs, const Quaternion& rhs) const
+	{
+		 return Quaternion<T>(
+			 lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y,
+			 lhs.w * rhs.y - lhs.x * rhs.z + lhs.y * rhs.w + lhs.z * rhs.x,
+			 lhs.w * rhs.z + lhs.x * rhs.y - lhs.y * rhs.x + lhs.z * rhs.w,
+			 lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z
+		 );
+	 }
+	
+	template<typename T>
+	constexpr bool Quaternion<T>::operator==(const Quaternion& lhs, const Quaternion& rhs) const
+	{
+		T dot = lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
+		return std::abs(std::abs(dot) - T(1)) < T(0.00001);
+	}
 }
