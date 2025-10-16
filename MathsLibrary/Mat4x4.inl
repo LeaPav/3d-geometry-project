@@ -159,6 +159,18 @@ namespace math {
 	}
 
 	template<typename T>
+	inline Vec3<T> Mat4x4<T>::GetColumn(int col) const
+	{
+		return Vec3<T>(mat[col*4 + 0], mat[col*4 +1], mat[col*4+2]);
+	}
+
+	template<typename T>
+	inline Vec3<T> Mat4x4<T>::GetRow(int row) const
+	{
+		return Vec3<T>(mat[0*4 +row], mat[1*4 + row], mat[2*4 + row]);
+	}
+
+	template<typename T>
 	inline Vec3<T> Mat4x4<T>::MultiplyPoint3x4(const Vec3<T>& point) const
 	{
 		T x = point.x;
@@ -184,6 +196,22 @@ namespace math {
 		T zp = mat[2] * x + mat[6] * y + mat[10] * z;
 
 		return Vec3<T>(xp, yp, zp);
+	}
+
+	template<typename T>
+	inline void Mat4x4<T>::SetColumn(int index, const Vec3<T>& column)
+	{
+		mat[index*4+0] = column.x;
+		mat[index*4+1] = column.y;
+		mat[index*4+2] = column.z;
+	}
+
+	template<typename T>
+	inline void Mat4x4<T>::SetRow(int index, const Vec3<T>& row)
+	{
+		mat[0*4 + index] = row.x;
+		mat[1 * 4 + index] = row.y;
+		mat[2 * 4 + index] = row.z;
 	}
 
 	template<typename T>

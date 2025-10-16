@@ -181,5 +181,32 @@ namespace UnitTestMat4x4
 					Assert::AreEqual(0.0f, id.mat[i], 0.0001f);
 			}
 		}
+		TEST_METHOD(GetSetColumn)
+		{
+			math::Mat4x4<float> m = math::Mat4x4<float>::Zero();
+
+			math::Vec3<float> col1(1.0f, 2.0f, 3.0f);
+			m.SetColumn(1, col1);
+
+			math::Vec3<float> got = m.GetColumn(1);
+
+			Assert::AreEqual(col1.x, got.x);
+			Assert::AreEqual(col1.y, got.y);
+			Assert::AreEqual(col1.z, got.z);
+		}
+		TEST_METHOD(GetSetRow)
+		{
+			math::Mat4x4<float> m = math::Mat4x4<float>::Zero();
+
+			math::Vec3<float> row2(4.0f, 5.0f, 6.0f);
+			m.SetRow(2, row2);
+
+			math::Vec3<float> got = m.GetRow(2);
+
+			Assert::AreEqual(row2.x, got.x);
+			Assert::AreEqual(row2.y, got.y);
+			Assert::AreEqual(row2.z, got.z);
+		}
+	
 	};
 }
