@@ -311,25 +311,77 @@ namespace math {
 	inline Quaternion<T> Quaternion<T>::Lerp(const Quaternion& a, const Quaternion& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
-		Quaternion<T> result(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		Quaternion<T> qua(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
 
-		return result.Normalized();
+		return qua.Normalized();
 	}
 
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::LerpUncampled(const Quaternion& a, const Quaternion& b, float t)
 	{
-		Quaternion<T> result(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		Quaternion<T> qua(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
 		
-		return result.Normalized();
+		return qua.Normalized();
 	}
 
 	template <typename T>
-	inline Quaternion<T> Quaternion<T>::LookRotation()
+	inline Quaternion<T> Quaternion<T>::LookRotation(const Vec3<T>& forward, const Vec3<T>& upwards)
 	{
-		return T();
+		Vec3<T> forw = forward.Normalized();
+		Vec3<T> up = upwards.Normalized();
+
+		Vec3<T> axisX = up.Cross(forw).Normalized();
+		Vec3<T> axisY = forw.Cross(axisX);
+
+		T m00 = axisX.x, m01 = axisY.x, m02 = forw.x;
+		T m10 = axisX.y, m11 = axisY.y, m12 = forw.y;
+		T m20 = axisX.z, m21 = axisY.z, m22 = forw.z;
+
+		T trace = m00 + m11 + m22;
+		Quaternion<T> qua;
+
+		if (trace > 0) {
+			T scaling = std::sqrt(1 + trace) * 2;
+
+			qua.w = scaling / 4;
+			qua.x = (m21 - m12) / scaling;
+			qua.y = (m02 - m20) / scaling;
+			qua.z = (m10 - m01) / scaling;
+
+		}
+		else if (m00 > m11 && m00 > m22) {
+			T scaling = std::sqrt(1 + m00 - m11 - m22) * 2;
+
+			qua.x = scaling / 4;
+			qua.w = (m21 - m12) / scaling;
+			qua.y = (m10 + m01) / scaling;
+			qua.z = (m20 + m02) / scaling;
+
+		}
+		else if (m11 > m00 && m11 > m22) {
+			T scaling = std::sqrt(1 + m11 - m00 - m22) * 2;
+
+			qua.y = scaling / 4;
+			qua.w = (m02 - m20) / scaling;
+			qua.x = (m10 + m01) / scaling;
+			qua.z = (m21 - m12) / scaling;
+
+		}
+		else {
+			T scaling = std::sqrt(1 + m22 - m11 - m00) * 2;
+
+			qua.z = scaling / 4;
+			qua.w = (m10 - m01) / scaling;
+			qua.x = (m20 + m02) / scaling;
+			qua.y = (m21 - m12) / scaling;
+		}
+
+		return qua.Normalized();
 	}
 
+	/*			if (forw.LengthSquared() < T(0.00001)) return Quaternion<T>::Identity();
+if (axisX.LengthSquared() < T(0.00001)) axisX = Vec3<T>(1, 0, 0); // ou autre axe arbitraire
+*/
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Normalize(const Quaternion& rhs)
 	{

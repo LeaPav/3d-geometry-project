@@ -47,7 +47,7 @@ namespace math{
         static Quaternion Inverse(const Quaternion& rotation);
         static Quaternion Lerp(const Quaternion& a, const Quaternion& b, float t);
         static Quaternion LerpUncampled(const Quaternion& a, const Quaternion& b, float t);
-        static Quaternion LookRotation();
+        static Quaternion LookRotation(const Vec3<T>& forward, const Vec3<T>& upwards);
         static Quaternion Normalize(const Quaternion& rhs);
         static Quaternion RotateTowards();
         static Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t);
