@@ -204,7 +204,7 @@ namespace math {
 	//static methods
 
 	template <typename T>
-	inline float math::Quaternion<T>::Angle(const Quaternion& from, const Quaternion& to)
+	inline T math::Quaternion<T>::Angle(const Quaternion& from, const Quaternion& to)
 	{
 		float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y + from.z * from.z + from.w * from.w);
 		float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y + to.z * to.z + to.w * to.w);
@@ -220,10 +220,21 @@ namespace math {
 	}
 
 	template<typename T>
-	inline float Quaternion<T>::AngleAxis(float angle, const Vec3<T>& axis)
+	inline Quaternion<T> Quaternion<T>::AngleAxis(const T& angle, const Vec3<T>& axis)
 	{
+		T angleRad = angle * T(3.14159265)/ T(180);
+		T angleDiv = angleRad / T(2);
 
-		return 0.0f;
+		T scaling = std::sin(angleDiv);
+		T w = std::cos(angleDiv);
+
+		Vec3<T> axisNormalize = axis.Normalized();
+
+		T x = axisNormalize.x * scaling;
+		T y = axisNormalize.y * scaling;
+		T z = axisNormalize.z * scaling;
+		
+		return Quaternion<T>(w, x, y, z);
 	}
 
 	template<typename T>
@@ -233,7 +244,7 @@ namespace math {
 	}
 
 	template <typename T>
-	inline T Euler(float x, float y, float z)
+	inline T Euler(T& x, T& y, T& z)
 	{
 		return T();
 	}
