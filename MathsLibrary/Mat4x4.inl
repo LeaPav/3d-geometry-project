@@ -44,7 +44,7 @@ namespace math {
 	}
 
 	template<typename T>
-	inline float Mat4x4<T>::Determinant() const
+	constexpr float Mat4x4<T>::Determinant() const
 	{
 		
 	}
@@ -144,6 +144,24 @@ namespace math {
 		m.mat[2 + 2 * 4] = v.z;
 		m.mat[3 + 3 * 4] = 1;
 		return m;
+	}
+
+	template<typename T>
+	inline Mat4x4<T> Mat4x4<T>::Translate(const Vec3<T>& vector)
+	{
+		Mat4x4<T> m = Mat4x4<T>::Identity();
+
+		m.mat[12] = vec.x;
+		m.mat[13] = vec.y;
+		m.mat[14] = vec.z;
+
+		return m;
+	}
+
+	template<typename T>
+	inline bool Mat4x4<T>::Inverse3DAffine(const Mat4x4<T>& input, const Mat4x4<T>& result)
+	{
+		return false;
 	}
 
 }

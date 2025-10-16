@@ -42,15 +42,22 @@ namespace math {
 
 		// Properties
 
-		float Determinant() const;
+		constexpr float Determinant() const;
 
 		Mat4x4 Inverse() const;
 
 		bool IsIdentity() const;
 
+		Vec3<T> LossyScale() const;
+
+		Mat4x4 Transpose() const;
+
+
 		// Public Methods
 
 		Vec3<T> GetPosition() const;
+
+		
 		Vec3<T> MultiplyPoint(const Vec3<T>& point) const;
 		Vec3<T> MultiplyPoint3x4(const Vec3<T>& point) const;
 		Vec3<T> MultiplyVector(const Vec3<T>& vector) const;
@@ -64,6 +71,16 @@ namespace math {
 		static Mat4x4 Scale(const Vec3<T>& vector);
 
 		static Mat4x4 Translate(const Vec3<T>& vector);
+
+		static bool Inverse3DAffine(const Mat4x4<T>& input, const Mat4x4<T>& result);
+
+		static Mat4x4 LookAt(const Vec3<T>& from, const Vec3<T>& to, const Vec3<T>& up);
+
+		static Mat4x4 Ortho(float left, float right, float bottom, float top, float zNear, float zFar);
+
+		static Mat4x4 Persepective(float fov, float aspect, float zNear, float zFar);
+
+		 
 	};
 	
 }
