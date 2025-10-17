@@ -15,10 +15,18 @@ void Ball::handleWallCollision(const sf::RenderWindow& window)
 	math::Vec2f pos = shape.getPosition();
 	float radius = shape.getRadius();
 
-	if (pos.x - radius < 0 || pos.x + radius > window.getSize().x)
+	if (pos.x - radius < 0) {
 		velocity.x *= -1;
-	if (pos.y - radius < 0)
+	}
+	else if (pos.x + radius > window.getSize().x) {
+		pos.x = window.getSize().x - radius;
+		velocity.x *= -1;
+	}
+	if (pos.y - radius < 0) {
+		pos.y = radius;
 		velocity.y *= -1;
+	}
+	shape.setPosition(pos);
 
 }
 
@@ -26,7 +34,7 @@ void Ball::handlePlayerCollision(const Player& player)
 {
 	math::Vec2f pos = shape.getPosition();
 	
-	if (shape.getGlobalBounds().findIntersection(player.getGlobalBounds())) {
+	if (const std::optional intersection = shape.getGlobalBounds().findIntersection(player.getGlobalBounds())) {
 
 		float playerCenterX = player.getGlobalBounds().position.x + player.getGlobalBounds().size.x / 2.f;
 		float ballX = shape.getPosition().x;
@@ -40,20 +48,32 @@ void Ball::handlePlayerCollision(const Player& player)
 
 void Ball::handleBrickCollision(std::vector<Brick>& bricks)
 {
+	sf::FloatRect intersection;
 	for (Brick& brick : bricks) {
-		if (!brick.isDestroyed() && shape.getGlobalBounds().findIntersection(brick.getGlobalBounds())) {
+
+		if(brick.isDestroyed()) continue;
+
+		if (const std::optional intersection = shape.getGlobalBounds().findIntersection(brick.getGlobalBounds())) {
 			brick.hit();
-			velocity.y *= -1;
+			if (intersection->size.x < intersection->size.y) {
+				velocity.x *= -1;
+			}
+			else {
+				velocity.y *= -1;
+			}
+			break;
+			
 		}
 	}
 }
 
 void Ball::update(float deltaTime, const sf::RenderWindow& window) 
 {
+	
 	math::Vec2f pos = shape.getPosition();
 	pos += velocity * deltaTime;
 	shape.setPosition(pos);
-	handleWallCollision(window);
+
 
 }
 

@@ -9,12 +9,12 @@ void Game::initWindow()
 
 void Game::initPlayer()
 {
-	player = new Player(250.f, math::Vec2f(500, 650));
+	player = new Player(300.f, math::Vec2f(500, 650));
 }
 
 void Game::initBall()
 {
-	ball = new Ball(400.f, 10.f, math::Vec2f(400.f, 300.f));
+	ball = new Ball(350.f, 10.f, math::Vec2f(400.f, 300.f));
 }
 
 void Game::initBricks()
@@ -68,9 +68,12 @@ void Game::update()
 void Game::updateEntities()
 {
 	player->update(deltaTime, *window);
-	ball->update(deltaTime, *window);
+
+	ball->handleWallCollision(*window);
 	ball->handlePlayerCollision(*player);
 	ball->handleBrickCollision(bricks);
+	ball->update(deltaTime, *window);
+	
 }
 
 void Game::draw()
