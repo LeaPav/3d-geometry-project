@@ -8,7 +8,7 @@ namespace math {
 	constexpr Quaternion<T>::Quaternion() : w(0), x(0), y(0), z(0)  {}
 
 	template <typename T>
-	constexpr Quaternion<T>::Quaternion(T w, T y, T z, T x) : w(w), x(x), y(y), z(z) {}
+	constexpr Quaternion<T>::Quaternion(T x, T y, T z, T w) : w(w), x(x), y(y), z(z) {}
 
 	//static properties
 
@@ -21,7 +21,7 @@ namespace math {
 	//properties
 
 	template<typename T>
-	inline Quaternion<T> Quaternion<T>::EulerAngles() 
+	inline Vec3<T> Quaternion<T>::EulerAngles() 
 	{
 		//rotation autour de X
 		T sinr_cosp = 2 * (w * x + y * z);
@@ -61,10 +61,10 @@ namespace math {
 	template<typename T>
 	inline T& Quaternion<T>::operator[](int index)
 	{
-		if (index == 0) return w;
-		else if (index == 1) return x;
-		else if (index == 2) return y;
-		else if (index == 3) return z;
+		if (index == 0) return x;
+		else if (index == 1) return y;
+		else if (index == 2) return z;
+		else if (index == 3) return w;
 		else throw std::out_of_range("Quaternion index out of range");
 	}
 
@@ -91,42 +91,42 @@ namespace math {
 	
 		Vec3<T> cross = Vec3<T>(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 	
-		T dot = a.x * b.x + a.y * b.y + a.z * b.z;
+		T dot = Vec3<T>::Dot(a, b); 
 		
-		if (dot > 1 - T(0.00001)) {
+		if (dot > T(0.99999)) {
 			return;
 		}
 
 		Vec3<T> orthogonal = Vec3<T>(1, 0, 0);
 
-		if (dot < -1 + T(0.00001)) {
+		if (dot <  T(-0.99999)) {
 			if (std::fabs(a.x) > 0.9f) {
 				orthogonal = Vec3<T>(0, 1, 0);
 			}
 
-			Vec3<T> perpendicular = a.Cross(orthogonal).Normalized();
-			*this = Quaternion<T>(perpendicular.x, perpendicular.y, perpendicular.z, 0);
+			Vec3<T> perpendicular = Vec3<T>::Cross(a, orthogonal).Normalized();
+			*this = Quaternion<T>(perpendicular.x, perpendicular.y, perpendicular.z, T(0));
 			
 			return;
 		}
 
-		Vec3<T> axis = cross;
+		Vec3<T> axis = Vec3<T>::Cross(a, b);
 
-		T w = std::sqrt((1 + dot) * 2);
-		T scaling = 1 / w;
+		T w = std::sqrt((1 + dot) * T(2));
+		T scaling = T(1) / w;
 
-		*this = Quaternion<T>(w * 0.5f, axis.x * scaling, axis.y * scaling, axis.z * scaling);
+		*this = Quaternion<T>(axis.x * scaling, axis.y * scaling, axis.z * scaling, w * T(0.5)).Normalized();
 
 	}
 
 	template <typename T>
 	inline void Quaternion<T>::SetLookRotation(const Vec3<T>& view, const Vec3<T>& up)
 	{
-		Vec3<T> view = view.Normalized();
-		Vec3<T> up = up.Normalized();
+		Vec3<T> viewV = view.Normalized();
+		Vec3<T> upU = up.Normalized();
 
-		Vec3<T> axisX = up.Cross(view).Normalized();
-		Vec3<T> axisY = view.Cross(axisX);
+		Vec3<T> axisX = axisX.Cross(upU, view).Normalized();
+		Vec3<T> axisY = axisY.Cross(viewV, axisX);
 
 		T m00 = axisX.x, m01 = axisY.x, m02 = view.x;
 		T m10 = axisX.y, m11 = axisY.y, m12 = view.y;
@@ -272,25 +272,25 @@ namespace math {
 		Vec3<T> a = fromDirection.Normalized();
 		Vec3<T> b = toDirection.Normalized();
 
-		T dot = a.Dot(b);
+		T dot = Vec3<T>::Dot(a, b);
 
 		if (dot > T(0.9999)) {
 			return Quaternion<T>::Identity();
 		}
 
-		Vec3<T> orthogonal = Vec3<T>(1, 0, 0).Cross(a);
+		Vec3<T> orthogonal = Vec3<T>(1, 0, 0).Cross(a, b);
 		
 		if (dot < T(-0.9999)) {
-
+			Vec3<T> orthogonal = Vec3<T>(1, 0, 0).Cross(a, b);
 			if (orthogonal.SqrMagnitude() < T(0.00001)) {
-				orthogonal = Vec3<T>(0, 1, 0).Cross(a);
+				orthogonal = Vec3<T>(0, 1, 0).Cross(a, b);
 			}
 
 			orthogonal = orthogonal.Normalized();
-			return Quaternion<T>(orthogonal.x, orthogonal.y, orthogonal.z, 0);
+			return Quaternion<T>(orthogonal.x, orthogonal.y, orthogonal.z, T(0));
 		}
 
-		Vec3<T> axis = a.Cross(b);
+		Vec3<T> axis = axis.Cross(a, b);
 
 		T w = std::sqrt((1 + dot) * 2);
 		T scaling = T(1) / w;
@@ -333,8 +333,8 @@ namespace math {
 		Vec3<T> forw = forward.Normalized();
 		Vec3<T> up = upwards.Normalized();
 
-		Vec3<T> axisX = up.Cross(forw).Normalized();
-		Vec3<T> axisY = forw.Cross(axisX);
+		Vec3<T> axisX = axisX.Cross(up, forw).Normalized();
+		Vec3<T> axisY = axisY.Cross(forw, axisX);
 
 		T m00 = axisX.x, m01 = axisY.x, m02 = forw.x;
 		T m10 = axisX.y, m11 = axisY.y, m12 = forw.y;
@@ -385,20 +385,20 @@ namespace math {
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Normalize(const Quaternion& rhs)
 	{
-	    T magnitude = std::sqrt(w * w + x * x + y * y + z * z);
+	    T magnitude = std::sqrt (rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z + rhs.w * rhs.w);
 	    
 	    if (magnitude < T(0.00001)) {
 	        return Quaternion<T>(0, 0, 0, 0);
 	    }
 
-	   return Quaternion<T>(w / magnitude, x/ magnitude, y/ magnitude, z/ magnitude);
+		return Quaternion<T>(rhs.w / magnitude, rhs.x / magnitude, rhs.y / magnitude, rhs.z / magnitude);
 	}
 
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::RotateTowards(const Quaternion& from, const Quaternion& to, const T maxDelta)
 	{
 
-		T angle = angle(from, to);
+		T angle = Angle(from, to);
 
 		if (angle < T(0.00001)) {
 			return to;
@@ -419,7 +419,7 @@ namespace math {
 
 		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(qauternionA, quaternionB ))); 
 		T theta = std::acos(dot);
-		return (qauternionA * (std::sin((1 - t) * theta) / std::sin(theta)) + quaternionB * (std::sin(t * theta) / std::sin(theta)));
+		return ((std::sin((1 - t) * theta) / std::sin(theta)) * qauternionA + (std::sin(t * theta) / std::sin(theta)) * quaternionB);
 
 	}
 
@@ -431,7 +431,7 @@ namespace math {
 
 		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(quaternionA, quaternionB)));
 		T theta = std::acos(dot);
-		return (quaternionB * (std::sin(t * theta) / std::sin(theta)) + quaternionA * (std::sin((1 - t) * theta) / std::sin(theta)));
+		return ((std::sin((1 - t) * theta) / std::sin(theta)) * quaternionA + (std::sin(t * theta) / std::sin(theta)) * quaternionB);
 	}
 
 
@@ -462,6 +462,12 @@ namespace math {
 	constexpr Quaternion<T> operator*(T lhs, const Quaternion<T>& rhs)
 	{
 		return lhs * rhs; 
+	}
+
+	template<typename T>
+	constexpr Quaternion<T> operator+(const Quaternion<T>& lhs, const Quaternion<T>& rhs)
+	{
+		return Quaternion<T>(lhs.w + rhs.w, lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 	}
 
 	template<typename T>

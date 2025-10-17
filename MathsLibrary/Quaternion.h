@@ -25,7 +25,7 @@ namespace math{
 
         // properties
 
-        Quaternion EulerAngles();
+        Vec3<T> EulerAngles();
         Quaternion Normalized() const; 
         T& operator[](int index);
 
@@ -68,6 +68,9 @@ namespace math{
 
     template <typename T>
     constexpr Quaternion<T> operator*(T lhs, const Quaternion<T>& rhs);
+
+    template<typename T>
+    constexpr Quaternion<T> operator+(const Quaternion<T>& lhs, const Quaternion<T>& rhs);
 
     template <typename T>
     constexpr bool operator==(const Quaternion<T>& lhs, const Quaternion<T>& rhs);

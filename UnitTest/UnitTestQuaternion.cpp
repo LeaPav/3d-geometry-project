@@ -19,11 +19,11 @@ public:
 
 	TEST_METHOD(Constructor_Values)
 	{
-		Quaternionf q(1.0f, 2.0f, 3.0f, 4.0f);
-		Assert::AreEqual(1.0f, q.x);
-		Assert::AreEqual(2.0f, q.y);
-		Assert::AreEqual(3.0f, q.z);
-		Assert::AreEqual(4.0f, q.w);
+		Quaternionf q(4.0f, 1.0f, 2.0f, 3.0f);
+		Assert::AreEqual(4.0f, q.x);
+		Assert::AreEqual(1.0f, q.y);
+		Assert::AreEqual(2.0f, q.z);
+		Assert::AreEqual(3.0f, q.w);	
 	}
 	TEST_METHOD(Operator_this)
 	{
