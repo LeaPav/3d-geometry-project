@@ -430,18 +430,17 @@ namespace math {
 	//operators
 
 	template<typename T>
-	constexpr Quaternion<T> Quaternion<T>::operator*(const Quaternion& lhs, const Quaternion& rhs) const
+	constexpr Quaternion<T> operator*(const Quaternion<T>& lhs, const Quaternion<T>& rhs)
 	{
-		 return Quaternion<T>(
-			 lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y,
-			 lhs.w * rhs.y - lhs.x * rhs.z + lhs.y * rhs.w + lhs.z * rhs.x,
-			 lhs.w * rhs.z + lhs.x * rhs.y - lhs.y * rhs.x + lhs.z * rhs.w,
-			 lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z
-		 );
-	 }
-	
+		return Quaternion<T>(
+			lhs.w *rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y,
+			lhs.w * rhs.y - lhs.x * rhs.z + lhs.y * rhs.w + lhs.z * rhs.x,
+			lhs.w * rhs.z + lhs.x * rhs.y - lhs.y * rhs.x + lhs.z * rhs.w,
+			lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z
+		);
+	}
 	template<typename T>
-	constexpr bool Quaternion<T>::operator==(const Quaternion& lhs, const Quaternion& rhs) const
+	constexpr bool operator==(const Quaternion<T>& lhs, const Quaternion<T>& rhs)
 	{
 		T dot = lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
 		return std::abs(std::abs(dot) - T(1)) < T(0.00001);

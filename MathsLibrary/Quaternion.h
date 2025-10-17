@@ -53,12 +53,17 @@ namespace math{
         static Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t);
         static Quaternion SlerpUncampled(const Quaternion& a, const Quaternion& b, float t);
 
-        //operators
-
-        static Quaternion operator*(const Quaternion& lhs, const Quaternion& rhs) const;
-        static bool operator==(const Quaternion& lhs, const Quaternion& rhs) const;
+       
 
     };
+
+    //operator
+
+    template <typename T>
+    constexpr Quaternion<T> operator*(const Quaternion<T>& lhs, const Quaternion<T>& rhs);
+
+    template <typename T>
+    constexpr bool operator==(const Quaternion<T>& lhs, const Quaternion<T>& rhs);
 
     using Quaternionf = Quaternion<float>;
     using Quaternioni = Quaternion<int>;
