@@ -5,12 +5,13 @@ void Player::initPlayer()
 {
 	shape.setSize(math::Vec2f(100.f, 20.f));
 	shape.setFillColor(sf::Color::Blue);
-	shape.setPosition(math::Vec2f(500, 650));
+	
 }
 
-Player::Player(float s) : speed(s), position(shape.getPosition())
+Player::Player(float s, math::Vec2f pos) : Entity(s, pos)
 {
 	initPlayer();
+	shape.setPosition(position);
 }
 
 void Player::handleInput(float deltaTime)
@@ -53,6 +54,11 @@ void Player::draw(sf::RenderTarget& target)
 	target.draw(shape);
 }
 
-math::Vec2f Player::GetPosition() const {
+math::Vec2f Player::getPosition() const {
 	return position;
+}
+
+sf::FloatRect Player::getGlobalBounds() const
+{
+	return shape.getGlobalBounds();
 }

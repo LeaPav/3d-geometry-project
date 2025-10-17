@@ -12,5 +12,6 @@ public:
 	virtual void update(float deltaTime, const sf::RenderWindow& window) = 0;
 	virtual void draw(sf::RenderTarget& target) = 0;
 
+	virtual sf::FloatRect getGlobalBounds() const = 0;
 };
 

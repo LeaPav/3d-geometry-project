@@ -22,12 +22,13 @@ void Ball::handleWallCollision(const sf::RenderWindow& window)
 
 }
 
-void Ball::handleEntityCollision(const Entity& entity)
+void Ball::handlePlayerCollision(const Player& player)
 {
 	math::Vec2f pos = shape.getPosition();
-	float radius = shape.getRadius();
-
 	
+	if (shape.getGlobalBounds().findIntersection(player.getGlobalBounds())) {
+		velocity.y *= -1;
+	}
 }
 
 void Ball::update(float deltaTime, const sf::RenderWindow& window) 
@@ -36,9 +37,15 @@ void Ball::update(float deltaTime, const sf::RenderWindow& window)
 	pos += velocity * deltaTime;
 	shape.setPosition(pos);
 	handleWallCollision(window);
+
 }
 
 void Ball::draw( sf::RenderTarget& target)
 {
 	target.draw(shape);
+}
+
+sf::FloatRect Ball::getGlobalBounds() const
+{
+	return shape.getGlobalBounds();
 }

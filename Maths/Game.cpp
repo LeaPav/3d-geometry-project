@@ -9,7 +9,7 @@ void Game::initWindow()
 
 void Game::initPlayer()
 {
-	player = new Player(200.f);
+	player = new Player(200.f, math::Vec2f(500, 650));
 }
 
 void Game::initBall()
@@ -52,6 +52,7 @@ void Game::updateEntities()
 {
 	player->update(deltaTime, *window);
 	ball->update(deltaTime, *window);
+	ball->handlePlayerCollision(*player);
 }
 
 void Game::draw()

@@ -2,27 +2,27 @@
 #include <SFML/Graphics.hpp>
 #include "Vec2.h"
 #include "Entity.h"
-class Player
+class Player : public Entity
 {
 private:
 
 	sf::RectangleShape shape;
-	math::Vec2f position;
-	float speed;
 
 	void initPlayer();
 
 public:
-	Player(float s);
+	Player(float s, math::Vec2f pos);
 
 	void handleInput(float deltaTime);
 	void handleScreenCollisions(const sf::RenderWindow& window);
 
 
-	void update(float deltaTime, const sf::RenderWindow& window);
-	void draw(sf::RenderTarget& target);
+	void update(float deltaTime, const sf::RenderWindow& window) override;
+	void draw(sf::RenderTarget& target) override;
 
 
-	math::Vec2f GetPosition() const;
+	math::Vec2f getPosition() const;
+
+	sf::FloatRect getGlobalBounds() const override;
 };
 
