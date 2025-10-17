@@ -14,7 +14,7 @@ void Game::initPlayer()
 
 void Game::initBall()
 {
-	ball = new Ball(175.f, 10.f, math::Vec2f(400.f, 300.f));
+	ball = new Ball(300.f, 10.f, math::Vec2f(400.f, 300.f));
 }
 
 Game::Game()
