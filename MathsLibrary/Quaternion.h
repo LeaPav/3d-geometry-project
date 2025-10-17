@@ -10,14 +10,13 @@ namespace math{
     template <typename T>
     class Quaternion {
     public:
-        T w;
         T x;
         T y;
         T z; 
-
+        T w;
 
         constexpr Quaternion() ;
-        constexpr Quaternion(T w,T x, T y, T z);
+        constexpr Quaternion(T x, T y, T z, T w);
 
         //static Properties
 

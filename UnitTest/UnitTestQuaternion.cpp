@@ -49,16 +49,49 @@ public:
 		Assert::AreEqual(0.0f, q.z);
 		Assert::AreEqual(1.0f, q.w);
 	}	
+	//TEST_METHOD(Property_EulerAngles)
+	//{
+	//	auto q1 = Quaternionf::Euler(0.0f, 90.0f * 3.14159265f / 180.0f, 0.0f);
+	//	auto euler = q1.EulerAngles();
+	//
+	//	auto q2 = Quaternionf::Euler(euler.x, euler.y, euler.z);
+	//
+	//	Assert::IsTrue(q1.Equals(q2));
+	//
+	//	Vec3f v(0, 0, 1);
+	//	Vec3f v1 = q1 * v;
+	//	Vec3f v2 = q2 * v;
+	//
+	//	Assert::AreEqual(v1.x, v2.x, 0.01f);
+	//	Assert::AreEqual(v1.y, v2.y, 0.01f);
+	//	Assert::AreEqual(v1.z, v2.z, 0.01f);
+	//
+	//	//Assert::AreEqual(0.0f, euler.x, 0.5f);
+	//	//Assert::AreEqual(3.14159265f / 2, euler.y, 0.01f);
+	//	//Assert::AreEqual(0.0f, euler.z, 0.5f);	
+	//}
 	TEST_METHOD(Property_EulerAngles)
 	{
-		auto q = Quaternionf::Euler(0.0f, 90.0f, 0.0f);
+		auto q1 = Quaternionf::Euler(0.0f, 90.0f * 3.14159265f / 180.0f, 0.0f);
+		auto euler = q1.EulerAngles();
+		auto q2 = Quaternionf::Euler(euler.x, euler.y, euler.z);
 
-		auto euler = q.EulerAngles();
+		bool areEquivalent =
+			(std::abs(q1.x - q2.x) < 0.001f && std::abs(q1.y - q2.y) < 0.001f &&
+				std::abs(q1.z - q2.z) < 0.001f && std::abs(q1.w - q2.w) < 0.001f) ||
+
+			(std::abs(q1.x + q2.x) < 0.001f && std::abs(q1.y + q2.y) < 0.001f &&
+				std::abs(q1.z + q2.z) < 0.001f && std::abs(q1.w + q2.w) < 0.001f);
+
+		Assert::IsTrue(areEquivalent);
+
+		Assert::IsTrue(areEquivalent);
 
 		Assert::AreEqual(0.0f, euler.x, 0.5f);
-		Assert::AreEqual(90.0f, euler.y, 0.5f);
+		Assert::AreEqual(3.14159265f / 2, euler.y, 0.01f);
 		Assert::AreEqual(0.0f, euler.z, 0.5f);
 	}
+
 	TEST_METHOD(Property_Normalized)
 	{
 		Quaternionf q(2, 0, 0, 0);
@@ -86,16 +119,15 @@ public:
 	}	
 	TEST_METHOD(Method_SetFromToRotation)
 	{
-		Quaternionf q;
-		Vec3f from(1, 0, 0);
-		Vec3f to(0, 1, 0);
+		Vec3f fromDirection{ 1, 0, 0 };
+		Vec3f toDirection{ 0, 1, 0 };
+		Quaternionf q{};
+		q.SetFromToRotation(fromDirection, toDirection);
 
-		q.SetFromToRotation(from, to);
-		Vec3f rotated = q * from;
-
-		Assert::AreEqual(to.x, rotated.x, 0.01f);
-		Assert::AreEqual(to.y, rotated.y, 0.01f);
-		Assert::AreEqual(to.z, rotated.z, 0.01f);
+		Assert::AreEqual(q.x, 0.f, 0.0001f);
+		Assert::AreEqual(q.y, 0.f, 0.0001f);
+		Assert::AreEqual(q.z, 0.7071f, 0.0001f);
+		Assert::AreEqual(q.w, 0.7071f, 0.0001f);
 	}
 	TEST_METHOD(Method_SetLookRotation)
 	{
@@ -112,14 +144,15 @@ public:
 	}
 	TEST_METHOD(Method_ToAngleAxis)
 	{
-		auto q = Quaternionf::AngleAxis(45.0f, Vec3f(0, 0, 1));
-		float angle;
-		Vec3f axis;
-		q.ToAngleAxis(angle, axis);
-		Assert::AreEqual(45.0f, angle, 0.01f);
-		Assert::AreEqual(0.0f, axis.x, 0.01f);
-		Assert::AreEqual(0.0f, axis.y, 0.01f);
-		Assert::AreEqual(1.0f, axis.z, 0.01f);
+		Quaternionf q{ 0.f, 0.f, 0.7071f, 0.7071f };
+		Vec3f v{};
+		float angle{};
+		q.ToAngleAxis(angle, v);
+		v.Normalize();
+		Assert::AreEqual(v.x, 0.f, 0.0001f);
+		Assert::AreEqual(v.y, 0.f, 0.0001f);
+		Assert::AreEqual(v.z, 1.f, 0.0001f);
+		Assert::AreEqual(angle, 3.14159265f / 2, 0.0001f);
 	}
 	TEST_METHOD(Method_ToString)
 	{
@@ -155,17 +188,15 @@ public:
 		auto dot = Quaternionf::Dot(q1, q2);
 		Assert::AreEqual(0.0f, dot);
 	}
+
 	TEST_METHOD(Static_Euler)
 	{
-		auto q = Quaternionf::Euler(0.0f, 90.0f, 0.0f);
-		float angle;
-		Vec3f axis;
-		q.ToAngleAxis(angle, axis);
+		Quaternionf q{ Quaternionf::Euler(0.f, 0.f, 3.14159265f / 2.f) };
 
-		Assert::AreEqual(90.0f, angle, 0.5f);
-		Assert::AreEqual(0.0f, axis.x, 0.01f);
-		Assert::AreEqual(1.0f, axis.y, 0.01f);
-		Assert::AreEqual(0.0f, axis.z, 0.01f);
+		Assert::AreEqual(q.x, 0.f, 0.0001f);
+		Assert::AreEqual(q.y, 0.f, 0.0001f);
+		Assert::AreEqual(q.z, 0.7071f, 0.0001f);
+		Assert::AreEqual(q.w, 0.7071f, 0.0001f);
 	}
 	TEST_METHOD(Static_FromToRotation)
 	{
@@ -201,29 +232,30 @@ public:
 	}
 	TEST_METHOD(Static_Lerp)
 	{
-		Quaternionf q1(1, 0, 0, 0);
-		Quaternionf q2(0, 1, 0, 0);
+		Quaternionf q1(0, 0, 0, 1);
+		Quaternionf q2(1, 0, 0, 0);
 		auto result = Quaternionf::Lerp(q1, q2, 0.5f);
 
-		Assert::AreEqual(0.5f, result.w, 0.01f);
-		Assert::AreEqual(0.5f, result.x, 0.01f);
+		Assert::AreEqual(0.7071f, result.w, 0.01f);
+		Assert::AreEqual(0.7071f, result.x, 0.01f);
 	}
 	TEST_METHOD(Static_LerpUncampled)
 	{
-		Quaternionf q1(1, 0, 0, 0);
-		Quaternionf q2(0, 1, 0, 0);
+		Quaternionf q1(0, 0, 0, 1);
+		Quaternionf q2(1, 0, 0, 0);
 		auto result = Quaternionf::LerpUncampled(q1, q2, 0.5f);
 
-		Assert::AreEqual(0.5f, result.w, 0.01f);
-		Assert::AreEqual(0.5f, result.x, 0.01f);
+		Assert::AreEqual(0.7071f, result.w, 0.01f);
+		Assert::AreEqual(0.7071f, result.x, 0.01f);
 	}
 	TEST_METHOD(Static_Normalize) {
-		math::Quaternionf q(2, 0, 0, 0);
-		auto norm = math::Quaternionf::Normalize(q);
-		Assert::AreEqual(1.0f, norm.w, 0.0001f);
+		Quaternionf q(0, 0, 0, 2);
+		auto norm = Quaternionf::Normalize(q);
 		Assert::AreEqual(0.0f, norm.x, 0.0001f);
 		Assert::AreEqual(0.0f, norm.y, 0.0001f);
 		Assert::AreEqual(0.0f, norm.z, 0.0001f);
+		Assert::AreEqual(1.0f, norm.w, 0.0001f);
+
 	}
 	TEST_METHOD(Static_RotateTowards)
 	{
