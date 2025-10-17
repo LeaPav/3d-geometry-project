@@ -1,13 +1,14 @@
 #include "Player.h"
+#include "Ball.h"
 
 void Player::initPlayer()
 {
 	shape.setSize(math::Vec2f(100.f, 20.f));
 	shape.setFillColor(sf::Color::Blue);
-	shape.setPosition(math::Vec2f(500, 550));
+	shape.setPosition(math::Vec2f(500, 650));
 }
 
-Player::Player(float s) : speed(s)
+Player::Player(float s) : speed(s), position(shape.getPosition())
 {
 	initPlayer();
 }
@@ -27,12 +28,31 @@ void Player::handleInput(float deltaTime)
 	shape.setPosition(newPos);
 }
 
-void Player::update(float deltaTime)
+void Player::handleScreenCollisions(const sf::RenderWindow& window)
+{
+	sf::FloatRect bounds = shape.getGlobalBounds();
+	if (bounds.position.x < 0) {
+		
+		shape.setPosition(math::Vec2f(0, bounds.position.y));
+	}
+	if (bounds.position.x + bounds.size.x > window.getSize().x) {
+		shape.setPosition(math::Vec2f(window.getSize().x - bounds.size.x, bounds.position.y));
+	}
+}
+
+
+
+void Player::update(float deltaTime, const sf::RenderWindow& window)
 {
 	handleInput(deltaTime);
+	handleScreenCollisions(window);
 }
 
 void Player::draw(sf::RenderTarget& target)
 {
 	target.draw(shape);
+}
+
+math::Vec2f Player::GetPosition() const {
+	return position;
 }

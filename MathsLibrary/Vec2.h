@@ -25,6 +25,8 @@ namespace math{
         constexpr Vec2 operator/(T scalar) const;
         constexpr bool operator==(const Vec2& vec) const;
         constexpr bool operator!=(const Vec2& vec) const;
+        constexpr Vec2& operator+=(const Vec2& vec);
+        constexpr Vec2& operator-=(const Vec2& vec);
         operator sf::Vector2f() const;
 
         T& operator[](int index);

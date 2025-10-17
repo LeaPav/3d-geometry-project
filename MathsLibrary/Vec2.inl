@@ -47,6 +47,22 @@ namespace math {
     }
 
     template<typename T>
+    inline constexpr Vec2<T>& Vec2<T>::operator+=(const Vec2& vec)
+    {
+        x+= vec.x;
+        y+= vec.y;
+        return *this;
+    }
+
+    template<typename T>
+    inline constexpr Vec2<T>& Vec2<T>::operator-=(const Vec2& vec)
+    {
+        x -= vec.x;
+        y -= vec.y;
+        return *this;
+    }
+
+    template<typename T>
     inline Vec2<T>::operator sf::Vector2f() const
     {
         return sf::Vector2f(static_cast<float>(x), static_cast<float>(y));
