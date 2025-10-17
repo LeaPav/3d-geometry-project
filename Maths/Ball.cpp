@@ -27,7 +27,7 @@ void Ball::handleEntityCollision(const Entity& entity)
 	math::Vec2f pos = shape.getPosition();
 	float radius = shape.getRadius();
 
-	sf::FloatRect playerBounds = 
+	
 }
 
 void Ball::update(float deltaTime, const sf::RenderWindow& window) 
