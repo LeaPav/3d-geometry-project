@@ -49,27 +49,6 @@ public:
 		Assert::AreEqual(0.0f, q.z);
 		Assert::AreEqual(1.0f, q.w);
 	}	
-	//TEST_METHOD(Property_EulerAngles)
-	//{
-	//	auto q1 = Quaternionf::Euler(0.0f, 90.0f * 3.14159265f / 180.0f, 0.0f);
-	//	auto euler = q1.EulerAngles();
-	//
-	//	auto q2 = Quaternionf::Euler(euler.x, euler.y, euler.z);
-	//
-	//	Assert::IsTrue(q1.Equals(q2));
-	//
-	//	Vec3f v(0, 0, 1);
-	//	Vec3f v1 = q1 * v;
-	//	Vec3f v2 = q2 * v;
-	//
-	//	Assert::AreEqual(v1.x, v2.x, 0.01f);
-	//	Assert::AreEqual(v1.y, v2.y, 0.01f);
-	//	Assert::AreEqual(v1.z, v2.z, 0.01f);
-	//
-	//	//Assert::AreEqual(0.0f, euler.x, 0.5f);
-	//	//Assert::AreEqual(3.14159265f / 2, euler.y, 0.01f);
-	//	//Assert::AreEqual(0.0f, euler.z, 0.5f);	
-	//}
 	TEST_METHOD(Property_EulerAngles)
 	{
 		auto q1 = Quaternionf::Euler(0.0f, 90.0f * 3.14159265f / 180.0f, 0.0f);
