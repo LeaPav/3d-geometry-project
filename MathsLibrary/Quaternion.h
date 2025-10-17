@@ -10,13 +10,14 @@ namespace math{
     template <typename T>
     class Quaternion {
     public:
+        T w;
         T x;
         T y;
         T z; 
-        T w;
+
 
         constexpr Quaternion() ;
-        constexpr Quaternion(T x, T y, T z, T w);
+        constexpr Quaternion(T w,T x, T y, T z);
 
         //static Properties
 
@@ -26,6 +27,8 @@ namespace math{
 
         Quaternion EulerAngles();
         Quaternion Normalized() const; 
+        T& operator[](int index);
+
 
         //public methods
 
@@ -34,7 +37,7 @@ namespace math{
         void SetFromToRotation(const Vec3<T>& fromDirection, const Vec3<T>& toDirection);
         void SetLookRotation(const Vec3<T>& view, const Vec3<T>& up);
         void ToAngleAxis(T& angle, Vec3<T>& axis);
-        std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w) + ")"; }
+        std::string ToString() const { return "(" + std::to_string(w) + ", " + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")"; }
 
 
         // static methods
@@ -53,14 +56,18 @@ namespace math{
         static Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t);
         static Quaternion SlerpUncampled(const Quaternion& a, const Quaternion& b, float t);
 
-       
-
     };
 
     //operator
 
     template <typename T>
     constexpr Quaternion<T> operator*(const Quaternion<T>& lhs, const Quaternion<T>& rhs);
+
+    template <typename T>
+    constexpr Vec3<T> operator*(const Quaternion<T>& lhs, const Vec3<T>& rhs);
+
+    template <typename T>
+    constexpr Quaternion<T> operator*(T lhs, const Quaternion<T>& rhs);
 
     template <typename T>
     constexpr bool operator==(const Quaternion<T>& lhs, const Quaternion<T>& rhs);

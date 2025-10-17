@@ -5,17 +5,17 @@
 namespace math {
 
 	template <typename T>
-	constexpr Quaternion<T>::Quaternion() : x(0), y(0), z(0), w(0) {}
+	constexpr Quaternion<T>::Quaternion() : w(0), x(0), y(0), z(0)  {}
 
 	template <typename T>
-	constexpr Quaternion<T>::Quaternion(T x, T y, T z, T w) : x(x), y(y), z(z), w(w) {}
+	constexpr Quaternion<T>::Quaternion(T w, T y, T z, T x) : w(w), x(x), y(y), z(z) {}
 
 	//static properties
 
 	template<typename T>
 	inline Quaternion<T> Quaternion<T>::Identity()
 	{
-		return Quaternion<T>(0, 0, 0, 1);
+		return Quaternion<T>(1, 0, 0, 0);
 	}
 
 	//properties
@@ -49,29 +49,37 @@ namespace math {
 
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Normalized() const {
-		 T magnitude = std::sqrt(x * x + y * y + z * z + w * w); 
+		 T magnitude = std::sqrt(w * w + x * x + y * y + z * z);
 
 		 if (magnitude < T(0.00001)) { 
 			 return Quaternion<T>(0, 0, 0, 0); 
 		 }
 
-		 return Quaternion<T>(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
+		 return Quaternion<T>(w / magnitude, x / magnitude, y / magnitude, z / magnitude);
 	}
 
-	//this[int]
+	template<typename T>
+	inline T& Quaternion<T>::operator[](int index)
+	{
+		if (index == 0) return w;
+		else if (index == 1) return x;
+		else if (index == 2) return y;
+		else if (index == 3) return z;
+		else throw std::out_of_range("Quaternion index out of range");
+	}
 
 	//public methods
 
 	template<typename T>
 	inline bool Quaternion<T>::Equals(const Quaternion& rhs) const
 	{
-		return (x == rhs.x) && (y == rhs.y) && (z == rhs.z) && (w == rhs.w);
+		return (w == rhs.w) && (x == rhs.x) && (y == rhs.y) && (z == rhs.z);
 	}
 
 	template<typename T>
 	inline void Quaternion<T>::Set(const Quaternion<T>& rhs)
 	{
-		x = rhs.x; y = rhs.y; z = rhs.z; w = rhs.w;
+		w = rhs.w; x = rhs.x; y = rhs.y; z = rhs.z;
 	}
 
 	template<typename T>
@@ -107,7 +115,7 @@ namespace math {
 		T w = std::sqrt((1 + dot) * 2);
 		T scaling = 1 / w;
 
-		*this = Quaternion<T>(axis.x * scaling, axis.y * scaling, axis.z * scaling, w * 0.5f);
+		*this = Quaternion<T>(w * 0.5f, axis.x * scaling, axis.y * scaling, axis.z * scaling);
 
 	}
 
@@ -201,8 +209,8 @@ namespace math {
 	template <typename T>
 	inline T math::Quaternion<T>::Angle(const Quaternion& from, const Quaternion& to)
 	{
-		float magnitudeFrom = std::sqrt(from.x * from.x + from.y * from.y + from.z * from.z + from.w * from.w);
-		float magnitudeTo = std::sqrt(to.x * to.x + to.y * to.y + to.z * to.z + to.w * to.w);
+		float magnitudeFrom = std::sqrt(from.w * from.w + from.x * from.x + from.y * from.y + from.z * from.z);
+		float magnitudeTo = std::sqrt(to.w * to.w + to.x * to.x + to.y * to.y + to.z * to.z);
 
 		float dot = Dot(from, to);
 
@@ -235,7 +243,7 @@ namespace math {
 	template<typename T>
 	constexpr T Quaternion<T>::Dot(const Quaternion& a, const Quaternion& b)
 	{
-		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+		return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
 	}
 
 	template <typename T>
@@ -287,26 +295,26 @@ namespace math {
 		T w = std::sqrt((1 + dot) * 2);
 		T scaling = T(1) / w;
 
-		return Quaternion<T>(axis.x * scaling, axis.y * scaling, axis.z * scaling, w * T(0.5)).Normalized();
+		return Quaternion<T>(w * T(0.5), axis.x * scaling, axis.y * scaling, axis.z * scaling).Normalized();
 	}
 
 	template<typename T>
 	inline Quaternion<T> Quaternion<T>::Inverse(const Quaternion& rotation)
 	{
-		T sqrMagnitude = rotation.x * rotation.x + rotation.y * rotation.y + rotation.z * rotation.z + rotation.w * rotation.w;
+		T sqrMagnitude = rotation.w * rotation.w + rotation.x * rotation.x + rotation.y * rotation.y + rotation.z * rotation.z;
 
 		if (sqrMagnitude < T(0.00001)) {
 			return Quaternion<T>::Identity();
 		}
 
-		return Quaternion<T>(-rotation.x / sqrMagnitude, -rotation.y / sqrMagnitude, -rotation.z / sqrMagnitude, rotation.w / sqrMagnitude);
+		return Quaternion<T>(rotation.w / sqrMagnitude, -rotation.x / sqrMagnitude, -rotation.y / sqrMagnitude, -rotation.z / sqrMagnitude);
 	}
 
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Lerp(const Quaternion& a, const Quaternion& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
-		Quaternion<T> qua(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		Quaternion<T> qua(a.w + (b.w - a.w) * t, a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
 
 		return qua.Normalized();
 	}
@@ -314,7 +322,7 @@ namespace math {
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::LerpUncampled(const Quaternion& a, const Quaternion& b, float t)
 	{
-		Quaternion<T> qua(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
+		Quaternion<T> qua(a.w + (b.w - a.w) * t, a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
 		
 		return qua.Normalized();
 	}
@@ -377,13 +385,13 @@ namespace math {
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Normalize(const Quaternion& rhs)
 	{
-	    T magnitude = std::sqrt(x * x + y * y + z * z + w * w);
+	    T magnitude = std::sqrt(w * w + x * x + y * y + z * z);
 	    
 	    if (magnitude < T(0.00001)) {
 	        return Quaternion<T>(0, 0, 0, 0);
 	    }
 
-	   return Quaternion<T>(x/ magnitude, y/ magnitude, z/ magnitude, w/ magnitude);
+	   return Quaternion<T>(w / magnitude, x/ magnitude, y/ magnitude, z/ magnitude);
 	}
 
 	template <typename T>
@@ -423,7 +431,7 @@ namespace math {
 
 		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(quaternionA, quaternionB)));
 		T theta = std::acos(dot);
-		return (quaternionA * (std::sin((1 - t) * theta) / std::sin(theta)) + quaternionB * (std::sin(t * theta) / std::sin(theta)));
+		return (quaternionB * (std::sin(t * theta) / std::sin(theta)) + quaternionA * (std::sin((1 - t) * theta) / std::sin(theta)));
 	}
 
 
@@ -439,10 +447,27 @@ namespace math {
 			lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z
 		);
 	}
+	template <typename T>
+	constexpr Vec3<T> operator*(const Quaternion<T>& lhs, const Vec3<T>& rhs)
+	{
+		Quaternion<T> vectorQua(T(0), rhs.x, rhs.y, rhs.z);
+
+		Quaternion<T> inverseQua = Quaternion<T>::Inverse(lhs);
+		Quaternion<T> rotation = lhs * vectorQua * inverseQua;
+
+		return Vec3<T>(rotation.x, rotation.y, rotation.z);
+	}
+
+	template <typename T>
+	constexpr Quaternion<T> operator*(T lhs, const Quaternion<T>& rhs)
+	{
+		return lhs * rhs; 
+	}
+
 	template<typename T>
 	constexpr bool operator==(const Quaternion<T>& lhs, const Quaternion<T>& rhs)
 	{
-		T dot = lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w;
+		T dot = lhs.w * rhs.w + lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
 		return std::abs(std::abs(dot) - T(1)) < T(0.00001);
 	}
 }
