@@ -13,7 +13,7 @@ namespace math {
 	//static properties
 
 	template<typename T>
-	inline static Quaternion<T> Quaternion<T>::Identity()
+	inline Quaternion<T> Quaternion<T>::Identity()
 	{
 		return Quaternion<T>(0, 0, 0, 1);
 	}
@@ -48,7 +48,7 @@ namespace math {
 
 
 	template <typename T>
-	constexpr Quaternion<T> Quaternion<T>::Normalized() const {
+	inline Quaternion<T> Quaternion<T>::Normalized() const {
 		 T magnitude = std::sqrt(x * x + y * y + z * z + w * w); 
 
 		 if (magnitude < T(0.00001)) { 

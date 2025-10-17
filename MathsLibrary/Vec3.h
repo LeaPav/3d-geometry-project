@@ -1,6 +1,7 @@
 #pragma once
 #include <limits>
 #include <cmath>
+#include <iostream>
 
 namespace math {
 
@@ -13,7 +14,6 @@ namespace math {
 
 		constexpr Vec3();
 		constexpr Vec3(T x, T y, T z);
-
 
 		// operators
 
@@ -28,33 +28,33 @@ namespace math {
 
 		// static properties
 
-		static constexpr Vec3 down();
-		static constexpr Vec3 back();
-		static constexpr Vec3 forward();
-		static constexpr Vec3 left();
-		static constexpr Vec3 one();
-		static constexpr Vec3 right();
-		static constexpr Vec3 up();
-		static constexpr Vec3 zero();
+		static constexpr Vec3 Down();
+		static constexpr Vec3 Back();
+		static constexpr Vec3 Forward();
+		static constexpr Vec3 Left();
+		static constexpr Vec3 One();
+		static constexpr Vec3 Right();
+		static constexpr Vec3 Up();
+		static constexpr Vec3 Zero();
 
-		static constexpr Vec3 negativeInfinity();
-		static constexpr Vec3 positiveInfinity();
+		static constexpr Vec3 NegativeInfinity();
+		static constexpr Vec3 PositiveInfinity();
 
 		// properties
 
-		float Magnitude() const { return std::sqrt(x * x + y * y + z * z); }
-		Vec3 Normalized() const {
-			float magnitude = Magnitude(); if (magnitude < 0.00001f) { return Vec3(0.0f, 0.0f, 0.0f); } return Vec3(x / magnitude, y / magnitude, z / magnitude);
-		}
-		float SqrMagnitude() const { return x * x + y * y + z * z; }
+		float Magnitude() const;
+		Vec3 Normalized() const;
+		float SqrMagnitude() const;
 
 		//public methods
 
-		bool Equals(const Vec3& rhs) const { return (x == rhs.x) && (y == rhs.y) && (z == rhs.z); }
+		bool Equals(const Vec3& rhs) const; 
 
-		void Set(const Vec3& rhs) { x = rhs.x; y = rhs.y; z = rhs.z; }
-		;
-		std::string ToString() const { return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std_to_string(z) + ")"; }
+		void Set(T newX, T newY, T newZ ); 
+
+		std::string ToString() const; 
+
+		void Normalize();
 
 		// static methods
 
@@ -92,16 +92,13 @@ namespace math {
 
 		static Vec3 ClampMagnitude(const Vec3& rhs, float maxLength);
 
-	    Vec3 Normalize(const Vec3& rhs) const; 
+		static Vec3 Normalize(const Vec3& rhs);
 
-		static T OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal);
-		// {
+		static void OrthoNormalize(Vec3& normal, Vec3& tangent);
 
-		//	Vec3 vector1 = Normalized();
+		static void OrthoNormalize(Vec3& normal, Vec3& tangent, Vec3& binormal);
 
-		//}
-
-		static float Reflect(const Vec3& inDirection, const Vec3& inNormal);
+		static Vec3 Reflect(const Vec3& inDirection, const Vec3& inNormal);
 
 	};
 
@@ -112,3 +109,4 @@ namespace math {
 
 }
 #include "Vec3.inl"
+

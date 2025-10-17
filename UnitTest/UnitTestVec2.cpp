@@ -70,6 +70,103 @@ namespace UnitTestVec2
 			Assert::AreEqual(vec1.x, vec1[0]);
 			Assert::AreEqual(vec1.y, vec1[1]);
 		}
+		TEST_METHOD(Property_Magnitude)
+		{
+			math::Vec2f vec(4.f, 3.f);
+			Assert::AreEqual(5.f, vec.Magnitude(), 0.0001f);
+		
+		}
+		TEST_METHOD(Property_Normalized)
+		{
+			math::Vec2f vec(5.f, 3.f);
+			math::Vec2f n = vec.Normalized();
+			float mag = n.Magnitude();
+			Assert::AreEqual(1.f, mag, 0.0001f);
+		}
+		TEST_METHOD(Property_SqrMagnitude)
+		{
+			math::Vec2f vec(2.f, 4.f);
+			Assert::AreEqual(20.f, vec.SqrMagnitude(), 0.0001f);
+		}
+
+		TEST_METHOD(Public_Method_Equals)
+		{
+			math::Vec2f vec1(1.f, 10.f);
+			math::Vec2f vec2(1.f,10.f);
+			Assert::IsTrue(vec1.Equals(vec2));
+
+			math::Vec2f vec3(4.f, 10.f);
+			math::Vec2f vec4(4.f, 10.2f);
+			Assert::IsFalse(vec3.Equals(vec4));
+		}
+		TEST_METHOD(Public_Method_Normalize)
+		{
+			math::Vec2f vec(2.f, 4.f);
+			vec.Normalize();
+
+			Assert::IsTrue(std::fabs(vec.Magnitude() - 1) < 1e-5f);
+			Assert::IsTrue(vec.x > 0 && vec.y > 0);
+
+		}
+		TEST_METHOD(Public_Method_Set)
+		{
+			math::Vec2f vec(0.f, 0.f);
+			vec.Set(2.1f, 1.f);
+			Assert::AreEqual(2.1f, vec.x);
+			Assert::AreEqual(1.f, vec.y);
+
+			math::Vec2f vec1(2.3f, 2.f);
+			math::Vec2f vec2(4.7f, 5.f);
+			vec2.Set(vec1.x, vec1.y);
+			Assert::IsTrue(vec2.Equals(vec1));
+		}
+		TEST_METHOD(Public_Method_ToString)
+		{
+			math::Vec2f vec(2.f, 4.f);
+			std::string s = vec.ToString();
+			Assert::IsTrue(s.find("(") == 0);
+			Assert::IsTrue(s.find(",") != std::string::npos);
+			Assert::IsTrue(s.find(")") == s.length() - 1);
+		}
+		TEST_METHOD(Static_ClampMagnitude)
+		{
+			math::Vec2f vec(5.f, 3.f);
+			math::Vec2f vecClamped = math::Vec2f::ClampMagnitude(vec, 2.f);
+
+			// Norme de 2
+			Assert::IsTrue(std::abs(vecClamped.Magnitude() - 2.f) < 1e-5f);
+
+			// direction conservee
+			Assert::IsTrue(std::abs(vec.x / vec.y - vecClamped.x / vecClamped.y) < 1e-5f);
+		}
+		TEST_METHOD(Static_MoveTowards)
+		{
+			math::Vec2f current(1.f, 1.f);
+			math::Vec2f target(4.f, 4.f);
+
+			math::Vec2f result = math::Vec2f::MoveTowards(current, target, 5.f);
+			Assert::IsTrue(target == result);
+		}
+		TEST_METHOD(Static_Perpendicular)
+		{
+			math::Vec2f v(1.f, 0.f);
+			math::Vec2 p = math::Vec2f::Perpendicular(v);
+			Assert::IsTrue(std::abs(math::Vec2f::Dot(v, p)) < 1e-5f);
+
+			Assert::IsTrue(std::abs(p.Magnitude() - v.Magnitude()) < 1e-5f);
+	
+		}
+		TEST_METHOD(Static_Reflect)
+		{
+			math::Vec2f dir(1, -1);
+			math::Vec2f normal(0, 1);
+
+			math::Vec2f r = math::Vec2f::Reflect(dir, normal);
+
+			Assert::IsTrue(std::abs(r.x - 1.f) < 1e-5f);
+			Assert::IsTrue(std::abs(r.y - 1.f) < 1e-5f);
+		
+		}
 		TEST_METHOD(Static_Distance)
 		{
 			math::Vec2f vec1(0.f, 0.f);

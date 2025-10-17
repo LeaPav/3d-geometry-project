@@ -52,59 +52,100 @@ namespace math {
 
 
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::back()
+	constexpr Vec3<T> Vec3<T>::Back()
 	{
 		return Vec3(0, 0, -1);
 	}
 
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::down()
+	constexpr Vec3<T> Vec3<T>::Down()
 	{
 		return Vec3(0, -1, 0);
 	}
 
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::forward()
+	constexpr Vec3<T> Vec3<T>::Forward()
 	{
 		return Vec3(0,0,1);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::left()
+	constexpr Vec3<T> Vec3<T>::Left()
 	{
 		return Vec3(-1, 0, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::one()
+	constexpr Vec3<T> Vec3<T>::One()
 	{
 		return Vec3(1, 1, 1);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::right()
+	constexpr Vec3<T> Vec3<T>::Right()
 	{
 		return Vec3(1, 0, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::up()
+	constexpr Vec3<T> Vec3<T>::Up()
 	{
 		return Vec3(0, 1, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::zero()
+	constexpr Vec3<T> Vec3<T>::Zero()
 	{
 		return Vec3(0, 0, 0);
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::negativeInfinity()
+	constexpr Vec3<T> Vec3<T>::NegativeInfinity()
 	{
 		return Vec3(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
 	}
 	template<typename T>
-	constexpr Vec3<T> Vec3<T>::positiveInfinity()
+	constexpr Vec3<T> Vec3<T>::PositiveInfinity()
 	{
 		return Vec3(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
 	}
 
 	//static methods
+
+	template<typename T>
+	inline float Vec3<T>::Magnitude() const
+	{
+		return std::sqrt(x * x + y * y + z * z);
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Normalized() const
+	{
+		float magnitude = Magnitude(); 
+		if (magnitude < static_cast<T>(0.00001)) {
+			return Vec3(0, 0, 0); } 
+		return Vec3(x / magnitude, y / magnitude, z / magnitude);
+	}
+
+	template<typename T>
+	inline float Vec3<T>::SqrMagnitude() const
+	{
+		return x * x + y * y + z * z;
+	}
+
+	template<typename T>
+	inline bool Vec3<T>::Equals(const Vec3& rhs) const
+	{
+		return x == rhs.x && y == rhs.y && z == rhs.z;
+	}
+
+	template<typename T>
+	inline void Vec3<T>::Set(T newX, T newY, T newZ)
+	{
+		x = newX;
+		y = newY;
+		z = newZ;
+	}
+
+	template<typename T>
+	inline std::string Vec3<T>::ToString() const
+	{
+		 return "(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")"; 
+	}
 
 	template<typename T>
 	inline float math::Vec3<T>::Angle(const Vec3& from, const Vec3& to)
@@ -152,25 +193,26 @@ namespace math {
 	inline Vec3<T> Vec3<T>::Lerp(const Vec3& a, const Vec3& b, float t)
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
-		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
+		return a + (b - a) * t;
 	}
 
 	template<typename T>
 	inline Vec3<T> Vec3<T>::LerpUnclamped(const Vec3& a, const Vec3& b, float t)
 	{
-		return Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t);
+		return a + (b - a) * t;
 	}
 
 	template<typename T>
 	constexpr Vec3<T> Vec3<T>::Max(const Vec3& a, const Vec3& b)
 	{
-		return Vec3((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y, (a.z > b.z) ? a.z : b.z);
+		return Vec3(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
+
 	}
 
 	template<typename T>
 	constexpr Vec3<T> Vec3<T>::Min(const Vec3& a, const Vec3& b)
 	{
-		return Vec3((a.x < b.x) ? a.x : b.x, (a.y < b.y) ? a.y : b.y, (a.z < b.z) ? a.z : b.z);
+		return Vec3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
 	}
 
 	template<typename T>
@@ -192,22 +234,39 @@ namespace math {
 	{
 		t = std::fmax(0.0f, std::fmin(1.0f, t));
 
-		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a, b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+		Vec3<T> aNorm = a.Normalized();
+		Vec3<T> bNorm = b.Normalized();
+		 
+		T dot = Dot(aNorm, bNorm);
+		dot = std::fmax(T(-1), std::fmin(T(1.0f), dot));
+
 		T theta = std::acos(dot);
-		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+
+		T mag = (1 - t) * a.Magnitude() + t * b.Magnitude();
+
+		return (aNorm * (std::sin((1 - t) * theta) / std::sin(theta)) + bNorm * (std::sin(t * theta) / std::sin(theta))) * mag;
 	}
 
 	template<typename T>
 	inline Vec3<T> Vec3<T>::SlerpUnclamped(const Vec3& a, const Vec3& b, float t)
 	{
-		T dot = std::fmax(T(-1), std::fmin(T(1.0f), Dot(a,b))); // faudra changer apres pour pouvoir mettre a.Normalized et b.Normalized
+
+		Vec3<T> aNorm = a.Normalized();
+		Vec3<T> bNorm = b.Normalized();
+
+		T dot = Dot(aNorm, bNorm);
+		dot = std::fmax(T(-1), std::fmin(T(1.0f), dot));
 		T theta = std::acos(dot);
-		return (a * (std::sin((1 - t) * theta) / std::sin(theta)) + b * (std::sin(t * theta) / std::sin(theta)));
+
+		if (std::abs(theta) < 1e-5f) return LerpUnclamped(aNorm, bNorm, t).Normalized();
+
+		T mag = (1 - t) * a.Magnitude() + t * b.Magnitude();
+		return (aNorm * (std::sin((1 - t) * theta) / std::sin(theta)) + bNorm * (std::sin(t * theta) / std::sin(theta))) * mag;
 	}
 	template<typename T>
 	inline Vec3<T> Vec3<T>::Project(const Vec3& vec, const Vec3& onNormal)
 	{
-		T denom = Dot(onNormal, onNormal); // denominateur, dans la formule c'est la norme au carré de b
+		T denom = Dot(onNormal, onNormal); // denominateur, dans la formule c'est la norme au carre de b
 		if (denom == 0) return Vec3<T>();
 
 		return onNormal * (Vec3<T>::Dot(vec, onNormal) / denom);
@@ -237,7 +296,28 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Vec3<T>::RotateTowards(const Vec3& current, const Vec3& target, float maxRadiansDelta, float maxMagnitudeDelta)
 	{
-		
+	
+		float currentMag = current.Magnitude();
+		float targetMag = target.Magnitude();
+
+		if (current == target) return target;
+
+		if (currentMag < 0.f) {
+			float newMag = std::min(targetMag, maxMagnitudeDelta);
+			return target.Normalized() * newMag;
+		}
+		Vec3 currentDir = current / currentMag;
+		Vec3 targetDir = target.Normalized();
+
+		float angle = Angle(currentDir, targetDir);
+
+		float t = (angle < 0.f) ? 1.f : std::fmin(1.f, maxRadiansDelta / angle);
+
+		Vec3 newDir = Slerp(currentDir, targetDir, t).Normalized();
+		float newMag = currentMag + std::fmax(-maxMagnitudeDelta, std::fmin(maxMagnitudeDelta, targetMag - currentMag));
+
+		return newDir * newMag;
+
 	}
 
 	template<typename T>
@@ -251,23 +331,55 @@ namespace math {
 	}
 
 	template<typename T>
-	inline Vec3<T> Vec3<T>::Normalize(const Vec3& rhs) const
+	inline Vec3<T> Vec3<T>::Normalize(const Vec3<T>& rhs)
 	{
-		float magnitude = rhs.Magnitude();
-		if (magnitude < 0.00001f) {
-			return Vec3(0.0f, 0.0f, 0.0f);
+		T magnitude = rhs.Magnitude();
+
+		if (magnitude < static_cast<T>(0.00001))
+			return Vec3<T>(0, 0, 0);
+
+		return Vec3(rhs.x / magnitude, rhs.y / magnitude, rhs.z / magnitude);
+
+	}
+
+	template<typename T>
+	inline void Vec3<T>::Normalize()
+	{
+		float magnitude = Magnitude();
+		if (magnitude < static_cast<T>(0.00001)) {
+			x = 0.0f;
+			y = 0.0f;
+			z = 0.0f;
+			return;
 		}
-		return Vec3(x / magnitude, y / magnitude, z / magnitude);
+		x /= magnitude;
+		y /= magnitude;
+		z /= magnitude;
 	}
 
 	template<typename T>
-	inline T Vec3<T>::OrthoNormalize(const Vec3& normal, const Vec3& tangent, const Vec3& binormal)
+	inline void Vec3<T>::OrthoNormalize(Vec3& normal,Vec3& tangent)
 	{
-		return T();
+		normal = normal.Normalized();
+
+		tangent = tangent - normal * Dot(normal, tangent);
+		tangent = tangent.Normalized();
+
 	}
 
 	template<typename T>
-	inline float Vec3<T>::Reflect(const Vec3& inDirection, const Vec3& inNormal)
+	inline void Vec3<T>::OrthoNormalize(Vec3& normal, Vec3& tangent, Vec3& binormal)
+	{
+		normal = normal.Normalized();
+		tangent = tangent - normal * Dot(normal, tangent);
+		tangent = tangent.Normalized();
+
+		binormal = binormal - normal * Dot(normal, binormal) - tangent * Dot(tangent, binormal);
+		binormal = binormal.Normalized();
+	}
+
+	template<typename T>
+	inline Vec3<T> Vec3<T>::Reflect(const Vec3& inDirection, const Vec3& inNormal)
 	{
 		Vec3 n = inNormal.Normalized();
 		float scal = Dot(inDirection, n);

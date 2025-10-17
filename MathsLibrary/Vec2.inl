@@ -8,6 +8,9 @@ namespace math {
     constexpr Vec2<T>::Vec2(T x, T y) : x(x), y(y) { }
 
     template<typename T>
+    inline constexpr Vec2<T>::Vec2(const sf::Vector2f& v) : x(static_cast<T>(v.x)), y(static_cast<T>(v.y)) { }
+
+    template<typename T>
     constexpr Vec2<T> Vec2<T>::operator+(const Vec2& rhs) const
     {
         return Vec2(x + rhs.x, y + rhs.y);
@@ -58,45 +61,99 @@ namespace math {
     }
 
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::zero() {
+    constexpr Vec2<T> Vec2<T>::Zero() {
         return Vec2(0, 0);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::one()
+    constexpr Vec2<T> Vec2<T>::One()
     {
         return Vec2(1, 1);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::up()
+    constexpr Vec2<T> Vec2<T>::Up()
     {
         return Vec2(0, 1);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::down()
+    constexpr Vec2<T> Vec2<T>::Down()
     {
         return Vec2(0, -1);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::right()
+    constexpr Vec2<T> Vec2<T>::Right()
     { 
         return Vec2(1, 0);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::left()
+    constexpr Vec2<T> Vec2<T>::Left()
     {
         return Vec2(-1, 0);
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::positiveInfinity()
+    constexpr Vec2<T> Vec2<T>::PositiveInfinity()
     {
         return Vec2(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
     }
     template<typename T>
-    constexpr Vec2<T> Vec2<T>::negativeInfinity()
+    constexpr Vec2<T> Vec2<T>::NegativeInfinity()
     {
         return Vec2(-std::numeric_limits<T>::infinity(), -std::numeric_limits<T>::infinity());
     }
+
+    template<typename T>
+    inline float Vec2<T>::Magnitude() const
+    {
+        return std::sqrt(x * x + y * y);
+    }
+
+    template<typename T>
+    inline Vec2<T> Vec2<T>::Normalized() const
+    {
+        float magnitude = Magnitude(); 
+        if (magnitude < 0.00001f) {
+            return Vec2(0.0f, 0.0f); } 
+        return Vec2(x / magnitude, y / magnitude);
+    }
+
+    template<typename T>
+    inline float Vec2<T>::SqrMagnitude() const
+    {
+        return x * x + y * y;
+    }
     
+    template<typename T>
+    inline bool Vec2<T>::Equals(const Vec2& rhs) const
+    {
+        return (x == rhs.x) && (y == rhs.y);
+    }
+
+    template<typename T>
+    inline void Vec2<T>::Normalize() 
+    {
+        float magnitude = Magnitude(); 
+        if (magnitude < static_cast<T>(0.00001)) { 
+            x = 0.0f;
+            y = 0.0f;
+            return;
+        } 
+        x /= magnitude;
+        y /= magnitude;
+    }
+
+    template<typename T>
+    inline void Vec2<T>::Set(T newX, T newY)
+    {
+        x = newX;
+        y = newY;
+    }
+
+    template<typename T>
+    inline std::string Vec2<T>::ToString() const
+    {
+        return "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+    }
+
+
     template<typename T>
     inline Vec2<T> Vec2<T>::ClampMagnitude(const Vec2& rhs, float maxLength) 
     {
@@ -127,7 +184,7 @@ namespace math {
     }
 
     template<typename T>
-    inline float Vec2<T>::Reflect(const Vec2& inDirection, const Vec2& inNormal)
+    inline Vec2<T> Vec2<T>::Reflect(const Vec2& inDirection, const Vec2& inNormal)
     {
         Vec2 n = inNormal.Normalized();
         float scal = Dot(inDirection, n);
@@ -178,25 +235,25 @@ namespace math {
     inline Vec2<T> Vec2<T>::Lerp(const Vec2& a, const Vec2& b, float t)
     {
         t = std::fmax(0.0f, std::fmin(1.0f, t));
-        return Vec2(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+        return a + (b - a) * t;
     }
 
     template<typename T>
     inline Vec2<T> Vec2<T>::LerpUnclamped(const Vec2& a, const Vec2& b, float t)
     {
-        return Vec2(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t);
+        return a + (b - a) * t;
     }
 
     template<typename T>
     constexpr Vec2<T> Vec2<T>::Max(const Vec2& a, const Vec2& b)
     {
-        return Vec2((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y);
+        return Vec2(std::max(a.x, b.x), std::max(a.y, b.y));
     }
 
     template<typename T>
     constexpr Vec2<T> Vec2<T>::Min(const Vec2& a, const Vec2& b)
     {
-        return Vec2((a.x < b.x) ? a.x : b.x, (a.y < b.y) ? a.y : b.y);
+        return Vec2(std::min(a.x, b.x), std::min(a.y, b.y));
     }
 
     template<typename T>
