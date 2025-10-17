@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "Player.h"
 #include "Ball.h"
+#include "Brick.h"
 
 class Game
 {
@@ -9,6 +10,7 @@ private:
 	sf::RenderWindow* window;
 	Player* player;
 	Ball* ball;
+	std::vector<Brick> bricks;
 
 	float deltaTime;
 	sf::Clock clock;
@@ -16,6 +18,7 @@ private:
 	void initWindow();
 	void initPlayer();
 	void initBall();
+	void initBricks();
 
 public:
 	Game();

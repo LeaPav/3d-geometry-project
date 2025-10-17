@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Player.h"
+#include "Brick.h"
 #include <SFML/Graphics.hpp>
 #include "Vec2.h"
 
@@ -15,6 +16,7 @@ public:
 
 	void handleWallCollision(const sf::RenderWindow& window);
 	void handlePlayerCollision(const Player& player);
+	void handleBrickCollision(std::vector<Brick>& bricks);
 
 	void update(float deltaTime, const sf::RenderWindow& window) override;
 	void draw(sf::RenderTarget& target) override;

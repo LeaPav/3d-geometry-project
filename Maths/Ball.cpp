@@ -27,7 +27,24 @@ void Ball::handlePlayerCollision(const Player& player)
 	math::Vec2f pos = shape.getPosition();
 	
 	if (shape.getGlobalBounds().findIntersection(player.getGlobalBounds())) {
-		velocity.y *= -1;
+
+		float playerCenterX = player.getGlobalBounds().position.x + player.getGlobalBounds().size.x / 2.f;
+		float ballX = shape.getPosition().x;
+		float offset = (ballX - playerCenterX) / (player.getGlobalBounds().size.x / 2.f);
+
+		velocity.y = -std::abs(velocity.y);
+		velocity.x += offset * speed;
+		velocity = velocity.Normalized() * speed;
+	}
+}
+
+void Ball::handleBrickCollision(std::vector<Brick>& bricks)
+{
+	for (Brick& brick : bricks) {
+		if (!brick.isDestroyed() && shape.getGlobalBounds().findIntersection(brick.getGlobalBounds())) {
+			brick.hit();
+			velocity.y *= -1;
+		}
 	}
 }
 
