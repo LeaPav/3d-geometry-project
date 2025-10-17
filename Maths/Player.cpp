@@ -58,6 +58,11 @@ math::Vec2f Player::getPosition() const {
 	return position;
 }
 
+float Ball::getRadius() const
+{
+	return shape.getRadius();
+}
+
 sf::FloatRect Player::getGlobalBounds() const
 {
 	return shape.getGlobalBounds();

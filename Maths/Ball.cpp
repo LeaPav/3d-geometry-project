@@ -46,7 +46,7 @@ void Ball::handlePlayerCollision(const Player& player)
 	}
 }
 
-void Ball::handleBrickCollision(std::vector<Brick>& bricks)
+int Ball::handleBrickCollision(std::vector<Brick>& bricks)
 {
 	sf::FloatRect intersection;
 	for (Brick& brick : bricks) {
@@ -61,10 +61,11 @@ void Ball::handleBrickCollision(std::vector<Brick>& bricks)
 			else {
 				velocity.y *= -1;
 			}
-			break;
+			return 1;
 			
 		}
 	}
+	return 0;
 }
 
 void Ball::update(float deltaTime, const sf::RenderWindow& window) 
@@ -82,7 +83,18 @@ void Ball::draw( sf::RenderTarget& target)
 	target.draw(shape);
 }
 
+void Ball::reset(math::Vec2f pos)
+{
+	shape.setPosition(pos);
+	velocity = math::Vec2f(-1.f, -1.f).Normalized() * speed;
+}
+
 sf::FloatRect Ball::getGlobalBounds() const
 {
 	return shape.getGlobalBounds();
+}
+
+math::Vec2f Ball::getPosition() const 
+{
+	return shape.getPosition();
 }

@@ -16,11 +16,15 @@ public:
 
 	void handleWallCollision(const sf::RenderWindow& window);
 	void handlePlayerCollision(const Player& player);
-	void handleBrickCollision(std::vector<Brick>& bricks);
+	int handleBrickCollision(std::vector<Brick>& bricks);
 
 	void update(float deltaTime, const sf::RenderWindow& window) override;
 	void draw(sf::RenderTarget& target) override;
 
+	void reset(math::Vec2f pos);
+
 	sf::FloatRect getGlobalBounds() const override;
+	math::Vec2f getPosition() const;
+	float getRadius() const;
 };
 

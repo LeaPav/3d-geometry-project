@@ -15,7 +15,15 @@ private:
 	float deltaTime;
 	sf::Clock clock;
 
+	int score;
+	int lives;
+	bool ballLost = false;
+
+	sf::Font font;
+	sf::Text* text;
+
 	void initWindow();
+	void initFont();
 	void initPlayer();
 	void initBall();
 	void initBricks();
@@ -25,8 +33,10 @@ public:
 	~Game();
 	void update();
 	void updateEntities();
+	void checkBallLost();
 
 	void draw();
+	void drawHUD();
 	void drawEntities();
 
 	bool isOpen();
