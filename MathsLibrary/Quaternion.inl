@@ -218,7 +218,7 @@ namespace math {
 		float cosTheta = dot / (magnitudeFrom * magnitudeTo);
 		cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
 
-		return 2.0 * std::acos(cosTheta) * (180.0f / 3.14159265f );
+		return static_cast<T>(2.0 * std::acos(cosTheta) * (180.0f / 3.14159265f ));
 	}
 
 	template<typename T>
@@ -249,12 +249,12 @@ namespace math {
 	template <typename T>
 	inline Quaternion<T> Quaternion<T>::Euler(T x, T y, T z)
 	{
-		T cosX = std::cos(x * 0.5);
-		T sinX = std::sin(x * 0.5);
-		T cosY = std::cos(y * 0.5);
-		T sinY = std::sin(y * 0.5);
-		T cosZ = std::cos(z * 0.5);
-		T sinZ = std::sin(z * 0.5);
+		T cosX = static_cast<T>(std::cos(x * 0.5));
+		T sinX = static_cast<T>(std::sin(x * 0.5));
+		T cosY = static_cast<T>(std::cos(y * 0.5));
+		T sinY = static_cast<T>(std::sin(y * 0.5));
+		T cosZ = static_cast<T>(std::cos(z * 0.5));
+		T sinZ = static_cast<T>(std::sin(z * 0.5));
 
 		return Quaternion<T>(
 			sinX * cosY * cosZ - cosX * sinY * sinZ, 
@@ -459,7 +459,7 @@ namespace math {
 	template <typename T>
 	constexpr Quaternion<T> operator*(T lhs, const Quaternion<T>& rhs)
 	{
-		return lhs * rhs; 
+		return Quaternion<T>( lhs * rhs.x, lhs * rhs.y, lhs*rhs.z, lhs* rhs.w); 
 	}
 
 	template<typename T>

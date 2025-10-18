@@ -6,7 +6,7 @@ namespace math {
 	constexpr Mat4x4<T>::Mat4x4()
 	{ 
 		for (int i = 0; i < 16; i++) {
-			mat[i] = (i % 5 == 0) ? 1 : 0; 
+			mat[i] = static_cast<T>((i % 5 == 0) ? 1 : 0); 
 		}
 	}
 
@@ -60,7 +60,7 @@ namespace math {
 	template<typename T>
 	inline T Mat4x4<T>::Minor(int row, int col) const
 	{
-		T sub[9];
+		T sub[9] = {};
 		int index = 0;
 
 		for (int c = 0; c < 4; c++) {
@@ -163,33 +163,33 @@ namespace math {
 		Quaternion<T> q;
 
 		if (trace > 0) {
-			T s = std::sqrt(trace + 1.0) * 2;
-			q.w = 0.25 * s;
+			T s = static_cast<T>(std::sqrt(trace + 1.0) * 2);
+			q.w = static_cast<T>(0.25 * s);
 			q.x = (m21 - m12) / s;
 			q.y = (m02 - m20) / s;
 			q.z = (m10 - m01) / s;
 		}
 		else if ((m00 > m11) && (m00 > m22)) {
-			T s = std::sqrt(1.0 + m00 - m11 - m22) * 2;
+			T s = static_cast<T>(std::sqrt(1.0 + m00 - m11 - m22) * 2);
 			q.w = (m21 - m12) / s;
-			q.x = 0.25 * s;
+			q.x = static_cast<T>(0.25 * s);
 			q.y = (m01 + m10) / s;
 			q.z = (m02 + m20) / s;
 		}
 		else if (m11 > m22) {
-			T s = std::sqrt(1.0 + m11 - m00 - m22) * 2;
+			T s = static_cast<T>(std::sqrt(1.0 + m11 - m00 - m22) * 2);
 			q.w = (m02 - m20) / s;
 			q.x = (m01 + m10) / s;
-			q.y = 0.25 * s;
+			q.y = static_cast<T>(0.25 * s);
 			q.z = (m12 + m21) / s;
 		}
 		else
 		{
-			T s = std::sqrt(1.0 + m22 - m00 - m11) * 2; 
+			T s = static_cast<T>(std::sqrt(1.0 + m22 - m00 - m11) * 2);
 			q.w = (m10 - m01) / s;
 			q.x = (m02 + m20) / s;
 			q.y = (m12 + m21) / s;
-			q.z = 0.25 * s;
+			q.z = static_cast<T>(0.25 * s);
 		}
 		return q;
 	}
