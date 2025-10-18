@@ -85,9 +85,8 @@ void Game::update()
 void Game::updateEntities()
 {
 	player->update(deltaTime, *window);
-
-	ball->handleWallCollision(*window);
 	ball->handlePlayerCollision(*player);
+	ball->handleWallCollision(*window);
 	int bricksHit = ball->handleBrickCollision(bricks);
 	ball->update(deltaTime, *window);
 	
