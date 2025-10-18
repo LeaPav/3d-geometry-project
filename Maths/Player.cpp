@@ -17,10 +17,10 @@ Player::Player(float s, math::Vec2f pos) : Entity(s, pos)
 void Player::handleInput(float deltaTime)
 {
 	math::Vec2f move(0.f, 0.f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
 		move.x += speed * deltaTime;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
 		move.x -= speed * deltaTime;
 	}
 

@@ -58,6 +58,7 @@ Game::~Game()
 	delete window;
 	delete player;
 	delete ball;
+	delete text;
 }
 
 
