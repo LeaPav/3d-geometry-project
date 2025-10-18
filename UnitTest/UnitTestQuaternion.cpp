@@ -246,8 +246,8 @@ public:
 		Assert::AreEqual(45.0f, angle, 0.01f);
 	}
 	TEST_METHOD(Static_Slerp) {
-		math::Quaternionf q1(1, 0, 0, 0);
-		math::Quaternionf q2(0, 1, 0, 0);
+		math::Quaternionf q1(0, 0, 0, 1);
+		math::Quaternionf q2(1, 0, 0, 0);
 		auto result = math::Quaternionf::Slerp(q1, q2, 0.5f);
 
 		float expected = std::sqrt(0.5f);
@@ -256,8 +256,8 @@ public:
 	}
 	TEST_METHOD(Static_SlerpUncampled)
 	{
-		Quaternionf q1(1, 0, 0, 0);
-		Quaternionf q2(0, 1, 0, 0);
+		Quaternionf q1(0, 0, 0, 1);
+		Quaternionf q2(1, 0, 0, 0);
 		auto result = Quaternionf::SlerpUncampled(q1, q2, 0.5f);
 
 		float expected = std::sqrt(0.5f);
