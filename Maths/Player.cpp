@@ -3,7 +3,7 @@
 
 void Player::initPlayer()
 {
-	shape.setSize(math::Vec2f(100.f, 20.f));
+	shape.setSize(math::Vec2f(120.f, 10.f));
 	shape.setFillColor(sf::Color::Blue);
 	
 }

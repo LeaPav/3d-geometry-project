@@ -2,7 +2,7 @@
 
 void Game::initWindow()
 {
-	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Game", sf::Style::Default);
+	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Breakout", sf::Style::Default);
 	window->setFramerateLimit(60);
 	window->setVerticalSyncEnabled(true);
 }
@@ -26,7 +26,7 @@ void Game::initPlayer()
 
 void Game::initBall()
 {
-	ball = new Ball(350.f, 10.f, math::Vec2f(400.f, 300.f));
+	ball = new Ball(400.f, 10.f, math::Vec2f(400.f, 300.f));
 }
 
 void Game::initBricks()
