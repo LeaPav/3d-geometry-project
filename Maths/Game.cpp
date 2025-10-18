@@ -9,14 +9,14 @@ void Game::initWindow()
 
 void Game::initFont()
 {
-	if (!font.openFromFile("assets/Font/game_over.ttf")) {
+	if (!font.openFromFile("assets/Font/Starborn.otf")) {
 		throw std::runtime_error("Errorloading font.");
 	}
 	text = new sf::Text(font);
 	text->setFont(font);
-	text->setCharacterSize(60);
+	text->setCharacterSize(25);
 	text->setFillColor(sf::Color::White);
-	text->setPosition(math::Vec2f(0.f, -20.f));
+	text->setPosition(math::Vec2f(0.f, 5.f));
 }
 
 void Game::initPlayer()
@@ -116,7 +116,7 @@ void Game::draw()
 
 void Game::drawHUD()
 {
-	text->setString("Score: " + std::to_string(score) + " Lives: " + std::to_string(lives));
+	text->setString("	Score: " + std::to_string(score) + "							" + "	Lives: " + std::to_string(lives));
 	window->draw(*text);
 }
 
