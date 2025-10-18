@@ -16,15 +16,16 @@ void Ball::handleWallCollision(const sf::RenderWindow& window)
 	float radius = shape.getRadius();
 
 	if (pos.x - radius < 0) {
-		velocity.x *= -1;
+		pos.x = radius;
+		velocity = math::Vec2f::Reflect(velocity, math::Vec2f::Right());
 	}
 	else if (pos.x + radius > window.getSize().x) {
 		pos.x = window.getSize().x - radius;
-		velocity.x *= -1;
+		velocity = math::Vec2f::Reflect(velocity, math::Vec2f::Left());
 	}
 	if (pos.y - radius < 0) {
 		pos.y = radius;
-		velocity.y *= -1;
+		velocity = math::Vec2f::Reflect(velocity, math::Vec2f::Down());
 	}
 	shape.setPosition(pos);
 
@@ -39,9 +40,11 @@ void Ball::handlePlayerCollision(const Player& player)
 		float playerCenterX = player.getGlobalBounds().position.x + player.getGlobalBounds().size.x / 2.f;
 		float ballX = shape.getPosition().x;
 		float offset = (ballX - playerCenterX) / (player.getGlobalBounds().size.x / 2.f);
+		offset = std::fmax(-0.8f, std::fmin(0.8f, offset));
 
-		velocity.y = -std::abs(velocity.y);
+		velocity = math::Vec2f::Reflect(velocity, math::Vec2f(0.f, -1.f));
 		velocity.x += offset * speed;
+		velocity.y = -std::abs(velocity.y);
 		velocity = velocity.Normalized() * speed;
 	}
 }
@@ -56,10 +59,13 @@ int Ball::handleBrickCollision(std::vector<Brick>& bricks)
 		if (const std::optional intersection = shape.getGlobalBounds().findIntersection(brick.getGlobalBounds())) {
 			brick.hit();
 			if (intersection->size.x < intersection->size.y) {
-				velocity.x *= -1;
+				//velocity.x *= -1;
+				math::Vec2f normal = (velocity.x > 0) ? math::Vec2f::Left() : math::Vec2f::Right();
+				velocity = math::Vec2f::Reflect(velocity, normal);
 			}
 			else {
-				velocity.y *= -1;
+				math::Vec2f normal = (velocity.y > 0) ? math::Vec2f::Up() : math::Vec2f::Down();
+				velocity = math::Vec2f::Reflect(velocity, normal);
 			}
 			return 1;
 			

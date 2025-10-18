@@ -2,7 +2,7 @@
 
 void Game::initWindow()
 {
-	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Game", sf::Style::Default);
+	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Breakout", sf::Style::Default);
 	window->setFramerateLimit(60);
 	window->setVerticalSyncEnabled(true);
 }
@@ -26,7 +26,7 @@ void Game::initPlayer()
 
 void Game::initBall()
 {
-	ball = new Ball(350.f, 10.f, math::Vec2f(400.f, 300.f));
+	ball = new Ball(400.f, 10.f, math::Vec2f(400.f, 300.f));
 }
 
 void Game::initBricks()
@@ -85,9 +85,8 @@ void Game::update()
 void Game::updateEntities()
 {
 	player->update(deltaTime, *window);
-
-	ball->handleWallCollision(*window);
 	ball->handlePlayerCollision(*player);
+	ball->handleWallCollision(*window);
 	int bricksHit = ball->handleBrickCollision(bricks);
 	ball->update(deltaTime, *window);
 	

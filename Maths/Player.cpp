@@ -3,7 +3,7 @@
 
 void Player::initPlayer()
 {
-	shape.setSize(math::Vec2f(100.f, 20.f));
+	shape.setSize(math::Vec2f(120.f, 10.f));
 	shape.setFillColor(sf::Color::Blue);
 	
 }
@@ -32,12 +32,15 @@ void Player::handleInput(float deltaTime)
 void Player::handleScreenCollisions(const sf::RenderWindow& window)
 {
 	sf::FloatRect bounds = shape.getGlobalBounds();
-	if (bounds.position.x < 0) {
+
+	math::Vec2f pos = math::Vec2f(bounds.position.x, bounds.position.y);
+	math::Vec2f size = math::Vec2f(bounds.size.x, bounds.size.y);
+	if (pos.x < 0) {
 		
-		shape.setPosition(math::Vec2f(0, bounds.position.y));
+		shape.setPosition(math::Vec2f(0, pos.y));
 	}
-	if (bounds.position.x + bounds.size.x > window.getSize().x) {
-		shape.setPosition(math::Vec2f(window.getSize().x - bounds.size.x, bounds.position.y));
+	if (pos.x + size.x > window.getSize().x) {
+		shape.setPosition(math::Vec2f(window.getSize().x - size.x, pos.y));
 	}
 }
 
@@ -55,7 +58,7 @@ void Player::draw(sf::RenderTarget& target)
 }
 
 math::Vec2f Player::getPosition() const {
-	return position;
+	return shape.getPosition();
 }
 
 float Ball::getRadius() const
