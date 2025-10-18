@@ -12,8 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Quaternion.h" />
-    <ClInclude Include="Vector3.h" />
-    <ClInclude Include="Vector2.h" />
     <ClInclude Include="Mat4x4.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
