@@ -41,7 +41,7 @@ git clone https://github.com/GamingCampus-MillieBourgois-25-26/3d-geometry-lea-e
 ### Project Structure Note
 
 The folder `Maths/` contains the main game project.  
-It was originally named `Game`, but renaming it caused issues with Visual Studio, so the name was kept for stability.
+It was originally named `Game`, but renaming it caused issues with Visual Studio, so we kept the name for stability.
 
 The overall structure is:
 ```
@@ -74,26 +74,33 @@ Here are some examples of the methods added to the library:
 Vec2<T>: 
 - **Arithmetic**: `+`, `-`, `*`, `/`, `==`, `!=`  
 - **Static vectors** : `Down`, `Left`, `NegativeInfinity`, `One`, `PositiveInfinity`, `Right`, `Up`, `Zero`  
-- **Static methods** : `Angle`, `ClampMagnitude`, `Distance`, `Dot`, `Lerp`, `LerpUnclamped`, `Max`, `Min`, `Reflect`, `Scale`, `Perpendicular`, `MoveTowards`  
+- **Properties**: `Magnitude`, `Normalized`, `SqrMagnitude`
+- **Public Methods**: `Normalize`, `Equals`, `Set`, `ToString`
+- **Static methods** : `Angle`, `ClampMagnitude`, `Distance`, `Dot`, `Lerp`, `LerpUnclamped`, `Max`, `Min`, `Reflect`, `Scale`, `Perpendicular`, `MoveTowards`, `SignedAngle`  
 
 Vec3<T>:  
 - **Arithmetic**: Same as `Vec2<T>`  
 - **Static vectors**: `Back`, `Down`, `Forward`, `Left`, `NegativeInfinity`, `PositiveInfinity`, `One`, `Right`, `Up`, `Zero`  
-- **Static methods**: Same as `Vec2`, plus `Cross`, `OrthoNormalize`, `Project`, `ProjectOnPlane`, `RotateTowards`, `Slerp`, `SlerpUnclamped`  
+- **Properties**: `Magnitude`, `Normalized`, `SqrMagnitude`  
+- **Public Methods**: `Equals`, `Set`, `ToString`
+- **Static methods**: Same as `Vec2` (except `Perpendicular`) plus `Cross`, `OrthoNormalize`, `Project`, `ProjectOnPlane`, `RotateTowards`, `Slerp`, `SlerpUnclamped`  
 
 Quaternion<T>: 
-- **Arithmetic**: `*`, `+`, `==`  
+- **Arithmetic**: `*`, `+`, `==` 
+- **Static properties**: `Identity`
+- **Properties**: `EulerAngles`, `Normalized` 
 - **Public methods**: `Equals`, `Set`, `SetFromToRotation`, `SetLookRotation`, `ToAngleAxis`, `ToString`  
-- **Static methods**: `Angle`, `AngleAxis`, `Dot`, `Euler`, `FromToRotation`, `Inverse`, `Lerp`, `LerpUnclamped`, `LookRotation`, `Normalize`, `RotateTowards` 
+- **Static methods**: `Angle`, `AngleAxis`, `Dot`, `Euler`, `FromToRotation`, `Inverse`, `Lerp`, `LerpUnclamped`, `LookRotation`, `Normalize`, `RotateTowards`, `Slerp`, `SlerpUnclamped` 
 
 Mat4x4<T>: 
-- **Arithmetic** : `*`  
-- **Public methods**: `GetColumn`, `GetRow`, `SetColumn`, `SetRow`, `MultiplyPoint`, `MultiplyPoint3x4`, `MultiplyVector`, `ToString`, `ValidTRS`  
+- **Arithmetic**: `*`  
+- **Properties**: `Determinant`, `Inverse`, `IsIdentity`, `LossyScale`, `Transpose`, `Rotation` 
+- **Public methods**: `GetPosition`, `GetColumn`, `GetRow`, `SetColumn`, `SetRow`, `SetTRS`, `MultiplyPoint`, `MultiplyPoint3x4`, `MultiplyVector`, `ToString`, `ValidTRS`  
 - **Static methods**: `Frustum`, `Scale`, `Translate`, `Inverse3DAffine`, `LookAt`, `Ortho`, `Perspective`, `Rotate`, `TRS`  
 
 ## ✅ Unit Testing
 - **Framework**: Visual Studio C++ Unit Test 
-- **Coverage**: major methods in `Vec2`, `Vec3`, `Quaternion`, `Mat4x4`
+- **Coverage**: core methods in `Vec2`, `Vec3`, `Quaternion`, `Mat4x4`
 
 ---
 ## 🎮 SFML Game Demo
@@ -102,9 +109,10 @@ Mat4x4<T>:
 - **Graphics: SFML 3.0.2**  
 - **Physics**: All collisions use `math::Vec2f::Reflect` for realistic bounce behavior  
 - **Gameplay**:   
-  - Score increases by 25 per brick destroyed  
-  - 3 lives: ball resets when lost  
-  - Paddle movement and collision handled via math library  
+  - 3 types of bricks with different lives: it takes either 1 hit, 2 hits, or 3 hits to destroy them.
+  - You earn `25` points for each brick hit, and `75` points when a brick is destroyed.
+  - 3 lives: ball resets when lost.  
+  - Paddle movement and collision handled via math library.  
 
 ### Controls
 `Q` or `<-` = Move paddle left.  
