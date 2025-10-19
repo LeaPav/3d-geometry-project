@@ -186,7 +186,7 @@ namespace math {
 	template<typename T>
 	constexpr T Vec3<T>::Dot(const Vec3& a, const Vec3& b)
 	{
-		return a.x * b.x + a.y * b.y + a.z * b.z; // produit scalaire
+		return a.x * b.x + a.y * b.y + a.z * b.z; // scalar product
 	}
 
 	template<typename T>
@@ -266,7 +266,7 @@ namespace math {
 	template<typename T>
 	inline Vec3<T> Vec3<T>::Project(const Vec3& vec, const Vec3& onNormal)
 	{
-		T denom = Dot(onNormal, onNormal); // denominateur, dans la formule c'est la norme au carre de b
+		T denom = Dot(onNormal, onNormal); // denominator
 		if (denom == 0) return Vec3<T>();
 
 		return onNormal * (Vec3<T>::Dot(vec, onNormal) / denom);
@@ -290,7 +290,7 @@ namespace math {
 		Vec3 direction = delta / distance;
 		return current + direction * maxDistanceDelta;
 
-		//déplace une valeur or objet d'une position actuelle vers une position cible à une vitesse constante;
+		//moves a value or object from a current position to a target position at a constant speed
 		
 	}
 	template<typename T>
@@ -327,7 +327,7 @@ namespace math {
 		if (magnitude <= maxLength) { return rhs; }
 		else { return rhs.Normalized() * maxLength; }
 
-		//	//limiter la longeur d'un vecteur sans changer sa direction
+		//limit the length of a vector without changing its direction
 	}
 
 	template<typename T>
@@ -383,7 +383,7 @@ namespace math {
 	{
 		Vec3 n = inNormal.Normalized();
 		float scal = Dot(inDirection, n);
-		return inDirection - n * (2.0f * scal); // formule de réflexion
+		return inDirection - n * (2.0f * scal); // reflection formula
 	}
 
 }
