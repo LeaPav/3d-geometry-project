@@ -2,7 +2,7 @@
 
 void Game::initWindow()
 {
-	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Breakout", sf::Style::Default);
+	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Breakout", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
 	window->setVerticalSyncEnabled(true);
 }
@@ -33,7 +33,7 @@ void Game::initPlayer()
 
 void Game::initBall()
 {
-	ball = new Ball(400.f, 10.f, math::Vec2f(400.f, 300.f));
+	ball = new Ball(400.f, 10.f, math::Vec2f(400.f, 350.f));
 }
 
 void Game::initBricks()
@@ -65,6 +65,7 @@ Game::~Game()
 	delete window;
 	delete player;
 	delete ball;
+	delete text;
 }
 
 
@@ -91,18 +92,27 @@ void Game::update()
 
 void Game::updateEntities()
 {
-	player->update(deltaTime, *window);
-	ball->handlePlayerCollision(*player);
-	ball->handleWallCollision(*window);
-	int bricksHit = ball->handleBrickCollision(bricks);
-	ball->update(deltaTime, *window);
+	int subSteps = 4;
+	float deltaStep = deltaTime / static_cast<float>(subSteps);
+
+	for (int i = 0; i < subSteps; i++) {
+		ball->update(deltaStep, *window);
+
+		ball->handlePlayerCollision(*player);
+		ball->handleWallCollision(*window);
 	
-	checkBallLost();
-	if (ballLost) {
-		ball->reset(math::Vec2f(400.f, 300.f));
-		ballLost = false;
+		score += ball->handleBrickCollision(bricks) * 25;
+
+		checkBallLost();
+		if (ballLost) {
+			ball->reset(math::Vec2f(400.f, 350.f));
+			ballLost = false;
+			break;
+		}
 	}
-	score += bricksHit * 25;
+
+	player->update(deltaTime, *window);
+
 }
 
 void Game::checkBallLost()

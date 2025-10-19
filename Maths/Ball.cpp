@@ -34,18 +34,63 @@ void Ball::handleWallCollision(const sf::RenderWindow& window)
 void Ball::handlePlayerCollision(const Player& player)
 {
 	math::Vec2f pos = shape.getPosition();
-	
+
 	if (const std::optional intersection = shape.getGlobalBounds().findIntersection(player.getGlobalBounds())) {
 
-		float playerCenterX = player.getGlobalBounds().position.x + player.getGlobalBounds().size.x / 2.f;
-		float ballX = shape.getPosition().x;
-		float offset = (ballX - playerCenterX) / (player.getGlobalBounds().size.x / 2.f);
-		offset = std::fmax(-0.8f, std::fmin(0.8f, offset));
+		math::Vec2f normal;
+		if (intersection->size.y < intersection->size.x) {
+			normal = { 0.f, -1.f };
+		}
+		else {
+			if (pos.x < player.getGlobalBounds().position.x) {
+				normal = { -1.f, 0.f };
+			}
+			else {
+				normal = { 1.f, 0.f };
+			}
+		}
 
-		velocity = math::Vec2f::Reflect(velocity, math::Vec2f(0.f, -1.f));
-		velocity.x += offset * speed;
-		velocity.y = -std::abs(velocity.y);
+		velocity = math::Vec2f::Reflect(velocity, normal);
+
+		if (normal.y != 0.f) {
+			float playerCenterX = player.getGlobalBounds().position.x + player.getGlobalBounds().size.x / 2.f;
+			float ballX = pos.x;
+			float offset = (ballX - playerCenterX) / (player.getGlobalBounds().size.x / 2.f);
+			// offset clamp to prevent the ball from flying too horizontally
+			offset = std::fmax(-0.8f, std::fmin(0.8f, offset));
+
+			velocity.x += offset * speed * 0.75f;
+		}
+		
+		if (normal.x != 0.f) {
+			velocity.y = std::fmin(velocity.y, 0.f);
+		}
+
 		velocity = velocity.Normalized() * speed;
+
+		float minVerticalSpeed = 0.25f * speed;
+		if (std::abs(velocity.y) < minVerticalSpeed) {
+			velocity.y = (velocity.y < 0.f ? -1.f : 1.f) * minVerticalSpeed;
+			// always going up
+			velocity.y = -minVerticalSpeed;
+			velocity = velocity.Normalized() * speed;
+		}
+
+		// reposition the ball above the racket so that it doesn't go thourgh
+		if (normal.y != 0.f) {
+			float newY = player.getGlobalBounds().position.y - shape.getRadius() - 0.1f;
+			shape.setPosition({ pos.x, newY });
+		}
+		else {
+			float newX;
+			if (normal.x < 0.f) {
+				newX = player.getGlobalBounds().position.x - shape.getRadius() - 0.1f;
+			}
+			else {
+				newX = player.getGlobalBounds().position.x + player.getGlobalBounds().size.x + shape.getRadius() - 0.1f;
+			}
+			shape.setPosition({ newX, pos.y });
+		}
 	}
 }
 
@@ -58,15 +103,19 @@ int Ball::handleBrickCollision(std::vector<Brick>& bricks)
 
 		if (const std::optional intersection = shape.getGlobalBounds().findIntersection(brick.getGlobalBounds())) {
 			brick.hit();
+
+			math::Vec2f normal;
+
 			if (intersection->size.x < intersection->size.y) {
-				//velocity.x *= -1;
-				math::Vec2f normal = (velocity.x > 0) ? math::Vec2f::Left() : math::Vec2f::Right();
-				velocity = math::Vec2f::Reflect(velocity, normal);
+				normal = (velocity.x > 0) ? math::Vec2f::Left() : math::Vec2f::Right();
 			}
 			else {
-				math::Vec2f normal = (velocity.y > 0) ? math::Vec2f::Up() : math::Vec2f::Down();
-				velocity = math::Vec2f::Reflect(velocity, normal);
+				normal = (velocity.y > 0) ? math::Vec2f::Up() : math::Vec2f::Down();
+	
 			}
+
+			velocity = math::Vec2f::Reflect(velocity, normal).Normalized() * speed;
+
 			return 1;
 			
 		}
@@ -80,7 +129,6 @@ void Ball::update(float deltaTime, const sf::RenderWindow& window)
 	math::Vec2f pos = shape.getPosition();
 	pos += velocity * deltaTime;
 	shape.setPosition(pos);
-
 
 }
 
