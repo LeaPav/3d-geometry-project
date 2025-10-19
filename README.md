@@ -72,28 +72,29 @@ ProjectRoot/
 Here are some examples of the methods added to the library:
 
 Vec2<T>: 
-- **Arithmetic**: `+`, `-`, `*`, `/`, `==`, `!=`  
+- **Arithmetic**: `+`, `-`, `*`, `/`, `==`, `!=`, `this[]` 
 - **Static vectors** : `Down`, `Left`, `NegativeInfinity`, `One`, `PositiveInfinity`, `Right`, `Up`, `Zero`  
 - **Properties**: `Magnitude`, `Normalized`, `SqrMagnitude`
 - **Public Methods**: `Normalize`, `Equals`, `Set`, `ToString`
 - **Static methods** : `Angle`, `ClampMagnitude`, `Distance`, `Dot`, `Lerp`, `LerpUnclamped`, `Max`, `Min`, `Reflect`, `Scale`, `Perpendicular`, `MoveTowards`, `SignedAngle`  
 
 Vec3<T>:  
-- **Arithmetic**: Same as `Vec2<T>`  
+- **Arithmetic**: Same as `Vec2<T>`, `this[]`  
 - **Static vectors**: `Back`, `Down`, `Forward`, `Left`, `NegativeInfinity`, `PositiveInfinity`, `One`, `Right`, `Up`, `Zero`  
 - **Properties**: `Magnitude`, `Normalized`, `SqrMagnitude`  
 - **Public Methods**: `Equals`, `Set`, `ToString`
 - **Static methods**: Same as `Vec2` (except `Perpendicular`) plus `Cross`, `OrthoNormalize`, `Project`, `ProjectOnPlane`, `RotateTowards`, `Slerp`, `SlerpUnclamped`  
 
 Quaternion<T>: 
-- **Arithmetic**: `*`, `+`, `==` 
+- **Arithmetic**: `*`, `+`, `==`, `this[]` 
 - **Static properties**: `Identity`
 - **Properties**: `EulerAngles`, `Normalized` 
 - **Public methods**: `Equals`, `Set`, `SetFromToRotation`, `SetLookRotation`, `ToAngleAxis`, `ToString`  
 - **Static methods**: `Angle`, `AngleAxis`, `Dot`, `Euler`, `FromToRotation`, `Inverse`, `Lerp`, `LerpUnclamped`, `LookRotation`, `Normalize`, `RotateTowards`, `Slerp`, `SlerpUnclamped` 
 
 Mat4x4<T>: 
-- **Arithmetic**: `*`  
+- **Arithmetic**: `*`, `this()`
+- **Static properties**: `Identity`, `Zero`   
 - **Properties**: `Determinant`, `Inverse`, `IsIdentity`, `LossyScale`, `Transpose`, `Rotation` 
 - **Public methods**: `GetPosition`, `GetColumn`, `GetRow`, `SetColumn`, `SetRow`, `SetTRS`, `MultiplyPoint`, `MultiplyPoint3x4`, `MultiplyVector`, `ToString`, `ValidTRS`  
 - **Static methods**: `Frustum`, `Scale`, `Translate`, `Inverse3DAffine`, `LookAt`, `Ortho`, `Perspective`, `Rotate`, `TRS`  
