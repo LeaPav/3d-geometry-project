@@ -4,7 +4,7 @@
 void Player::initPlayer()
 {
 	shape.setSize(math::Vec2f(120.f, 10.f));
-	shape.setFillColor(sf::Color::Blue);
+	shape.setFillColor(sf::Color::Magenta);
 	
 }
 
