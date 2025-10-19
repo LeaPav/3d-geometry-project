@@ -2,7 +2,7 @@
 
 void Game::initWindow()
 {
-	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Breakout", sf::Style::Default);
+	window = new sf::RenderWindow(sf::VideoMode({ 800,700 }), "Breakout", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
 	window->setVerticalSyncEnabled(true);
 }
@@ -26,7 +26,7 @@ void Game::initPlayer()
 
 void Game::initBall()
 {
-	ball = new Ball(400.f, 10.f, math::Vec2f(400.f, 300.f));
+	ball = new Ball(400.f, 10.f, math::Vec2f(400.f, 350.f));
 }
 
 void Game::initBricks()
@@ -98,7 +98,7 @@ void Game::updateEntities()
 
 		checkBallLost();
 		if (ballLost) {
-			ball->reset(math::Vec2f(400.f, 300.f));
+			ball->reset(math::Vec2f(400.f, 350.f));
 			ballLost = false;
 			break;
 		}
