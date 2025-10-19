@@ -34,18 +34,25 @@ void Ball::handleWallCollision(const sf::RenderWindow& window)
 void Ball::handlePlayerCollision(const Player& player)
 {
 	math::Vec2f pos = shape.getPosition();
-	
+
 	if (const std::optional intersection = shape.getGlobalBounds().findIntersection(player.getGlobalBounds())) {
 
 		float playerCenterX = player.getGlobalBounds().position.x + player.getGlobalBounds().size.x / 2.f;
-		float ballX = shape.getPosition().x;
+		float ballX = pos.x;
 		float offset = (ballX - playerCenterX) / (player.getGlobalBounds().size.x / 2.f);
+		// offset clamp to prevent the ball from flying too horizontally
 		offset = std::fmax(-0.8f, std::fmin(0.8f, offset));
 
-		velocity = math::Vec2f::Reflect(velocity, math::Vec2f(0.f, -1.f));
-		velocity.x += offset * speed;
+		math::Vec2f normal(0.f, -1.f);
+		velocity = math::Vec2f::Reflect(velocity, normal);
+
+		velocity.x += offset * speed * 0.75f;
 		velocity.y = -std::abs(velocity.y);
 		velocity = velocity.Normalized() * speed;
+
+		// reposition the ball above the racket so that it doesn't go thourgh
+		float newY = player.getGlobalBounds().position.y - shape.getRadius() - 0.1f;
+		shape.setPosition({ pos.x, newY });
 	}
 }
 
@@ -58,15 +65,21 @@ int Ball::handleBrickCollision(std::vector<Brick>& bricks)
 
 		if (const std::optional intersection = shape.getGlobalBounds().findIntersection(brick.getGlobalBounds())) {
 			brick.hit();
+
+			math::Vec2f normal;
+
 			if (intersection->size.x < intersection->size.y) {
-				//velocity.x *= -1;
-				math::Vec2f normal = (velocity.x > 0) ? math::Vec2f::Left() : math::Vec2f::Right();
-				velocity = math::Vec2f::Reflect(velocity, normal);
+				normal = (velocity.x > 0) ? math::Vec2f::Left() : math::Vec2f::Right();
 			}
 			else {
-				math::Vec2f normal = (velocity.y > 0) ? math::Vec2f::Up() : math::Vec2f::Down();
-				velocity = math::Vec2f::Reflect(velocity, normal);
+				normal = (velocity.y > 0) ? math::Vec2f::Up() : math::Vec2f::Down();
+	
 			}
+
+			velocity = math::Vec2f::Reflect(velocity, normal).Normalized() * speed;
+
+			
+
 			return 1;
 			
 		}
@@ -80,7 +93,6 @@ void Ball::update(float deltaTime, const sf::RenderWindow& window)
 	math::Vec2f pos = shape.getPosition();
 	pos += velocity * deltaTime;
 	shape.setPosition(pos);
-
 
 }
 
