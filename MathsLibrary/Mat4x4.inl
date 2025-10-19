@@ -14,13 +14,13 @@ namespace math {
 	constexpr Mat4x4<T>::Mat4x4(std::array<T, 16> values) : mat(values) {}
 
 	template<typename T>
-	inline Mat4x4<T> Mat4x4<T>::Identity()
+	constexpr Mat4x4<T> Mat4x4<T>::Identity()
 	{
 		return Mat4x4();
 	}
 
 	template<typename T>
-	inline Mat4x4<T> Mat4x4<T>::Zero()
+	constexpr Mat4x4<T> Mat4x4<T>::Zero()
 	{
 		Mat4x4 mat;
 		for (auto& m : mat.mat) {
@@ -155,29 +155,32 @@ namespace math {
 	template<typename T>
 	inline Quaternion<T> Mat4x4<T>::Rotation() const
 	{
+		// extract rotation matrix components from the matrix
 		T m00 = mat[0], m01 = mat[4], m02 = mat[8];
 		T m10 = mat[1], m11 = mat[5], m12 = mat[9];
 		T m20 = mat[2], m21 = mat[6], m22 = mat[10];
 
+		//compute the trace of the matrix 
 		T trace = m00 + m11 + m22;
 		Quaternion<T> q;
 
 		if (trace > 0) {
-			T s = static_cast<T>(std::sqrt(trace + 1.0) * 2);
+			// use the stantard formula
+			T s = static_cast<T>(std::sqrt(trace + 1.0) * 2); // s = 4xqw
 			q.w = static_cast<T>(0.25 * s);
 			q.x = (m21 - m12) / s;
 			q.y = (m02 - m20) / s;
 			q.z = (m10 - m01) / s;
 		}
 		else if ((m00 > m11) && (m00 > m22)) {
-			T s = static_cast<T>(std::sqrt(1.0 + m00 - m11 - m22) * 2);
+			T s = static_cast<T>(std::sqrt(1.0 + m00 - m11 - m22) * 2); // s = 4*qx
 			q.w = (m21 - m12) / s;
 			q.x = static_cast<T>(0.25 * s);
 			q.y = (m01 + m10) / s;
 			q.z = (m02 + m20) / s;
 		}
 		else if (m11 > m22) {
-			T s = static_cast<T>(std::sqrt(1.0 + m11 - m00 - m22) * 2);
+			T s = static_cast<T>(std::sqrt(1.0 + m11 - m00 - m22) * 2);// s = 4*qy
 			q.w = (m02 - m20) / s;
 			q.x = (m01 + m10) / s;
 			q.y = static_cast<T>(0.25 * s);
@@ -185,7 +188,7 @@ namespace math {
 		}
 		else
 		{
-			T s = static_cast<T>(std::sqrt(1.0 + m22 - m00 - m11) * 2);
+			T s = static_cast<T>(std::sqrt(1.0 + m22 - m00 - m11) * 2);// s = 4*qz
 			q.w = (m10 - m01) / s;
 			q.x = (m02 + m20) / s;
 			q.y = (m12 + m21) / s;
@@ -318,7 +321,7 @@ namespace math {
 	}
 
 	template<typename T>
-	inline Mat4x4<T> Mat4x4<T>::Scale(const Vec3<T>& vector)
+	constexpr Mat4x4<T> Mat4x4<T>::Scale(const Vec3<T>& vector)
 	{
 		Mat4x4<T> m;
 		m.mat[0 + 0 * 4] = vector.x;
@@ -329,7 +332,7 @@ namespace math {
 	}
 
 	template<typename T>
-	inline Mat4x4<T> Mat4x4<T>::Translate(const Vec3<T>& vector)
+	constexpr Mat4x4<T> Mat4x4<T>::Translate(const Vec3<T>& vector)
 	{
 		Mat4x4<T> m = Mat4x4<T>::Identity();
 
@@ -343,19 +346,23 @@ namespace math {
 	template<typename T>
 	inline bool Mat4x4<T>::Inverse3DAffine(const Mat4x4<T>& input, Mat4x4<T>& result)
 	{
+		// extract rotation part 
 		Mat4x4<T> r = Mat4x4<T>::Identity();
 		r.mat[0] = input.mat[0]; r.mat[1] = input.mat[1]; r.mat[2] = input.mat[2];
 		r.mat[4] = input.mat[4]; r.mat[5] = input.mat[5]; r.mat[6] = input.mat[6];
 		r.mat[8] = input.mat[8]; r.mat[9] = input.mat[9]; r.mat[10] = input.mat[10];
 
+		// extract translation vector
 		Vec3<T> A(input.mat[12], input.mat[13], input.mat[14]);
 
+		// chec =k if matrix is invertible
 		T detR = r.Determinant();
 		if (detR == static_cast<T>(0)) { result = input; return false; }
 
 		Mat4x4 inverseR = r.Inverse();
 		Vec3<T> newT = inverseR.MultiplyVector(A) * static_cast<T>(-1);
 
+		// reconstruc full inverse matrix
 		result = Mat4x4<T>::Identity();
 		result.mat[0] = inverseR.mat[0]; result.mat[1] = inverseR.mat[1]; result.mat[2] = inverseR.mat[2];
 		result.mat[4] = inverseR.mat[4]; result.mat[5] = inverseR.mat[5]; result.mat[6] = inverseR.mat[6];
@@ -375,9 +382,12 @@ namespace math {
 		Vec3<T> u = f.Cross(r, f);
 		Mat4x4<T> result = Mat4x4<T>::Identity();
 
+		// set rotation part
 		result.mat[0] = r.x; result.mat[1] = r.y; result.mat[2] = r.z; result.mat[3] = 0; 
 		result.mat[4] = u.x; result.mat[5] = u.y; result.mat[6] = u.z; result.mat[7] = 0;
 		result.mat[8] = -f.x; result.mat[9] = -f.y; result.mat[10] = -f.z; result.mat[11] = 0;
+
+		// set translation part
 		result.mat[12] = from.x; result.mat[13] = from.y; result.mat[14] = from.z; result.mat[15] = 1;
 
 		return result;
@@ -430,6 +440,7 @@ namespace math {
 		T wy = q.w * q.y;
 		T wz = q.w * q.z;
 
+		// fill rotation matrix
 		m.mat[0] = 1 - 2 * (yy + zz);
 		m.mat[1] = 2 * (xy + wz);
 		m.mat[2] = 2 * (xz - wy);
@@ -445,6 +456,7 @@ namespace math {
 		m.mat[10] = 1 - 2 * (xx + yy);
 		m.mat[11] = 0;
 
+		// translation part
 		m.mat[12] = 0; m.mat[13] = 0; m.mat[14] = 0; m.mat[15] = 1;
 
 		return m;
@@ -454,14 +466,15 @@ namespace math {
 	template<typename T>
 	inline Mat4x4<T> Mat4x4<T>::TRS(const Vec3<T>& pos, const Quaternion<T>& q, const Vec3<T>& s)
 	{
-		Mat4x4<T> result;
-
+		// start with rotation matrix
 		Mat4x4<T> rot = Rotate(q);
 
+		// apply scale to each axis
 		rot.mat[0] *= s.x; rot.mat[1] *= s.x; rot.mat[2] *= s.x;
 		rot.mat[4] *= s.y; rot.mat[5] *= s.y; rot.mat[6] *= s.y;
 		rot.mat[8] *= s.z; rot.mat[9] *= s.z; rot.mat[10] *= s.z;
 
+		// set translation
 		rot.mat[12] = pos.x;
 		rot.mat[13] = pos.y;
 		rot.mat[14] = pos.z;
