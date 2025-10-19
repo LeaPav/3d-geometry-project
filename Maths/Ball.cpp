@@ -102,7 +102,7 @@ int Ball::handleBrickCollision(std::vector<Brick>& bricks)
 		if(brick.isDestroyed()) continue;
 
 		if (const std::optional intersection = shape.getGlobalBounds().findIntersection(brick.getGlobalBounds())) {
-			brick.hit();
+			bool destroyed = brick.hit();
 
 			math::Vec2f normal;
 
@@ -116,7 +116,7 @@ int Ball::handleBrickCollision(std::vector<Brick>& bricks)
 
 			velocity = math::Vec2f::Reflect(velocity, normal).Normalized() * speed;
 
-			return 1;
+			return destroyed ? 75 : 25;
 			
 		}
 	}

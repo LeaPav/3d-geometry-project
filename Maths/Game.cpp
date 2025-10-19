@@ -101,7 +101,7 @@ void Game::updateEntities()
 		ball->handlePlayerCollision(*player);
 		ball->handleWallCollision(*window);
 	
-		score += ball->handleBrickCollision(bricks) * 25;
+		score += ball->handleBrickCollision(bricks);
 
 		checkBallLost();
 		if (ballLost) {

@@ -11,7 +11,7 @@ private:
 public:
 	Brick(math::Vec2f position, math::Vec2f size, int hp);
 
-	void hit();
+	bool hit();
 	void updateColor();
 
 	void draw(sf::RenderTarget& target);

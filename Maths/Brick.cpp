@@ -7,15 +7,17 @@ Brick::Brick(math::Vec2f position, math::Vec2f size, int hp) : health(hp)
 	updateColor();
 }
 
-void Brick::hit()
+bool Brick::hit()
 {
-	if (destroyed) return;
+	if (destroyed) return false;
 	health--;
 	if (health <= 0) {
 		destroyed = true;
+		return true;
 	}
 	else {
 		updateColor();
+		return false;
 	}
 }
 
