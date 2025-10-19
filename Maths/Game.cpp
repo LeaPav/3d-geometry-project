@@ -17,6 +17,13 @@ void Game::initFont()
 	text->setCharacterSize(25);
 	text->setFillColor(sf::Color::White);
 	text->setPosition(math::Vec2f(0.f, 5.f));
+
+	livestext = new sf::Text(font);
+	livestext->setFont(font);
+	livestext->setCharacterSize(25);
+	livestext->setFillColor(sf::Color::White);
+	livestext->setPosition(math::Vec2f(535.f, 5.f));
+
 }
 
 void Game::initPlayer()
@@ -116,8 +123,11 @@ void Game::draw()
 
 void Game::drawHUD()
 {
-	text->setString("	Score: " + std::to_string(score) + "							" + "	Lives: " + std::to_string(lives));
+	text->setString("	Score: " + std::to_string(score));
+	livestext->setString("	Lives: " + std::to_string(lives));
+	
 	window->draw(*text);
+	window->draw(*livestext);
 }
 
 void Game::drawEntities()

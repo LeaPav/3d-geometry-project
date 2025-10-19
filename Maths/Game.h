@@ -21,6 +21,7 @@ private:
 
 	sf::Font font;
 	sf::Text* text;
+	sf::Text* livestext;
 
 	void initWindow();
 	void initFont();
