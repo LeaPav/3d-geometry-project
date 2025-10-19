@@ -177,7 +177,7 @@ namespace math {
         if (magnitude <= maxLength) { return rhs; }
         else { return rhs.Normalized() * maxLength; }
 
-        //limiter la longeur d'un vecteur sans changer sa direction
+        //limit the length of a vector without changing its direction.
     }
 
     template<typename T>
@@ -191,7 +191,7 @@ namespace math {
         Vec2 direction = delta / distance;
         return current + direction * maxDistanceDelta;
 
-        //déplace une valeur or objet d'une position actuelle vers une position cible à une vitesse constante
+        //move a value or object from a current position to a target position, at a constant speed.
     }
     template<typename T>
     inline Vec2<T> Vec2<T>::Perpendicular(const Vec2& rhs)
@@ -204,7 +204,7 @@ namespace math {
     {
         Vec2 n = inNormal.Normalized();
         float scal = Dot(inDirection, n);
-        return inDirection - n * (2.0f * scal); // formule de réflexion
+        return inDirection - n * (2.0f * scal); // reflection formula
     }
 
     template<typename T>
@@ -215,7 +215,7 @@ namespace math {
 
         float dot = Dot(from, to);
 
-        if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f; // eviter la division par 0
+        if (magnitudeFrom == 0 || magnitudeTo == 0) return 0.0f; // avoid division by zero
 
         float cosTheta = dot / (magnitudeFrom * magnitudeTo);
         cosTheta = std::fmax(-1.f, std::fmin(1.f, cosTheta));
@@ -228,7 +228,7 @@ namespace math {
     {
 
         float dot = Dot(from, to);
-        float product = from.x * to.y - from.y * to.x; // pour connaitre le sens de la rotation (product > 0 -> anti horaire, product < 0 -> horaire)
+        float product = from.x * to.y - from.y * to.x; // to determine the direction of rotation (product > 0 -> counterclockwise, product < 0 -> clockwise)
 
         return std::atan2(product, dot);
     }
@@ -244,7 +244,7 @@ namespace math {
     template<typename T>
     constexpr T Vec2<T>::Dot(const Vec2& a, const Vec2& b)
     {
-        return a.x * b.x + a.y * b.y; // produit scalaire
+        return a.x * b.x + a.y * b.y; // scalar product
     }
 
     template<typename T>
