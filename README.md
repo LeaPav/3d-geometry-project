@@ -37,6 +37,25 @@ git clone https://github.com/GamingCampus-MillieBourgois-25-26/3d-geometry-lea-e
 4. Build and run the project.
 
 > Make sure the `assets/` folder is located in the same directory as the `.exe` file. The game uses relative paths to load the resources.
+
+### Project Structure Note
+
+The folder `Maths/` contains the main game project.  
+It was originally named `Game`, but renaming it caused issues with Visual Studio, so the name was kept for stability.
+
+The overall structure is:
+```
+ProjectRoot/
+|--Maths/             # SFML demo breakout game 
+     |--assets/       # Game textures, font, etc.
+|--MathsLibrary/      # Custom math library
+|--UnitTest/          # Visual Studio C++ Unit Test
+|--include/           # SFML Headers
+|--lib/               # SFML libraries
+|--3D-Geometry.sln    # Visual Studio solution
+|--README.md
+```
+
 ---
 ## 📏 Math Conventions
 
@@ -73,7 +92,7 @@ Mat4x4<T>:
 - **Static methods**: `Frustum`, `Scale`, `Translate`, `Inverse3DAffine`, `LookAt`, `Ortho`, `Perspective`, `Rotate`, `TRS`  
 
 ## ✅ Unit Testing
-- **Framework**: `MSTest` for C++  
+- **Framework**: Visual Studio C++ Unit Test 
 - **Coverage**: major methods in `Vec2`, `Vec3`, `Quaternion`, `Mat4x4`
 
 ---
@@ -92,5 +111,6 @@ Mat4x4<T>:
 `D` or  `->` = Move paddle right.
 
 ---
+
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/WaLJfkf3)
